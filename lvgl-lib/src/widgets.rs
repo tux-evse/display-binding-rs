@@ -234,6 +234,15 @@ impl LvglImgButton {
                 &cglue::lv_button_mid as *const _ as *const raw::c_void,
                 &cglue::lv_button_right as *const _ as *const raw::c_void,
             );
+            /*
+            cglue::lv_imgbtn_set_src(
+                handle,
+                cglue::lv_imgbtn_state_t_LV_IMGBTN_STATE_RELEASED,
+                &cglue::lv_wifi_off as *const _ as *const raw::c_void,
+                &cglue::lv_tux_evsex40 as *const _ as *const raw::c_void,
+                &cglue::lv_wifi_on as *const _ as *const raw::c_void,
+            );
+            */
             cglue::lv_obj_add_style(handle, style, cglue::LV_STATE_DEFAULT);
             cglue::lv_obj_add_style(handle, style_pr, cglue::LV_STATE_PRESSED);
             cglue::lv_obj_align(handle, cglue::LV_ALIGN_TOP_LEFT as u8, x_ofs, y_ofs);
@@ -405,6 +414,18 @@ impl LvglImage {
             Box::leak(Box::new(widget))
         }
     }
+    /*
+    pub fn load_image_from_path(&self, path: &str) -> &Self {
+        let filepath = match CString::new(path) {
+            Err(_) => CString::new("Non UTF8 path").unwrap(),
+            Ok(value) => value,
+        };
+        unsafe {
+            cglue::lv_img_set_src(self.handle, filepath.as_ptr() as *mut raw::c_void);
+        }
+        self
+    }
+    */
     pub fn callback(&self, widget: &LvglWidget, event: &LvglEvent) {
         if let Some(ctrlbox) = self.ctrlbox.get() {
             match event {

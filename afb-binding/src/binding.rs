@@ -99,7 +99,8 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
         ));
     };
 
-
+    let value = "/home/ronan/IoT/Valeo/lvgl/tux-evse-webapp/src/assets/images/tux_evsex150.png";
+    LvglImage::new("tux-evse", value,0,0);
 
     // check theme and provide default if needed
     if let Ok(jvalue) = jconf.get::<JsoncObj>("theme") {

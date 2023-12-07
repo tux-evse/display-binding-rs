@@ -68,17 +68,26 @@ impl DisplayHandle {
     }
 
     pub fn draw_panel(&mut self) -> &mut Self {
-        /* 
+    /*
         self.panel.push(
-            LvglIcon::new("Icon-logo", lv_tux_evse, 500, 500)
+            LvglIcon::new("Icon-logo",LvglMkImgBin::tux_evsex40(), 500, 500)
                 .set_info("Demo logo Icon")
                 .finalize(),
         );
-*/
+    */
+    
+        self.panel.push(
+            LvglImage::new("tux-evse2", "/home/ronan/IoT/Valeo/lvgl/tux-evse-webapp/src/assets/images/tux_evsex150.png", 0, 0)
+                .finalize(),
+        );
+
+//            .load_image_from_path()
+/* 
     self.panel.push(
         LvglImgButton::new( "test imgBut", "label", 500, 500, LvglColor::palette(LvglPalette::INDIGO),1000, 2000 )
             .finalize(),
     );
+*/
 
 /*
         self.panel.push(

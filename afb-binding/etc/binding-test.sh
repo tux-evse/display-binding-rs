@@ -31,4 +31,5 @@ if test -n "$PERMISION_ADM"; then
 fi
 
 # start binder with test config
+#strace afb-binder --trap-faults=no -v --config=afb-binding/etc/binding-display-lvgl.json 2>&1
 afb-binder --trap-faults=no -v --config=afb-binding/etc/binding-display-lvgl.json
