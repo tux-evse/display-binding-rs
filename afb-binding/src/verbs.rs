@@ -145,10 +145,10 @@ AfbVerbRegister!(SwitchVerb, switch_verb_cb, SwitchCtx);
 fn switch_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut SwitchCtx) -> Result<(), AfbError> {
     match args.get::<&QueryOnOff>(0)? {
         QueryOnOff::ON => {
-            ctx.widget.set_check(true);
+            ctx.widget.set_value(true);
         }
         QueryOnOff::OFF => {
-            ctx.widget.set_check(false);
+            ctx.widget.set_value(false);
         }
     }
     rqt.reply(AFB_NO_DATA, 0);

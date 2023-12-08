@@ -121,14 +121,14 @@ impl DisplayHandle {
 
         self.panel.push(
             LvglSwitch::new(self.handle.get_root_widget(),"Switch-1", 670, 5)
-                .set_check(false)
+                .set_lock(false)
                 .set_height(20)
                 .finalize(),
         );
 
         self.panel.push(
             LvglSwitch::new(self.handle.get_root_widget(),"Switch-2", 600, 5)
-                .set_check(true)
+                .set_lock(true)
                 .set_height(20)
                 .finalize(),
         );
