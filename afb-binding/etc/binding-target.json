@@ -9,7 +9,7 @@
         {
             "uid": "display-lvgl",
             "api": "display",
-            "path": "/usr/redpesk/lvgl-binding-rs/lib/libafb_lvgl.so",
+            "path": "/usr/redpesk/lvgl-binding-rs/lib/libafb_display_lvgl.so",
             "info": "lvgl embedded display binding",
             "permission": "acl:display:client",
             "display": {

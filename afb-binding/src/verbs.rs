@@ -12,7 +12,7 @@
 
 use crate::prelude::*;
 use afbv4::prelude::*;
-use lvgl_gui::prelude::*;
+use display_lvgl_gui::prelude::*;
 
 macro_rules! verb_by_uid {
     ($api: ident, $display:ident, $uid:literal, $widget:ty, $ctx_type: ident) => {

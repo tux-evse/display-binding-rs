@@ -1,4 +1,4 @@
-# lvgl-binding-rs
+# display-binding-rs
 
 Binding template/demo interfacing lvgl-rclib-rs with libafb-rs micro service architecture.
 

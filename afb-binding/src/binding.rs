@@ -12,7 +12,7 @@
 
 use crate::prelude::*;
 use afbv4::prelude::*;
-use lvgl_gui::prelude::*;
+use display_lvgl_gui::prelude::*;
 use serde::{Deserialize, Serialize};
 
 pub(crate) fn to_static_str(value: String) -> &'static str {

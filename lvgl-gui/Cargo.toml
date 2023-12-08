@@ -1,5 +1,5 @@
 [package]
-name = "lvgl_gui"
+name = "display_lvgl_gui"
 version = "0.0.1"
 edition = "2021"
 authors = ["Fulup Le Foll <fulup@iot.bzh>"]
@@ -16,7 +16,7 @@ bindgen    = ">=0.6"
 cc = "1"
 
 [lib]
-name = "lvgl_gui"
+name = "display_lvgl_gui"
 crate-type = ["lib"]
 path = "src/libso.rs"
 

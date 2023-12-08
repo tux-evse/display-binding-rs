@@ -10,7 +10,7 @@
         {
             "uid": "display-lvgl",
             "api": "display",
-            "path": "${CARGO_TARGET_DIR}debug/libafb_lvgl.so",
+            "path": "${CARGO_TARGET_DIR}debug/libafb_display_lvgl.so",
             "info": "lvgl embedded display binding",
             "permission": "acl:display:client",
          	"logo": "./afb-binding/etc/tux-evsex150.png",
