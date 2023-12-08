@@ -20,7 +20,7 @@ use lvgl::prelude::*;
 use std::any::Any;
 
 pub struct DisplayHandle {
-    handle: LvglHandle,
+    pub handle: LvglHandle,
     panel: Vec<&'static LvglWidget>,
     ctrlbox: Option<*mut dyn LvglHandler>,
 }
@@ -70,7 +70,7 @@ impl DisplayHandle {
 
     pub fn draw_panel(&mut self) -> &mut Self {
         self.panel.push(
-            LvglLabel::new("Label-1", LvglMkFont::std_22(), 50, 400)
+            LvglLabel::new(self.handle.get_root_widget(), "Label-1", LvglMkFont::std_22(), 50, 400)
                 .set_info("Demo Label widget")
                 .set_value("This is a label widget")
                 .set_title("Label widget", 100, 75, LvglMkFont::std_10())
@@ -82,7 +82,7 @@ impl DisplayHandle {
         );
 
         self.panel.push(
-            LvglPixButton::new("Pixmap-Button", 450, 7)
+            LvglPixButton::new(self.handle.get_root_widget(),"Pixmap-Button", 450, 7)
                 .set_info("Demo Pixmap Button")
                 .set_value(AssetPixmap::nfc_off())
                 .set_background(LvglColor::BLUE_GREY())
@@ -92,16 +92,16 @@ impl DisplayHandle {
         );
 
         self.panel.push(
-            LvglPixmap::new("Icon-Charge", LvglIcon::WIFI, 1000, 0)
+            LvglPixmap::new(self.handle.get_root_widget(),"Icon-Charge", LvglIcon::WIFI, 1000, 0)
                 .set_info("Demo Wifi Icon")
                 .finalize(),
         );
 
         self.panel
-            .push(LvglPixmap::new("Icon-Battery", LvglIcon::BATTERY_2, 900, 0).finalize());
+            .push(LvglPixmap::new(self.handle.get_root_widget(),"Icon-Battery", LvglIcon::BATTERY_2, 900, 0).finalize());
 
         self.panel.push(
-            LvglLed::new("Led-Red", 850, 5)
+            LvglLed::new(self.handle.get_root_widget(),"Led-Red", 850, 5)
                 .set_info("red led")
                 .set_color(LvglColor::RED())
                 .set_size(10, 10)
@@ -110,7 +110,7 @@ impl DisplayHandle {
         );
 
         self.panel.push(
-            LvglLed::new("Led-Green", 800, 5)
+            LvglLed::new(self.handle.get_root_widget(),"Led-Green", 800, 5)
                 .set_color(LvglColor::rvb(0, 255, 0))
                 .set_info("green led")
                 .set_brightness(255)
@@ -120,21 +120,21 @@ impl DisplayHandle {
         );
 
         self.panel.push(
-            LvglSwitch::new("Switch-1", 670, 5)
+            LvglSwitch::new(self.handle.get_root_widget(),"Switch-1", 670, 5)
                 .set_check(false)
                 .set_height(20)
                 .finalize(),
         );
 
         self.panel.push(
-            LvglSwitch::new("Switch-2", 600, 5)
+            LvglSwitch::new(self.handle.get_root_widget(),"Switch-2", 600, 5)
                 .set_check(true)
                 .set_height(20)
                 .finalize(),
         );
 
         self.panel.push(
-            LvglQrcode::new(
+            LvglQrcode::new(self.handle.get_root_widget(),
                 "qr-code",
                 LvglColor::LIGHT_BLUE(),
                 LvglColor::DEEP_PURPLE(),
@@ -155,7 +155,7 @@ impl DisplayHandle {
             LvglPoint { x: 240, y: 10 },
         ];
         self.panel.push(
-            LvglLine::new("Line", 400, 100)
+            LvglLine::new(self.handle.get_root_widget(),"Line", 400, 100)
                 .set_color(LvglColor::RED())
                 .set_width(8)
                 .set_rounded(true)
@@ -164,7 +164,7 @@ impl DisplayHandle {
         );
 
         self.panel.push(
-            LvglButton::new("Button-A", LvglMkFont::std_18(), 100, 200)
+            LvglButton::new(self.handle.get_root_widget(),"Button-A", LvglMkFont::std_18(), 100, 200)
                 .set_value("My Button-A")
                 .set_info("Push Button 1")
                 .set_size(180, 100)
@@ -172,20 +172,20 @@ impl DisplayHandle {
         );
 
         self.panel.push(
-            LvglButton::new("Button-B", LvglMkFont::std_14(), 300, 200)
+            LvglButton::new(self.handle.get_root_widget(),"Button-B", LvglMkFont::std_14(), 300, 200)
                 .set_info("Push button B")
                 .set_value("My Button-B")
                 .finalize(),
         );
 
         self.panel.push(
-            LvglArc::new("Arc", 10, 270, 800, 150)
+            LvglArc::new(self.handle.get_root_widget(),"Arc", 10, 270, 800, 150)
                 .set_info("Arc widget")
                 .finalize(),
         );
 
         self.panel.push(
-            LvglBar::new("Bar-1", 10, 90, 700, 300)
+            LvglBar::new(self.handle.get_root_widget(),"Bar-1", 10, 90, 700, 300)
                 .set_info("variable bar")
                 .set_size(10, 250)
                 .set_gradient(true, LvglColor::GREEN(), LvglColor::YELLOW())
@@ -194,7 +194,7 @@ impl DisplayHandle {
         );
 
         self.panel.push(
-            LvglBar::new("Bar-2", 10, 90, 400, 300)
+            LvglBar::new(self.handle.get_root_widget(),"Bar-2", 10, 90, 400, 300)
                 .set_info("variable bar")
                 .set_size(250, 10)
                 .set_gradient(false, LvglColor::GREEN(), LvglColor::YELLOW())
@@ -203,7 +203,7 @@ impl DisplayHandle {
         );
 
         self.panel.push(
-            LvglMeter::new("Meter", 4, -10, LvglColor::INDIGO(), 800, 350)
+            LvglMeter::new(self.handle.get_root_widget(),"Meter", 4, -10, LvglColor::INDIGO(), 800, 350)
                 .set_size(200, 200)
                 .set_tic(3, 10, 41, 10, 8, LvglColor::BLUE_GREY(), LvglColor::GREY())
                 .set_zone(0, 20, 4, LvglColor::RED())
@@ -215,7 +215,7 @@ impl DisplayHandle {
         );
 
         self.panel.push(
-            LvglTextArea::new("Text-Area", 0, 550)
+            LvglTextArea::new(self.handle.get_root_widget(),"Text-Area", 0, 550)
                 .set_info("Demo Text area Zone")
                 .set_width(600)
                 .set_value("display message zone")

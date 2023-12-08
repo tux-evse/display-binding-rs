@@ -21,9 +21,9 @@ if ! test -w /dev/fb0; then
     exit 1
 fi
 
-if ! test -r /dev/input/mouse0; then
-    echo "FATAL: missing permision to read /dev/input/mouse0 (missing group input ???)"
-    ls -l //dev/input/mouse0
+if ! test -r /dev/input/lvgl; then
+    echo "FATAL: missing permision to read /dev/input/lvgl (missing group input ???)"
+    ls -l /dev/input/lvgl
     exit 1
 fi
 
