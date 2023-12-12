@@ -11,7 +11,9 @@
  */
 
 use crate::prelude::*;
+
 use afbv4::prelude::*;
+
 use display_lvgl_gui::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -45,12 +47,52 @@ fn json_to_color(jcolor: JsoncObj) -> Result<LvglColor, AfbError> {
     Ok(LvglColor::rvb(red as u8, green as u8, blue as u8))
 }
 
+
+pub struct ApiConfig {
+    pub mgr_api: &'static str,
+}
+
+// wait until both apis (iso+slac) to be ready before trying event subscription
+struct ApiUserData {
+    mgr_api: &'static str,
+}
+
+impl AfbApiControls for ApiUserData {
+    // the API is created and ready. At this level user may subcall api(s) declare as dependencies
+    fn start(&mut self, api: &AfbApi) -> Result<(), AfbError> {
+        afb_log_msg!(Notice, api, "subscribing charging_api api:{}", self.mgr_api);
+        AfbSubCall::call_sync(
+            api,
+            self.mgr_api,
+            "subscribe",
+            AFB_NO_DATA,
+        )?;
+
+        AfbSubCall::call_sync(
+            api,
+            self.mgr_api,
+            "subscribe_vehicleState",
+            AFB_NO_DATA,
+        )?;
+
+        Ok(())
+    }
+
+    // mandatory unsed declaration
+    fn as_any(&mut self) -> &mut dyn Any {
+        self
+    }
+}
+
 // Binding init callback started at binding load time before any API exist
 // -----------------------------------------
 pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi, AfbError> {
     // add binding custom converter
     api_arg_subscribe::register()?;
-    api_arg_switch::register()?;
+    api_arg_switch::register()?;    
+
+    // add binding custom converter
+    types_register()?;
 
     let uid = if let Ok(value) = jconf.get::<String>("uid") {
         to_static_str(value)
@@ -58,7 +100,7 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
         "lvgl"
     };
 
-    let api = if let Ok(value) = jconf.get::<String>("api") {
+    let api_name = if let Ok(value) = jconf.get::<String>("api") {
         to_static_str(value)
     } else {
         uid
@@ -75,7 +117,7 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
         rootv4,
         "Binding starting uid:{} api:{} info:{}",
         uid,
-        api,
+        api_name,
         info
     );
 
@@ -100,9 +142,9 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
             ));
         }
     };
-    
+
     if let Ok(value) = jconf.get::<String>("logo") {
-        LvglImage::new(display.handle.get_root_widget(), "tux-evse", value.as_str(), 0, 0);
+        LvglImage::new(display.get_root(), "tux-evse", value.as_str(), 0, 0);
     }
 
     // check theme and provide default if needed
@@ -118,12 +160,29 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
         display.set_theme(primary, secondary, false, LvglMkFont::std_14());
     }
 
-    // create backend API
-    let api = AfbApi::new(api).set_info(info).set_permission(permission);
-    register_verbs(api , &mut display)?;
+    let mgr_api = if let Ok(value) = jconf.get::<String>("mgr_api") {
+        to_static_str(value)
+    } else {
+        return Err(AfbError::new(
+            "binding-mgr-charging-config",
+            "mgr_api micro service api SHOULD be defined",
+        ));
+    };
 
-    // lock config in ram to avoid lvgl to free memory
-    //Box::leak(Box::new(display));
+    let api_config = ApiConfig {
+        mgr_api,
+    };
+
+    // create backend API
+    // --------------------------------------------------------
+    let api = AfbApi::new(api_name)
+        .set_info(info)
+        .set_permission(permission)
+        .set_callback(Box::new(ApiUserData { mgr_api }));
+
+    register_verbs(api, &mut display, api_config)?;
+
+    api.require_api(mgr_api);
 
     Ok(api.finalize()?)
 }

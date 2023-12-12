@@ -4,8 +4,10 @@
     "alias": [
         "/devtools:/usr/share/afb-ui-devtools/binder"
     ],
-    "test":1,
     "monitoring": true,
+    "ws-client": [
+        "public:unix:@tux-evse-webapp-mock"
+    ],
     "binding": [
         {
             "uid": "display-lvgl",
@@ -13,13 +15,13 @@
             "path": "${CARGO_TARGET_DIR}debug/libafb_display_lvgl.so",
             "info": "lvgl embedded display binding",
             "permission": "acl:display:client",
-         	"logo": "./afb-binding/etc/tux-evsex150.png",
             "test": 1,
             "display": {
                 "x_res": 1024,
                 "y_res": 600,
                 "ratio": 1
-            }
+            },
+            "mgr_api": "tux-evse-webapp-mock"
         }
     ]
 }
