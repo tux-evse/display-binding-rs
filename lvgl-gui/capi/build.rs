@@ -16,6 +16,12 @@ fn main() {
     println!("cargo:rustc-link-arg=-llvgl");
     println!("cargo:rustc-link-arg=-llv_drivers");
 
+    if let Ok(value) = env::var("CARGO_TARGET_DIR") {
+        if let Ok(profile) = env::var("PROFILE") {
+            println!("cargo:rustc-link-search=crate={}{}", value, profile);
+        }
+    }
+
     let header = "
     // -----------------------------------------------------------------------
     //         <- private '_capi_map.rs' Rust/C unsafe binding ->
@@ -25,17 +31,21 @@ fn main() {
     //     - build.rs for C/Rust glue options
     //     - src/capi/capi-map.c for C prototype inputs
     // -----------------------------------------------------------------------
-    ".to_string();
-    let prj_dir= format!("\npub const PRJ_DIR:&str=\"{}\";", env::var("CARGO_MANIFEST_DIR").unwrap());
-    let header= header + prj_dir.as_str();
+    "
+    .to_string();
+    let prj_dir = format!(
+        "\npub const PRJ_DIR:&str=\"{}\";",
+        env::var("CARGO_MANIFEST_DIR").unwrap()
+    );
+    let header = header + prj_dir.as_str();
 
-    let gtk_selected= match env::var("USE_GTK") {
+    let gtk_selected = match env::var("USE_GTK") {
         Ok(_value) => {
-            println! ("cargo:warning=GTK driver backend selected");
-            println! ("cargo:rustc-cfg=use_gtk");
+            println!("cargo:warning=GTK driver backend selected");
+            println!("cargo:rustc-cfg=use_gtk");
             1
-        },
-        Err(_) => 0
+        }
+        Err(_) => 0,
     };
 
     let _capi_map = bindgen::Builder::default()
@@ -54,7 +64,7 @@ fn main() {
         .write_to_file("capi/_capi-map.rs")
         .expect("Couldn't write _capi-map.rs!");
 
-    let defined= gtk_selected.to_string();
+    let defined = gtk_selected.to_string();
     cc::Build::new()
         .file("capi/capi-map.c")
         .define("USE_GTK", defined.as_str())

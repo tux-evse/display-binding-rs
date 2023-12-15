@@ -15,18 +15,6 @@ if ! test -f $CARGO_TARGET_DIR/debug/libafb_display_lvgl.so; then
     exit 1
 fi
 
-if ! test -w /dev/fb0; then
-    echo "FATAL: missing permision to write /dev/fb0 (missing group video ???)"
-    ls -l  /dev/fb0
-    exit 1
-fi
-
-if ! test -r /dev/input/lvgl; then
-    echo "FATAL: missing permision to read /dev/input/lvgl (missing group input ???)"
-    ls -l /dev/input/lvgl
-    exit 1
-fi
-
 # give access to devtools via TCP port
 PERMISION_ADM=`which cynagora-admin 2>/dev/null`
 if test -n "$PERMISION_ADM"; then
