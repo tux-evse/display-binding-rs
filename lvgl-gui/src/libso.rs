@@ -15,11 +15,16 @@
     html_favicon_url = "https://iot.bzh/images/defaults/favicon.ico"
 )]
 
+#[cfg(not(lvgl))]
+extern crate lvgl;
+
 #[path = "../capi/capi-mod.rs"]
 mod capi;
 
 #[path = "display-lvgl.rs"]
 mod display;
+
+
 
 pub mod prelude {
     //pub(crate) use crate::capi::*;
