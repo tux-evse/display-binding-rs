@@ -51,6 +51,7 @@ fn main() {
     let _capi_map = bindgen::Builder::default()
         .header("capi/capi-map.c")
         .clang_arg("-I/usr/local/include/lvgl")
+        .clang_arg("-I/usr/include/lvgl")
         .raw_line(header)
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .derive_debug(false)
@@ -70,5 +71,7 @@ fn main() {
         .define("USE_GTK", defined.as_str())
         .include("/usr/local/include/lvgl")
         .include("/usr/local/include")
+        .include("/usr/include/lvgl")
+        .include("/usr/include")
         .compile("lvgl-asset");
 }

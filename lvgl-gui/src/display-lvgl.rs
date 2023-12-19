@@ -602,7 +602,7 @@ impl DisplayHandle {
                 5,
                 5,
             )
-            .set_value("https://github.com/tux-evse")
+            .set_value("WIFI:T:WPA;S:tuxevse_hotspot;P:valeocharger;")
             .finalize(),
         );
 
