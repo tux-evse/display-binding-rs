@@ -7,8 +7,7 @@ publish = false
 build = "capi/build.rs"
 
 [dependencies]
-afbv4 = {git= "https://github.com/redpesk-common/afb-librust", branch="master", optional = true}
-lvgl = {git= "https://github.com/tux-evse/lvgl-rclib-rs", branch="main", optional = true}
+#lvgl = {git= "https://github.com/tux-evse/lvgl-rclib-rs", branch="main", optional = true}
 
 [build-dependencies]
 bindgen    = ">=0.6"
