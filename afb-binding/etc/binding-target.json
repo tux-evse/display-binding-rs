@@ -1,22 +1,25 @@
 {
     "name": "afb-display",
-    "port": 1234,
     "alias": [
         "/devtools:/usr/share/afb-ui-devtools/binder"
     ],
     "monitoring": true,
+    "ws-client": [
+        "public:unix:@tux-evse-webapp-mock"
+    ],
     "binding": [
         {
             "uid": "display-lvgl",
             "api": "display",
-            "path": "/usr/redpesk/lvgl-binding-rs/lib/libafb_display_lvgl.so",
+            "path": "/usr/redpesk/display-binding-rs/lib/libafb_display_lvgl.so",
             "info": "lvgl embedded display binding",
             "permission": "acl:display:client",
             "display": {
                 "x_res": 1024,
-                "y_res": 800,
-                "ration": 1
-            }
+                "y_res": 600,
+                "ratio": 1
+            },
+            "mgr_api": "tux-evse-webapp-mock"
         }
     ]
 }
