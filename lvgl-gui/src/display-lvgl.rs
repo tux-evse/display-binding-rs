@@ -573,7 +573,7 @@ impl DisplayHandle {
     }
 
     pub fn draw_panel_bot(&mut self, root: &LvglWidget) -> &mut Self {
-        let bare_code_size = 80;
+        let bare_code_size = 100;
 
         let label_zone_mess_x_ofs = bare_code_size + 10;
         let label_zone_mess_y_ofs = label_zone_mess_x_ofs / 4;
@@ -617,7 +617,7 @@ impl DisplayHandle {
         let area_top_sizey = 240;
 
         let area_mid_posy = area_top_posy + area_top_sizey;
-        let area_mid_sizey = 210;
+        let area_mid_sizey = 190;
 
         let area_bot_posy = area_mid_posy + area_mid_sizey;
         let area_bot_sizey = 600 - area_mid_sizey - area_top_sizey - area_menu_sizey;
