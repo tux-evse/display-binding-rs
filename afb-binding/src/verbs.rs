@@ -183,9 +183,10 @@ struct TimerCtx {
 }
 // Callback is called for each tick until decount>0
 AfbTimerRegister!(TimerCtrl, timer_callback, TimerCtx);
-fn timer_callback(_timer: &AfbTimer, _decount: u32, ctx: &mut TimerCtx) {
+fn timer_callback(_timer: &AfbTimer, _decount: u32, ctx: &mut TimerCtx) -> Result<(), AfbError> {
     ctx.time.set_value(get_time("%H:%M").unwrap().as_str());
     ctx.date.set_value(get_time("%D").unwrap().as_str());
+    Ok(())
 }
 
 //------------------------------------------------------------------
@@ -206,7 +207,7 @@ struct EvtUserData {
     ctx: Arc<UserCtxData>,
 }
 AfbEventRegister!(EventGetCtrl, event_get_callback, EvtUserData);
-fn event_get_callback(event: &AfbEventMsg, args: &AfbData, userdata: &mut EvtUserData) {
+fn event_get_callback(event: &AfbEventMsg, args: &AfbData, userdata: &mut EvtUserData)  -> Result<(), AfbError>  {
     // check request introspection
     let evt_uid = event.get_uid();
     let evt_name = event.get_name();
@@ -222,7 +223,7 @@ fn event_get_callback(event: &AfbEventMsg, args: &AfbData, userdata: &mut EvtUse
         api_uid
     );
 
-    match args.get::<JsoncObj>(0) {
+    let value = match args.get::<JsoncObj>(0) {
         Ok(argument) => {
             afb_log_msg!(Info, event, "Got valid jsonc object argument={}", argument);
             argument
@@ -232,6 +233,7 @@ fn event_get_callback(event: &AfbEventMsg, args: &AfbData, userdata: &mut EvtUse
             JsoncObj::from("invalid json input argument")
         }
     };
+    Ok(())
 }
 //------------------------------------------------------------------
 
@@ -274,7 +276,7 @@ pub fn types_register() -> Result<(),AfbError> {
 }
 */
 AfbEventRegister!(MgrEvtVerb, evt_nrj_cb, MgrEvtCtrl);
-fn evt_nrj_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut MgrEvtCtrl) {
+fn evt_nrj_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut MgrEvtCtrl) -> Result<(), AfbError> {
     match args.get::<&ChargerNrj>(0){
         Ok(data) => {
             //afb_log_msg!(Debug, event, "-- energy data:{}", data.energy );
@@ -287,10 +289,11 @@ fn evt_nrj_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut MgrEvtCtrl) {
             afb_log_msg!(Error, event, "-- energy invalid data");
         }
     };
+    Ok(())
 }
 
 AfbEventRegister!(PlugEvtVerb, evt_plug_cb, PlugEvtCtrl);
-fn evt_plug_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut PlugEvtCtrl) {
+fn evt_plug_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut PlugEvtCtrl) -> Result<(), AfbError> {
     afb_log_msg!(Notice, event, "-- evt_plug_cb event");
     match args.get::<&VehicleState>(0){
         Ok(data) => {
@@ -336,6 +339,7 @@ fn evt_plug_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut PlugEvtCtrl) {
             afb_log_msg!(Error, event, "-- plug invalid format data");
         }
     }
+    Ok(())
 }
 
 pub(crate) fn register_verbs(
