@@ -61,14 +61,11 @@ impl AfbApiControls for ApiUserData {
 
     fn config(&mut self, api: &AfbApi, config: JsoncObj) -> Result<(),AfbError> {
 
-        println!("RLM AfbApiControls config 1");
         Ok(()) // returning -1 will abort binder process
     }
 
     // the API is created and ready. At this level user may subcall api(s) declare as dependencies
     fn start(&mut self, api: &AfbApi) -> Result<(), AfbError> {
-        println!("RLM AfbApiControls start 1");
-        afb_log_msg!(Notice, None, "RLM start 1");
         afb_log_msg!(Notice, None, "subscribing charging_api api:{} 1 ", self.mgr_api);
         /*
         afb_log_msg!(Notice, api, "subscribing charging_api api:{} 2", self.mgr_api);
@@ -187,19 +184,14 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
 
     // create backend API
     // --------------------------------------------------------
-    afb_log_msg!(Notice, None, "RLM binding_init 1");
     let api = AfbApi::new(api_name)
         .set_info(info)
         .set_permission(permission)
         .set_callback(Box::new(ApiUserData { mgr_api }));
-    afb_log_msg!(Notice, None, "RLM binding_init 2");
 
     register_verbs(api, &mut display, api_config)?;
-    afb_log_msg!(Notice, None, "RLM binding_init 3");
-    afb_log_msg!(Notice, None, "RLM binding_init 3 mgr_api {}", mgr_api);
 
     api.require_api(mgr_api);
-    afb_log_msg!(Notice, None, "RLM binding_init 4.1");
 
     Ok(api.finalize()?)
 }
