@@ -67,7 +67,7 @@ impl AfbApiControls for ApiUserData {
     // the API is created and ready. At this level user may subcall api(s) declare as dependencies
     fn start(&mut self, api: &AfbApi) -> Result<(), AfbError> {
         afb_log_msg!(Notice, None, "subscribing charging_api api:{} 1 ", self.mgr_api);
-        /*
+        
         afb_log_msg!(Notice, api, "subscribing charging_api api:{} 2", self.mgr_api);
         AfbSubCall::call_sync(
             api,
@@ -82,7 +82,6 @@ impl AfbApiControls for ApiUserData {
             "subscribe_vehicleState",
             AFB_NO_DATA,
         )?;
-  */
         afb_log_msg!(Notice, None, "subscribing charging_api done ");
         Ok(())
     }
