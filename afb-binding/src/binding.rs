@@ -11,6 +11,7 @@
  */
 
 use crate::prelude::*;
+use typesv4::prelude::*;
 
 use afbv4::prelude::*;
 
@@ -47,41 +48,35 @@ fn json_to_color(jcolor: JsoncObj) -> Result<LvglColor, AfbError> {
     Ok(LvglColor::rvb(red as u8, green as u8, blue as u8))
 }
 
-
 pub struct ApiConfig {
-    pub mgr_api: &'static str,
+    pub engy_api: &'static str,
 }
 
 // wait until both apis (iso+slac) to be ready before trying event subscription
 struct ApiUserData {
-    mgr_api: &'static str,
+    engy_api: &'static str,
 }
 
 impl AfbApiControls for ApiUserData {
-
-    fn config(&mut self, api: &AfbApi, config: JsoncObj) -> Result<(),AfbError> {
-
+    fn config(&mut self, api: &AfbApi, config: JsoncObj) -> Result<(), AfbError> {
         Ok(()) // returning -1 will abort binder process
     }
 
     // the API is created and ready. At this level user may subcall api(s) declare as dependencies
     fn start(&mut self, api: &AfbApi) -> Result<(), AfbError> {
-        afb_log_msg!(Notice, None, "subscribing charging_api api:{} 1 ", self.mgr_api);
-        
-        afb_log_msg!(Notice, api, "subscribing charging_api api:{} 2", self.mgr_api);
-        AfbSubCall::call_sync(
+        afb_log_msg!(
+            Notice,
             api,
-            self.mgr_api,
-            "subscribe",
-            AFB_NO_DATA,
-        )?;
+            "subscribing charging_api api:{}",
+            self.engy_api
+        );
 
-        AfbSubCall::call_sync(
-            api,
-            self.mgr_api,
-            "subscribe_vehicleState",
-            AFB_NO_DATA,
-        )?;
+        AfbSubCall::call_sync(api, self.engy_api, "volts", "{'action':'subscribe'}")?;
+        AfbSubCall::call_sync(api, self.engy_api, "energy", "{'action':'subscribe'}")?;
+        AfbSubCall::call_sync(api, self.engy_api, "amps", "{'action':'subscribe'}")?;
+        AfbSubCall::call_sync(api, self.engy_api, "power", "{'action':'subscribe'}")?;
+        AfbSubCall::call_sync(api, self.engy_api, "adps", "{'action':'subscribe'}")?;
+
         afb_log_msg!(Notice, None, "subscribing charging_api done ");
         Ok(())
     }
@@ -97,15 +92,16 @@ impl AfbApiControls for ApiUserData {
 pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi, AfbError> {
     // add binding custom converter
     api_arg_subscribe::register()?;
-    api_arg_switch::register()?;    
+    api_arg_switch::register()?;
 
     // add binding custom converter
     types_register()?;
-
+    engy_registers()?;
+    
     let uid = if let Ok(value) = jconf.get::<String>("uid") {
         to_static_str(value)
     } else {
-        "lvgl"
+        "display"
     };
 
     let api_name = if let Ok(value) = jconf.get::<String>("api") {
@@ -168,29 +164,27 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
         display.set_theme(primary, secondary, false, LvglMkFont::std_14());
     }
 
-    let mgr_api = if let Ok(value) = jconf.get::<String>("mgr_api") {
+    let engy_api = if let Ok(value) = jconf.get::<String>("engy_api") {
         to_static_str(value)
     } else {
         return Err(AfbError::new(
-            "binding-mgr-charging-config",
-            "mgr_api micro service api SHOULD be defined",
+            "binding-mgr-engy-config",
+            "engy_api micro service api SHOULD be defined",
         ));
     };
 
-    let api_config = ApiConfig {
-        mgr_api,
-    };
+    let api_config = ApiConfig { engy_api };
 
     // create backend API
     // --------------------------------------------------------
     let api = AfbApi::new(api_name)
         .set_info(info)
         .set_permission(permission)
-        .set_callback(Box::new(ApiUserData { mgr_api }));
+        .set_callback(Box::new(ApiUserData { engy_api }));
 
     register_verbs(api, &mut display, api_config)?;
-
-    api.require_api(mgr_api);
+    
+    api.require_api(engy_api);
 
     Ok(api.finalize()?)
 }

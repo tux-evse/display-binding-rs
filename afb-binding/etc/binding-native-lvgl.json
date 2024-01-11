@@ -6,8 +6,9 @@
     ],
     "monitoring": true,
     "ws-client": [
-        "public:unix:@tux-evse-webapp-mock"
+        "tcp:phytec-power.tuxevse.vpn:12351/engy"
     ],
+    "uuid": "HELLO",
     "binding": [
         {
             "uid": "display-lvgl",
@@ -21,7 +22,7 @@
                 "y_res": 600,
                 "ratio": 1
             },
-            "mgr_api": "tux-evse-webapp-mock"
+            "engy_api": "engy"
         }
     ]
 }
