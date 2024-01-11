@@ -71,7 +71,7 @@ impl AfbApiControls for ApiUserData {
             self.engy_api
         );
 
-        AfbSubCall::call_sync(api, self.engy_api, "volts", "{'action':'subscribe'}")?;
+        AfbSubCall::call_sync(api, self.engy_api, "tension", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "energy", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "amps", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "power", "{'action':'subscribe'}")?;
@@ -97,7 +97,7 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
     // add binding custom converter
     types_register()?;
     engy_registers()?;
-    
+
     let uid = if let Ok(value) = jconf.get::<String>("uid") {
         to_static_str(value)
     } else {

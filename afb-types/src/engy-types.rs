@@ -27,11 +27,11 @@ pub enum MeterTagSet {
 AfbDataConverter!(meter_data_set, MeterDataSet);
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct MeterDataSet {
-    #[serde(skip_serializing)]
+    #[serde(skip)]
     pub start: i32,
-    #[serde(skip_serializing)]
+    #[serde(skip)]
     pub variation: i32,
-    #[serde(skip_serializing)]
+    #[serde(skip)]
     pub updated: bool,
     pub tag: MeterTagSet,
     pub total: i32,
@@ -57,9 +57,15 @@ impl MeterDataSet {
     // update data_set and set updated flag when total changes.
     pub fn update(&mut self, phase: usize, meter: f64) -> Result<(), AfbError> {
         let value = (meter * 100.0).round() as i32;
+
         match phase {
             0 => {
-                let value = value - self.start; // special reset counter
+                // special reset counter
+                let value = if self.start > 0 {
+                    value - self.start
+                } else {
+                    value
+                };
                 if self.total * 100 / self.variation < value
                     || value > self.l3 * 100 / self.variation
                 {
@@ -101,7 +107,6 @@ pub enum PowerEvent {
     IMAX(u32),
     UNSET,
 }
-
 
 pub fn engy_registers() -> Result<(), AfbError> {
     // add binding custom converter
