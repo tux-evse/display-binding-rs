@@ -33,7 +33,6 @@ macro_rules! handler_by_uid {
                 )
             }
         };
-        afb_log_msg!(Notice, None, "RLM  AfbEvtHandler widget.get_info() \"{}\" apievt {} pattern {}",widget.get_info(),$apievt, $pattern);
         let handler = AfbEvtHandler::new(widget.get_uid())
             .set_info(widget.get_info())
             .set_pattern(to_static_str(format!("{}/{}", $apievt, $pattern)))
@@ -264,8 +263,7 @@ fn evt_nrj_cb(
     ctx: &mut MgrEvtEngyCtrl,
 ) -> Result<(), AfbError> {
         let data = args.get::<&MeterDataSet>(0)?;
-        afb_log_msg!(Notice, None, "RLM  evt_nrj_cb data.total {}", data.total);
-        ctx.widget.set_value(format!("{}", data.total).as_str());
+        ctx.widget.set_value(format!("{:.2}", (data.total as f64)/100.0).as_str());
         Ok(())
 }
 

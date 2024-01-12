@@ -317,7 +317,7 @@ impl DisplayHandle {
 
         let label_txt_x_ofs = 10;
         let label_val_x_ofs = label_txt_x_ofs + 90;
-        let label_unit_x_ofs = label_val_x_ofs + 30;
+        let label_unit_x_ofs = label_val_x_ofs + 50;
 
 
         let label_height = 30;
