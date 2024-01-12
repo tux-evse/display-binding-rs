@@ -19,7 +19,7 @@
                 "y_res": 600,
                 "ratio": 1
             },
-            "mgr_api": "tux-evse-webapp-mock"
+            "engy_api": "tux-evse-webapp-mock"
         }
     ]
 }

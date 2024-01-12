@@ -397,7 +397,7 @@ pub(crate) fn register_verbs(
         display,
         "ChargeImpsVal",
         engy_api,
-        "amps",
+        "current",
         LvglLabel,
         MgrEvtEngyCtrl
     );
