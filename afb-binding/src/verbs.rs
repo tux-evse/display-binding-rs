@@ -417,7 +417,7 @@ pub(crate) fn register_verbs(
         display,
         "ChargeAdpsVal",
         engy_api,
-        "adps",
+        "adsp",
         LvglLabel,
         MgrEvtEngyCtrl
     );

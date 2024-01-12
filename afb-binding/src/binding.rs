@@ -75,7 +75,7 @@ impl AfbApiControls for ApiUserData {
         AfbSubCall::call_sync(api, self.engy_api, "energy", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "current", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "power", "{'action':'subscribe'}")?;
-        AfbSubCall::call_sync(api, self.engy_api, "adps", "{'action':'subscribe'}")?;
+        AfbSubCall::call_sync(api, self.engy_api, "adsp", "{'action':'subscribe'}")?;
 
         afb_log_msg!(Notice, None, "subscribing charging_api done ");
         Ok(())
