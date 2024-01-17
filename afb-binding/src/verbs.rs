@@ -282,8 +282,40 @@ fn evt_chmgr_cb(
     args: &AfbData,
     ctx: &mut MgrEvtChmgrCtrl,
 ) -> Result<(), AfbError> {
-        let data = args.get::<&MeterDataSet>(0)?;
-        
+        let data = args.get::<&ChargingMsg>(0)?;
+        match data {
+            ChargingMsg::Power(pdata) => {
+                match pdata {
+                    PowerRequest::Start => {
+                        ctx.widget.set_value(AssetPixmap::station_charging());
+                    }
+                    PowerRequest::Stop => {
+                        ctx.widget.set_value(AssetPixmap::station_completed());
+                    }
+                    _ => {
+                        
+                    }
+                }
+            }
+            ChargingMsg::Plugged(sdata) => {
+                match sdata {
+                    PlugState::Lock => {
+                        ctx.widget.set_value(AssetPixmap::station_pending_autho());
+                    }
+                    PlugState::Error => {
+                        ctx.widget.set_value(AssetPixmap::station_out_of_order());
+                    }
+                    PlugState::PlugOut => {
+                        ctx.widget.set_value(AssetPixmap::station_available());
+                    }
+                    _ => {
+                        
+                    }
+                }
+            }
+            _ => {
+            }
+        }
         Ok(())
 }
 

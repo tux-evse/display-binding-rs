@@ -31,18 +31,18 @@ AfbDataConverter!(power_request, PowerRequest);
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 #[serde(rename_all = "lowercase")]
 pub enum PowerRequest {
-    Start,
-    Stop,
+    Start, // chrmgr station charging
+    Stop, // chrmgr station completed
 }
 
 AfbDataConverter!(plug_state, PlugState);
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 #[serde(rename_all = "lowercase")]
 pub enum PlugState {
-    PlugIn,
-    Lock,
-    Error,
-    PlugOut,
+    PlugIn, 
+    Lock, // chrmgr station pending autho
+    Error, // chrmgr station out of order
+    PlugOut, // chrmgr station available
     Unknown,
 }
 
