@@ -5,9 +5,6 @@
     ],
     "monitoring": true,
     "ws-client": [
-        "public:unix:@tux-evse-webapp-mock"
-    ],
-    "ws-client": [
         "unix:/tmp/api/engy",
         "unix:/tmp/api/chmgr",
         "unix:/tmp/api/auth"
