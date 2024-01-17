@@ -706,7 +706,7 @@ impl DisplayHandle {
             )
             .set_info("Zone Message")
             .set_width(label_zone_mess_height)
-            .insert_text("No matter where you go there you are")
+            .insert_text("Scan the QRcode with your smartphone")
             .finalize(),
         );
 
