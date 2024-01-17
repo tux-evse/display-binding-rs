@@ -282,6 +282,7 @@ fn evt_chmgr_cb(
     args: &AfbData,
     ctx: &mut MgrEvtChmgrCtrl,
 ) -> Result<(), AfbError> {
+        afb_log_msg!(Notice, event, "-- evt_chmgr_cb event");
         let data = args.get::<&ChargingMsg>(0)?;
         match data {
             ChargingMsg::Power(pdata) => {
@@ -289,7 +290,7 @@ fn evt_chmgr_cb(
                     PowerRequest::Start => {
                         ctx.widget.set_value(AssetPixmap::station_charging());
                     }
-                    PowerRequest::Stop => {
+                    PowerRequest::Stop(i32) => {
                         ctx.widget.set_value(AssetPixmap::station_completed());
                     }
                     _ => {
@@ -325,8 +326,8 @@ fn evt_auth_cb(
     args: &AfbData,
     ctx: &mut MgrEvtAuthCrl,
 ) -> Result<(), AfbError> {
+        afb_log_msg!(Notice, event, "-- evt_auth_cb event");
         let data = args.get::<&AuthMsg>(0)?;
-
         match data {
             AuthMsg::Done => {
                 ctx.widget.set_value(AssetPixmap::nfc_done());

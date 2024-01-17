@@ -23,4 +23,4 @@ if test -n "$PERMISION_ADM"; then
 fi
 
 # start binder with test config
-afb-binder --trap-faults=no -v --config=afb-binding/etc/binding-target.json
+afb-binder --trap-faults=no -v --config=test/etc/binding-target.json
