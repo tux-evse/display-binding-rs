@@ -249,7 +249,8 @@ struct MgrEvtEngyCtrl {
 }
 
 struct MgrEvtChmgrCtrl {
-    widget: &'static LvglPixmap,
+    widget_charge: &'static LvglPixmap,
+    widget_plug_status: &'static LvglPixmap,
 }
 
 struct MgrEvtAuthCrl {
@@ -288,10 +289,10 @@ fn evt_chmgr_cb(
             ChargingMsg::Power(pdata) => {
                 match pdata {
                     PowerRequest::Start => {
-                        ctx.widget.set_value(AssetPixmap::station_charging());
+                        ctx.widget_charge.set_value(AssetPixmap::station_charging());
                     }
                     PowerRequest::Stop(i32) => {
-                        ctx.widget.set_value(AssetPixmap::station_completed());
+                        ctx.widget_charge.set_value(AssetPixmap::station_completed());
                     }
                     _ => {
                         
@@ -300,14 +301,23 @@ fn evt_chmgr_cb(
             }
             ChargingMsg::Plugged(sdata) => {
                 match sdata {
+                    PlugState::PlugIn => {
+                        ctx.widget_plug_status.set_value(AssetPixmap::plug_connected_unlocked());
+                    }
                     PlugState::Lock => {
-                        ctx.widget.set_value(AssetPixmap::station_pending_autho());
+                        ctx.widget_charge.set_value(AssetPixmap::station_pending_autho());
+                        ctx.widget_plug_status.set_value(AssetPixmap::plug_connected_locked());
                     }
                     PlugState::Error => {
-                        ctx.widget.set_value(AssetPixmap::station_out_of_order());
+                        ctx.widget_charge.set_value(AssetPixmap::station_out_of_order());
+                        ctx.widget_charge.set_value(AssetPixmap::plug_error());
                     }
                     PlugState::PlugOut => {
-                        ctx.widget.set_value(AssetPixmap::station_available());
+                        ctx.widget_charge.set_value(AssetPixmap::station_available());
+                        ctx.widget_plug_status.set_value(AssetPixmap::plug_disconnected());
+                    }
+                    PlugState::Unknown => {
+                        ctx.widget_plug_status.set_value(AssetPixmap::plug_unknow());
                     }
                     _ => {
                         
@@ -504,15 +514,39 @@ pub(crate) fn register_verbs(
         MgrEvtEngyCtrl
     );
 
-    handler_by_uid!(
-        api,
-        display,
-        "Pixmap-charge-status",
-        chmgr_api,
-        "*",
-        LvglPixmap,
-        MgrEvtChmgrCtrl
-    );
+    let widget_charge = match display.get_by_uid("Pixmap-charge-status").downcast_ref::<LvglPixmap>() {
+        Some(widget) => widget,
+        None => {
+            return afb_error!(
+                "verb-info-widget",
+                "no widget uid:{} type:{} found in panel",
+                "Pixmap-charge-status",
+                "LvglPixmap"
+            )
+        }
+    };
+
+    let widget_plug_status = match display
+        .get_by_uid("Pixmap-connect-status")
+        .downcast_ref::<LvglPixmap>()
+    {
+        Some(widget) => widget,
+        None => {
+            return Err(AfbError::new(
+                "Pixmap-connect-status",
+                "no widget uid: Pixmap-connect-status  type:LvglPixmap found in panel",
+            ))
+        }
+    };
+
+
+    let handler = AfbEvtHandler::new("Charger_manager")
+        .set_info("Charger manager")
+        .set_pattern(to_static_str(format!("{}/{}",chmgr_api, "*")))
+        .set_callback(Box::new(MgrEvtChmgrCtrl{ widget_charge, widget_plug_status }))
+        .finalize()?;
+
+    api.add_evt_handler(handler);
 
     handler_by_uid!(
         api,
@@ -539,18 +573,7 @@ pub(crate) fn register_verbs(
         }
     };
 */
-    let lv_plug_status = match display
-        .get_by_uid("Pixmap-connect-status")
-        .downcast_ref::<LvglPixmap>()
-    {
-        Some(widget) => widget,
-        None => {
-            return Err(AfbError::new(
-                "Pixmap-connect-status",
-                "no widget uid: Pixmap-connect-status  type:LvglPixmap found in panel",
-            ))
-        }
-    };
+
 
     let lv_Switch_iso = match display
         .get_by_uid("Switch-iso")
