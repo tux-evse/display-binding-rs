@@ -18,9 +18,25 @@
 #[cfg(not(afbv4))]
 extern crate afbv4;
 
+#[path = "chmgr-types.rs"]
+mod chmgr;
+
+#[path = "am62x-types.rs"]
+mod am62x;
+
 #[path = "engy-types.rs"]
 mod engy;
 
+#[path = "slac-types.rs"]
+mod slac;
+
+#[path = "auth-types.rs"]
+mod auth;
+
 pub mod prelude {
+    pub use crate::chmgr::*;
+    pub use crate::am62x::*;
     pub use crate::engy::*;
+    pub use crate::slac::*;
+    pub use crate::auth::*;
 }

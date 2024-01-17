@@ -247,6 +247,15 @@ fn event_get_callback(
 struct MgrEvtEngyCtrl {
     widget: &'static LvglLabel,
 }
+
+struct MgrEvtChmgrCtrl {
+    widget: &'static LvglPixmap,
+}
+
+struct MgrEvtAuthCrl {
+    widget: &'static LvglPixmap,
+}
+
 //------------------------------------------------------------------
 struct PlugEvtCtrl {
     plug_pixmap: &'static LvglPixmap,
@@ -256,7 +265,7 @@ struct PlugEvtCtrl {
     pixmap_start: &'static LvglPixButton,
 }
 
-AfbEventRegister!(MgrEvtVerb, evt_nrj_cb, MgrEvtEngyCtrl);
+AfbEventRegister!(MgrEvtEngyVerb, evt_nrj_cb, MgrEvtEngyCtrl);
 fn evt_nrj_cb(
     event: &AfbEventMsg,
     args: &AfbData,
@@ -267,27 +276,65 @@ fn evt_nrj_cb(
         Ok(())
 }
 
+AfbEventRegister!(MgrEvtChmgrVerb, evt_chmgr_cb, MgrEvtChmgrCtrl);
+fn evt_chmgr_cb(
+    event: &AfbEventMsg,
+    args: &AfbData,
+    ctx: &mut MgrEvtChmgrCtrl,
+) -> Result<(), AfbError> {
+        let data = args.get::<&MeterDataSet>(0)?;
+        
+        Ok(())
+}
+
+AfbEventRegister!(MgrEvtAuthVerb, evt_auth_cb, MgrEvtAuthCrl);
+fn evt_auth_cb(
+    event: &AfbEventMsg,
+    args: &AfbData,
+    ctx: &mut MgrEvtAuthCrl,
+) -> Result<(), AfbError> {
+        let data = args.get::<&AuthMsg>(0)?;
+
+        match data {
+            AuthMsg::Done => {
+                ctx.widget.set_value(AssetPixmap::nfc_done());
+            }
+            AuthMsg::Fail => {
+                ctx.widget.set_value(AssetPixmap::nfc_fail());
+            }
+            AuthMsg::Pending => {
+                ctx.widget.set_value(AssetPixmap::nfc_pending());
+            }
+            AuthMsg::Idle => {
+                ctx.widget.set_value(AssetPixmap::nfc_idle());
+            }
+        };
+
+        Ok(())
+}
+
+
 AfbEventRegister!(PlugEvtVerb, evt_plug_cb, PlugEvtCtrl);
 fn evt_plug_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut PlugEvtCtrl) -> Result<(), AfbError> {
     afb_log_msg!(Notice, event, "-- evt_plug_cb event");
     match args.get::<&VehicleState>(0) {
         Ok(data) => {
             match data.plugged {
-                PlugState::PlugIn => {
+                PlugState2del::PlugIn => {
                     ctx.plug_pixmap
                         .set_value(AssetPixmap::plug_connected_unlocked());
                 }
-                PlugState::Lock => {
+                PlugState2del::Lock => {
                     ctx.plug_pixmap
                         .set_value(AssetPixmap::plug_connected_locked());
                 }
-                PlugState::Error => {
+                PlugState2del::Error => {
                     ctx.plug_pixmap.set_value(AssetPixmap::plug_error());
                 }
-                PlugState::PlugOut => {
+                PlugState2del::PlugOut => {
                     ctx.plug_pixmap.set_value(AssetPixmap::plug_disconnected());
                 }
-                PlugState::Unknown => {
+                PlugState2del::Unknown => {
                     ctx.plug_pixmap.set_value(AssetPixmap::plug_unknow());
                 }
                 _ => {
@@ -295,11 +342,11 @@ fn evt_plug_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut PlugEvtCtrl) -> Re
                 }
             }
             match data.power_request {
-                PowerRequest::Start => {
+                PowerRequest2del::Start => {
                     ctx.pixmap_start.set_value(AssetPixmap::btn_start());
                     ctx.pixmap_start.set_disable(true);
                 }
-                PowerRequest::Stop => {
+                PowerRequest2del::Stop => {
                     ctx.pixmap_start.set_value(AssetPixmap::btn_stop());
                     ctx.pixmap_start.set_disable(false);
                 }
@@ -371,6 +418,8 @@ pub(crate) fn register_verbs(
     };
     //------------------------------------------------------------------
     let engy_api = config.engy_api;
+    let chmgr_api = config.chmgr_api;
+    let auth_api = config.auth_api;
 
     handler_by_uid!(
         api,
@@ -420,6 +469,26 @@ pub(crate) fn register_verbs(
         "adsp",
         LvglLabel,
         MgrEvtEngyCtrl
+    );
+
+    handler_by_uid!(
+        api,
+        display,
+        "Pixmap-charge-status",
+        chmgr_api,
+        "*",
+        LvglPixmap,
+        MgrEvtChmgrCtrl
+    );
+
+    handler_by_uid!(
+        api,
+        display,
+        "Pixmap-auth-status",
+        auth_api,
+        "*",
+        LvglPixmap,
+        MgrEvtAuthCrl
     );
 
     //------------------------------------------------------------------

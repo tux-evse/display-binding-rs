@@ -6,7 +6,9 @@
     ],
     "monitoring": true,
     "ws-client": [
-        "tcp:phytec-power.tuxevse.vpn:12351/engy"
+        "tcp:phytec-power.tuxevse.vpn:12351/engy",
+        "tcp:phytec-power.tuxevse.vpn:12371/chmgr",
+        "tcp:phytec-power.tuxevse.vpn:12381/auth"
     ],
     "uuid": "HELLO",
     "binding": [
@@ -22,7 +24,9 @@
                 "y_res": 600,
                 "ratio": 1
             },
-            "engy_api": "engy"
+            "engy_api": "engy",
+            "chmgr_api": "chmgr",
+            "auth_api": "auth"
         }
     ]
 }

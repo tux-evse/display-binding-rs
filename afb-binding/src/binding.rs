@@ -50,11 +50,15 @@ fn json_to_color(jcolor: JsoncObj) -> Result<LvglColor, AfbError> {
 
 pub struct ApiConfig {
     pub engy_api: &'static str,
+    pub chmgr_api: &'static str,
+    pub auth_api: &'static str,
 }
 
 // wait until both apis (iso+slac) to be ready before trying event subscription
 struct ApiUserData {
     engy_api: &'static str,
+    chmgr_api: &'static str,
+    auth_api: &'static str,
 }
 
 impl AfbApiControls for ApiUserData {
@@ -77,6 +81,10 @@ impl AfbApiControls for ApiUserData {
         AfbSubCall::call_sync(api, self.engy_api, "power", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "adsp", "{'action':'subscribe'}")?;
 
+
+        AfbSubCall::call_sync(api, self.auth_api, "subscribe", true)?;
+        AfbSubCall::call_sync(api, self.chmgr_api, "subscribe", true)?;
+
         afb_log_msg!(Notice, None, "subscribing charging_api done ");
         Ok(())
     }
@@ -97,6 +105,8 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
     // add binding custom converter
     types_register()?;
     engy_registers()?;
+    auth_registers()?;
+    chmgr_registers()?;
 
     let uid = if let Ok(value) = jconf.get::<String>("uid") {
         to_static_str(value)
@@ -173,18 +183,43 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
         ));
     };
 
-    let api_config = ApiConfig { engy_api };
+
+    let chmgr_api = if let Ok(value) = jconf.get::<String>("chmgr_api") {
+        to_static_str(value)
+    } else {
+        return Err(AfbError::new(
+            "binding-mgr-chmgr-config",
+            "chmgr_api micro service api SHOULD be defined",
+        ));
+    };
+
+
+    let auth_api = if let Ok(value) = jconf.get::<String>("auth_api") {
+        to_static_str(value)
+    } else {
+        return Err(AfbError::new(
+            "binding-mgr-auth-config",
+            "auth_api micro service api SHOULD be defined",
+        ));
+    };
+
+
+
+
+    let api_config = ApiConfig { engy_api , chmgr_api, auth_api};
 
     // create backend API
     // --------------------------------------------------------
     let api = AfbApi::new(api_name)
         .set_info(info)
         .set_permission(permission)
-        .set_callback(Box::new(ApiUserData { engy_api }));
+        .set_callback(Box::new(ApiUserData { engy_api, chmgr_api, auth_api }));
 
     register_verbs(api, &mut display, api_config)?;
     
     api.require_api(engy_api);
+    api.require_api(chmgr_api);
+    api.require_api(auth_api);
 
     Ok(api.finalize()?)
 }

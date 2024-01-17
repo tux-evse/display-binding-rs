@@ -7,6 +7,11 @@
     "ws-client": [
         "public:unix:@tux-evse-webapp-mock"
     ],
+    "ws-client": [
+        "unix:/tmp/api/engy",
+        "unix:/tmp/api/chmgr",
+        "unix:/tmp/api/auth"
+    ],
     "binding": [
         {
             "uid": "display-lvgl",
@@ -19,7 +24,9 @@
                 "y_res": 600,
                 "ratio": 1
             },
-            "engy_api": "tux-evse-webapp-mock"
+            "engy_api": "engy",
+            "chmgr_api": "chmgr",
+            "auth_api": "auth"
         }
     ]
 }

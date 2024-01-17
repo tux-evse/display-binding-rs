@@ -35,18 +35,18 @@ pub enum IecState {
     Unset,
 }
 //#[serde(rename_all = "SCREAMING-KEBAB-CASE", tag = "action")]
-AfbDataConverter!(power_request, PowerRequest);
+AfbDataConverter!(power_request, PowerRequest2del);
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
-pub enum PowerRequest {
+pub enum PowerRequest2del {
     Start,
     Stop,
 }
 
 //#[serde(rename_all = "SCREAMING-KEBAB-CASE", tag = "action")]
 
-AfbDataConverter!(plug_state, PlugState);
+AfbDataConverter!(plug_state, PlugState2del);
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
-pub enum PlugState {
+pub enum PlugState2del {
     PlugIn,
     Lock,
     Error,
@@ -69,8 +69,8 @@ pub enum Iso15118State {
 AfbDataConverter!(vehicle_state, VehicleState);
 #[derive(Serialize, Deserialize, Debug)]
 pub struct VehicleState {
-    pub plugged: PlugState,
-    pub power_request: PowerRequest,
+    pub plugged: PlugState2del,
+    pub power_request: PowerRequest2del,
     pub power_imax: u32,
     pub iso15118: Iso15118State,
     pub iec_state: IecState,

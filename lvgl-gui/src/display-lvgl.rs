@@ -225,7 +225,8 @@ impl DisplayHandle {
         let pix_connect_status_x_ofs = 30;
         let pix_connect_status_y_ofs = 30;
 
-        let pix_global_status_x_ofs = 450;
+        let pix_auth_status_x_ofs = 550;
+        let pix_charge_status_x_ofs = 350;
 
         let pix_start_x_ofs = 800;
 
@@ -244,14 +245,28 @@ impl DisplayHandle {
         self.panel.push(
             LvglPixmap::new(
                 root,
-                "Pixmap-global-status",
-                AssetPixmap::tux_evsex150(),
-                pix_global_status_x_ofs,
+                "Pixmap-charge-status",
+                AssetPixmap::station_out_of_order(),
+                pix_charge_status_x_ofs,
                 pix_connect_status_y_ofs,
             )
             .set_info("Pixmap lang")
             .finalize(),
         );
+
+
+        self.panel.push(
+            LvglPixmap::new(
+                root,
+                "Pixmap-auth-status",
+                AssetPixmap::nfc_fail(),
+                pix_auth_status_x_ofs,
+                pix_connect_status_y_ofs,
+            )
+            .set_info("Pixmap lang")
+            .finalize(),
+        );
+
 
         self.panel.push(
             LvglPixButton::new(

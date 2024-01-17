@@ -57,15 +57,9 @@ impl MeterDataSet {
     // update data_set and set updated flag when total changes.
     pub fn update(&mut self, phase: usize, meter: f64) -> Result<(), AfbError> {
         let value = (meter * 100.0).round() as i32;
-
         match phase {
             0 => {
-                // special reset counter
-                let value = if self.start > 0 {
-                    value - self.start
-                } else {
-                    value
-                };
+                let value= value - self.start;
                 if self.total * 100 / self.variation < value
                     || value > self.l3 * 100 / self.variation
                 {
@@ -97,20 +91,19 @@ impl MeterDataSet {
     }
 }
 
-AfbDataConverter!(power_events, PowerEvent);
+AfbDataConverter!(energy_actions, EnergyAction);
 #[derive(Serialize, Deserialize, Debug, Default)]
 #[serde(rename_all = "lowercase", tag = "action")]
-pub enum PowerEvent {
+pub enum EnergyAction {
     #[default]
-    STOP,
-    START,
-    IMAX(u32),
-    UNSET,
+    READ,
+    SUBSCRIBE,
+    UNSUBSCRIBE,
+    RESET,
+    INFO,
 }
-
 pub fn engy_registers() -> Result<(), AfbError> {
-    // add binding custom converter
     meter_data_set::register()?;
-    power_events::register()?;
+    energy_actions::register()?;
     Ok(())
 }
