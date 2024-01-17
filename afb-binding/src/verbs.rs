@@ -497,7 +497,7 @@ pub(crate) fn register_verbs(
     handler_by_uid!(
         api,
         display,
-        "ChargePowerVal",
+        "BatConso",
         engy_api,
         "power",
         LvglLabel,

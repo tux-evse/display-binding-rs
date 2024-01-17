@@ -310,7 +310,7 @@ impl DisplayHandle {
                 label_status_bat_y_ofs + 120,
             )
             .set_height(label_status_bat_height)
-            .set_value("2760.4")
+            .set_value("0.0")
             .finalize(),
         );
         LvglLabel::new(
@@ -340,8 +340,8 @@ impl DisplayHandle {
         let label_volts_y_ofs = 10;
         let label_energy_y_ofs = label_volts_y_ofs + label_height;
         let label_amps_y_ofs = label_volts_y_ofs + 2 * label_height;
-        let label_power_y_ofs = label_volts_y_ofs + 3 * label_height;
-        let label_adps_y_ofs = label_volts_y_ofs + 4 * label_height;
+        //let label_power_y_ofs = label_volts_y_ofs + 3 * label_height;
+        let label_adps_y_ofs = label_volts_y_ofs + 3 * label_height;
 
         self.panel.push(
             LvglLabel::new(
@@ -460,7 +460,7 @@ impl DisplayHandle {
             .set_value("I")
             .finalize(),
         );
-
+/* 
         self.panel.push(
             LvglLabel::new(
                 root,
@@ -473,6 +473,7 @@ impl DisplayHandle {
             .set_value("Power")
             .finalize(),
         );
+
 
         self.panel.push(
             LvglLabel::new(
@@ -499,7 +500,7 @@ impl DisplayHandle {
             .set_value("KW")
             .finalize(),
         );
-
+*/
         self.panel.push(
             LvglLabel::new(
                 root,
