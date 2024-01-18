@@ -26,12 +26,13 @@ if test -n "$PERMISION_ADM"; then
 fi
 
 DEVTOOL_PORT=1236
-echo display debug mode config=$CONFDIR/*.json port=$DEVTOOL_PORT
+echo display debug mode config="${CONFDIR}"/*.json port=$DEVTOOL_PORT
 
 # start binder with test config
 afb-binder --port=$DEVTOOL_PORT \
     --trap-faults=no \
     -v \
-    --config=$CONFDIR/binding-target.json \
+    --config="${CONFDIR}"/binder-display.json \
+    --config="${CONFDIR}"/binding-display.json \
   --tracereq=all \
   $*

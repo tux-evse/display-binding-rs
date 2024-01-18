@@ -1,0 +1,20 @@
+
+{
+"binding": [
+    {
+        "uid": "display-lvgl",
+        "api": "display",
+        "path": "/usr/redpesk/display-binding-rs/lib/libafb_display_lvgl.so",
+        "info": "lvgl embedded display binding",
+        "permission": "acl:display:client",
+        "display": {
+            "x_res": 1024,
+            "y_res": 600,
+            "ratio": 1
+        },
+        "engy_api": "engy",
+        "chmgr_api": "chmgr",
+        "auth_api": "auth"
+    }
+]
+}
