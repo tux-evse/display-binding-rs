@@ -226,7 +226,7 @@ impl DisplayHandle {
         let pix_connect_status_y_ofs = 30;
 
         let pix_auth_status_x_ofs = 550;
-        let pix_charge_status_x_ofs = 350;
+        let pix_charge_status_x_ofs = 330;
 
         let pix_start_x_ofs = 800;
 
@@ -306,8 +306,8 @@ impl DisplayHandle {
                 root,
                 "BatConso",
                 LvglMkFont::std_14(),
-                label_status_bat_x_ofs + 50,
-                label_status_bat_y_ofs + 120,
+                label_status_bat_x_ofs + 45,
+                label_status_bat_y_ofs + 100,
             )
             .set_height(label_status_bat_height)
             .set_value("0.0")
@@ -318,7 +318,7 @@ impl DisplayHandle {
             "BatConsoKw",
             LvglMkFont::std_14(),
             label_status_bat_x_ofs + 50 + 60,
-            label_status_bat_y_ofs + 120,
+            label_status_bat_y_ofs + 100,
         )
         .set_height(label_status_bat_height)
         .set_value("kw")
@@ -335,13 +335,13 @@ impl DisplayHandle {
         let label_unit_x_ofs = label_val_x_ofs + 50;
 
 
-        let label_height = 30;
+        let label_height = 35;
 
         let label_volts_y_ofs = 10;
         let label_energy_y_ofs = label_volts_y_ofs + label_height;
         let label_amps_y_ofs = label_volts_y_ofs + 2 * label_height;
         //let label_power_y_ofs = label_volts_y_ofs + 3 * label_height;
-        let label_adps_y_ofs = label_volts_y_ofs + 3 * label_height;
+        //let label_adps_y_ofs = label_volts_y_ofs + 3 * label_height;
 
         self.panel.push(
             LvglLabel::new(
@@ -363,7 +363,7 @@ impl DisplayHandle {
                 "ChargeVoltsVal",
                 LvglMkFont::std_14(),
                 label_val_x_ofs,
-                label_volts_y_ofs,
+                label_volts_y_ofs+18-14,
             )
             .set_height(label_height)
             .set_value("0.0")
@@ -376,7 +376,7 @@ impl DisplayHandle {
                 "ChargeVoltsUnit",
                 LvglMkFont::std_14(),
                 label_unit_x_ofs,
-                label_volts_y_ofs,
+                label_volts_y_ofs+18-14,
             )
             .set_height(label_height)
             .set_value("V")
@@ -402,7 +402,7 @@ impl DisplayHandle {
                 "ChargeEnergysVal",
                 LvglMkFont::std_14(),
                 label_val_x_ofs,
-                label_energy_y_ofs,
+                label_energy_y_ofs+18-14,
             )
             .set_height(label_height)
             .set_value("0.0")
@@ -415,7 +415,7 @@ impl DisplayHandle {
                 "ChargeEnergysUnit",
                 LvglMkFont::std_14(),
                 label_unit_x_ofs,
-                label_energy_y_ofs,
+                label_energy_y_ofs+18-14,
             )
             .set_height(label_height)
             .set_value("KwH")
@@ -441,7 +441,7 @@ impl DisplayHandle {
                 "ChargeImpsVal",
                 LvglMkFont::std_14(),
                 label_val_x_ofs,
-                label_amps_y_ofs,
+                label_amps_y_ofs+18-14,
             )
             .set_height(label_height)
             .set_value("0.0")
@@ -454,7 +454,7 @@ impl DisplayHandle {
                 "ChargeImpsUnit",
                 LvglMkFont::std_14(),
                 label_unit_x_ofs,
-                label_amps_y_ofs,
+                label_amps_y_ofs+18-14,
             )
             .set_height(label_height)
             .set_value("I")
@@ -501,6 +501,7 @@ impl DisplayHandle {
             .finalize(),
         );
 */
+/*
         self.panel.push(
             LvglLabel::new(
                 root,
@@ -539,7 +540,7 @@ impl DisplayHandle {
             .set_value("I")
             .finalize(),
         );
-
+ */
 
         self
     }
@@ -556,7 +557,7 @@ impl DisplayHandle {
         let switch_main_label_y_ofs = 5;
         let switch_iso_y_ofs = switch_main_label_y_ofs + 20;
         let switch_pnc_y_ofs = switch_iso_y_ofs + (switch_height + switch_sep) * 1;
-        let switch_v2g_y_ofs = switch_iso_y_ofs + (switch_height + switch_sep) * 2;
+        let switch_iec_y_ofs = switch_iso_y_ofs + (switch_height + switch_sep) * 2;
 
         self.panel.push(
             LvglLabel::new(
@@ -600,13 +601,13 @@ impl DisplayHandle {
         self.panel.push(
             LvglLabel::new(
                 root,
-                "V2G",
+                "IEC",
                 LvglMkFont::std_14(),
                 switch_label_x_ofs,
-                switch_v2g_y_ofs,
+                switch_iec_y_ofs,
             )
             .set_height(switch_title_height)
-            .set_value("V2G")
+            .set_value("IEC")
             .finalize(),
         );
 
@@ -627,7 +628,7 @@ impl DisplayHandle {
         );
 
         self.panel.push(
-            LvglSwitch::new(root, "Switch-v2g", switch_x_ofs, switch_v2g_y_ofs)
+            LvglSwitch::new(root, "Switch-iec", switch_x_ofs, switch_iec_y_ofs)
                 .set_disable(true)
                 .set_height(switch_height)
                 .set_value(false)
@@ -638,18 +639,19 @@ impl DisplayHandle {
     }
 
     pub fn draw_panel_mid(&mut self, root: &LvglWidget) -> &mut Self {
-        let area_smart_info_width = 250;
-        let area_smart_info_height = 160;
-        let area_smart_info_sizex = 400;
-        let area_smart_info_sizey = 20;
 
         let area_status_bat_width = 190;
-        let area_status_bat_height = 190;
+        let area_status_bat_height = 135;
         let area_status_bat_sizex = 20;
-        let area_status_bat_sizey = area_smart_info_sizey;
+        let area_status_bat_sizey = 20;
+
+        let area_smart_info_width = 220;
+        let area_smart_info_height = 135;
+        let area_smart_info_sizex = 380;
+        let area_smart_info_sizey = area_status_bat_sizey;
 
         let area_smart_charging_width = 250;
-        let area_smart_charging_height = 130;
+        let area_smart_charging_height = 135;
         let area_smart_charging_sizex = 1024 - area_smart_charging_width - 50;
         let area_smart_charging_sizey = area_smart_info_sizey;
 
@@ -691,24 +693,11 @@ impl DisplayHandle {
     }
 
     pub fn draw_panel_bot(&mut self, root: &LvglWidget) -> &mut Self {
-        let bare_code_size = 100;
+        let bare_code_size = 130;
 
         let label_zone_mess_x_ofs = bare_code_size + 10;
         let label_zone_mess_y_ofs = label_zone_mess_x_ofs / 4;
         let label_zone_mess_height = 1024 - label_zone_mess_x_ofs - 10;
-
-        self.panel.push(
-            LvglTextArea::new(
-                root,
-                "ZoneMessage",
-                label_zone_mess_x_ofs,
-                label_zone_mess_y_ofs,
-            )
-            .set_info("Zone Message")
-            .set_width(label_zone_mess_height)
-            .insert_text("Scan the QRcode with your smartphone")
-            .finalize(),
-        );
 
         self.panel.push(
             LvglQrcode::new(
@@ -724,6 +713,20 @@ impl DisplayHandle {
             .finalize(),
         );
 
+        self.panel.push(
+            LvglTextArea::new(
+                root,
+                "ZoneMessage",
+                label_zone_mess_x_ofs,
+                label_zone_mess_y_ofs,
+            )
+            .set_info("Zone Message")
+            .set_width(label_zone_mess_height)
+            .set_disable(true)
+            .insert_text("Scan the QRcode with your smartphone")
+            .finalize(),
+        );
+
         self
     }
 
@@ -732,10 +735,10 @@ impl DisplayHandle {
         let area_menu_sizey = 60;
 
         let area_top_posy = area_menu_sizey;
-        let area_top_sizey = 170;
+        let area_top_sizey = 210;
 
         let area_mid_posy = area_top_posy + area_top_sizey;
-        let area_mid_sizey = 250;
+        let area_mid_sizey = 190;
 
         let area_bot_posy = area_mid_posy + area_mid_sizey;
         let area_bot_sizey = 600 - area_mid_sizey - area_top_sizey - area_menu_sizey;
@@ -764,6 +767,18 @@ impl DisplayHandle {
         self.draw_panel_top(area_top);
         self.draw_panel_mid(area_mid);
         self.draw_panel_bot(area_bot);
+        
+        self.panel.push(
+            LvglPixmap::new(
+                self.get_root(),
+                "Pixmap-iotbzh",
+                AssetPixmap::logo_iot_bzh_flat(),
+                1024-100,
+                600-40,
+            )
+            .set_info("Pixmap iotbzh")
+            .finalize(),
+        );
 
         self
     }

@@ -34,6 +34,7 @@ impl AssetPixmap {
     impl_static_imgbin! (clock, img_clock);
     impl_static_imgbin! (info_circle_fill, img_info_circle_fill);
     impl_static_imgbin! (plug_connected_unlocked, img_plug_connected_unlocked);
+    impl_static_imgbin! (logo_iot_bzh_flat, img_logo_iot_bzh_flat);
     impl_static_imgbin! (nfc_pending, img_nfc_pending);
     impl_static_imgbin! (station_completed, img_station_completed);
     impl_static_imgbin! (station_pending_autho, img_station_pending_autho);

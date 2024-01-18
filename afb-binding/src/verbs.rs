@@ -262,7 +262,7 @@ struct PlugEvtCtrl {
     plug_pixmap: &'static LvglPixmap,
     switch_iso: &'static LvglSwitch,
     switch_pnc: &'static LvglSwitch,
-    switch_v2g: &'static LvglSwitch,
+    switch_iec: &'static LvglSwitch,
     pixmap_start: &'static LvglPixButton,
 }
 
@@ -291,8 +291,14 @@ fn evt_chmgr_cb(
                     PowerRequest::Start => {
                         ctx.widget_charge.set_value(AssetPixmap::station_charging());
                     }
-                    PowerRequest::Stop(i32) => {
+                    PowerRequest::Charging(_value) => {
+                        ctx.widget_charge.set_value(AssetPixmap::station_charging());
+                    }
+                    PowerRequest::Stop(_value) => {
                         ctx.widget_charge.set_value(AssetPixmap::station_completed());
+                    }
+                    PowerRequest::Idle => {
+                        ctx.widget_charge.set_value(AssetPixmap::station_available());
                     }
                     _ => {
                         
@@ -401,17 +407,17 @@ fn evt_plug_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut PlugEvtCtrl) -> Re
                 Iso15118State::Iso20 => {
                     ctx.switch_iso.set_value(true);
                     ctx.switch_pnc.set_value(false);
-                    ctx.switch_v2g.set_value(false);
+                    ctx.switch_iec.set_value(false);
                 }
                 Iso15118State::Iso2 => {
                     ctx.switch_iso.set_value(false);
                     ctx.switch_pnc.set_value(true);
-                    ctx.switch_v2g.set_value(false);
+                    ctx.switch_iec.set_value(false);
                 }
                 Iso15118State::Iec => {
                     ctx.switch_iso.set_value(false);
                     ctx.switch_pnc.set_value(false);
-                    ctx.switch_v2g.set_value(true);
+                    ctx.switch_iec.set_value(true);
                 }
                 _ => {
                     afb_log_msg!(Error, None, "-- switch invalid status");
@@ -503,7 +509,7 @@ pub(crate) fn register_verbs(
         LvglLabel,
         MgrEvtEngyCtrl
     );
-
+/*
     handler_by_uid!(
         api,
         display,
@@ -513,7 +519,7 @@ pub(crate) fn register_verbs(
         LvglLabel,
         MgrEvtEngyCtrl
     );
-
+ */
     let widget_charge = match display.get_by_uid("Pixmap-charge-status").downcast_ref::<LvglPixmap>() {
         Some(widget) => widget,
         None => {
@@ -601,15 +607,15 @@ pub(crate) fn register_verbs(
         }
     };
 
-    let lv_Switch_v2g = match display
-        .get_by_uid("Switch-v2g")
+    let lv_Switch_iec = match display
+        .get_by_uid("Switch-iec")
         .downcast_ref::<LvglSwitch>()
     {
         Some(widget) => widget,
         None => {
             return Err(AfbError::new(
-                "Switch-v2g",
-                "no widget uid: Switch-v2g  type:LvglSwitch found in panel",
+                "Switch-iec",
+                "no widget uid: Switch-iec  type:LvglSwitch found in panel",
             ))
         }
     };

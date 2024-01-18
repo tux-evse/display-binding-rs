@@ -32,8 +32,9 @@ AfbDataConverter!(power_request, PowerRequest);
 #[serde(rename_all = "lowercase")]
 pub enum PowerRequest {
     Start, // chrmgr station charging
-    Charging,
-    Stop(i32), // chrmgr station completed
+    Charging(u32),// chrmgr station charging (Value Imax on cable)
+    Stop(i32), // chrmgr station completed(Value kwh total),
+    Idle, //  chrmgr station available
 }
 
 AfbDataConverter!(plug_state, PlugState);

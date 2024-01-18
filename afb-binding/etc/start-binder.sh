@@ -5,6 +5,8 @@ DIRNAME=`dirname $0`
 cd $DIRNAME/..
 CONFDIR=`pwd`/etc
 
+pkill afb-display
+
 # use libafb development version if any
 export LD_LIBRARY_PATH="/usr/local/lib64:$LD_LIBRARY_PATH"
 export PATH="/usr/local/lib64:$PATH"
