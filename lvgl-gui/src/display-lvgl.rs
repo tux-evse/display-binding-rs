@@ -74,8 +74,8 @@ impl DisplayHandle {
     }
 
     pub fn draw_panel_menu(&mut self, root: &LvglWidget) -> &mut Self {
-        let pixmap_logo_x_ofs = 5;
-        let pixmap_logo_y_ofs = 5;
+        let pixmap_logo_x_ofs = 15;
+        let pixmap_logo_y_ofs = 15;
         //-----------------------------------------
         let pixmap_date_time_ico_y_ofs = 15;
         let label_time_height = 10;
@@ -92,12 +92,12 @@ impl DisplayHandle {
         self.panel.push(
             LvglPixmap::new(
                 root,
-                "Pixmap-logo",
-                AssetPixmap::tux_evsex40(),
+                "Pixmap-iotbzh",
+                AssetPixmap::logo_iot_bzh_flat(),
                 pixmap_logo_x_ofs,
                 pixmap_logo_y_ofs,
             )
-            .set_info("Pixmap nfc")
+            .set_info("Pixmap iotbzh")
             .finalize(),
         );
 
@@ -695,9 +695,14 @@ impl DisplayHandle {
     pub fn draw_panel_bot(&mut self, root: &LvglWidget) -> &mut Self {
         let bare_code_size = 130;
 
-        let label_zone_mess_x_ofs = bare_code_size + 10;
+        let label_zone_mess_x_ofs = bare_code_size + 40;
         let label_zone_mess_y_ofs = label_zone_mess_x_ofs / 4;
-        let label_zone_mess_height = 1024 - label_zone_mess_x_ofs - 10;
+
+        let pixmap_logo_x_ofs = 1024 - 170;
+        let pixmap_logo_y_ofs = 0;
+
+
+        let label_zone_mess_height = 1024 - label_zone_mess_x_ofs - 10 - 200;
 
         self.panel.push(
             LvglQrcode::new(
@@ -712,6 +717,19 @@ impl DisplayHandle {
             .set_value("WIFI:T:WPA;S:tuxevse_hotspot;P:valeocharger;")
             .finalize(),
         );
+
+        self.panel.push(
+            LvglPixmap::new(
+                root,
+                "Pixmap-logo",
+                AssetPixmap::tux_evsex150(),
+                pixmap_logo_x_ofs,
+                pixmap_logo_y_ofs,
+            )
+            .set_info("Pixmap nfc")
+            .finalize(),
+        );
+
 
         self.panel.push(
             LvglTextArea::new(
@@ -768,17 +786,7 @@ impl DisplayHandle {
         self.draw_panel_mid(area_mid);
         self.draw_panel_bot(area_bot);
         
-        self.panel.push(
-            LvglPixmap::new(
-                self.get_root(),
-                "Pixmap-iotbzh",
-                AssetPixmap::logo_iot_bzh_flat(),
-                1024-100,
-                600-40,
-            )
-            .set_info("Pixmap iotbzh")
-            .finalize(),
-        );
+
 
         self
     }
