@@ -255,6 +255,7 @@ struct MgrEvtAuthCrl {
     widget: &'static LvglPixmap,
 }
 
+
 //------------------------------------------------------------------
 struct PlugEvtCtrl {
     plug_pixmap: &'static LvglPixmap,
@@ -354,6 +355,51 @@ fn evt_auth_cb(
         Ok(())
 }
 
+struct AsyncAuthData {
+    widget: &'static LvglPixmap,
+}
+
+AfbCallRegister!( AsyncAuthCtrl, async_auth_cb, AsyncAuthData);
+fn async_auth_cb(
+    api: &AfbApi,
+    args: &AfbData, 
+    authdata: &mut AsyncAuthData,
+) -> Result<(), AfbError> {
+        afb_log_msg!(Notice, api, "-- async_auth_cb");
+        let data = args.get::<&AuthState>(0)?;
+        match data.auth {
+            AuthMsg::Done => {
+                authdata.widget.set_value(AssetPixmap::nfc_done());
+            }
+            AuthMsg::Fail => {
+                authdata.widget.set_value(AssetPixmap::nfc_fail());
+            }
+            AuthMsg::Pending => {
+                authdata.widget.set_value(AssetPixmap::nfc_pending());
+            }
+            AuthMsg::Idle => {
+                authdata.widget.set_value(AssetPixmap::nfc_idle());
+            }
+        };
+
+        Ok(())
+}
+
+/*
+AfbVerbRegister!(AsyncAuthResCtrl, async_auth_res_cb);
+fn async_auth_res_cb(request: &AfbRequest, params: &mut AfbData) {
+    let jquery = match params.get::<&AuthState>(0) {
+        Ok(argument) => {afb_log_msg!(Info,request,"async_response received params={}",argument);}
+        Err(error) => {
+            afb_log_msg!(Error, request, "async_response error={}", error);
+            request.reply(afb_add_trace!(error), -1);
+            return;
+        }
+    };
+    // do something
+    request.reply("async callback done", 0);
+}
+ */
 
 AfbEventRegister!(PlugEvtVerb, evt_plug_cb, PlugEvtCtrl);
 fn evt_plug_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut PlugEvtCtrl) -> Result<(), AfbError> {
@@ -415,6 +461,18 @@ fn evt_plug_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut PlugEvtCtrl) -> Re
         }
     }
     Ok(())
+}
+
+
+
+pub fn init_display_value(
+    api: & AfbApi,
+    widget: &'static LvglPixmap,
+    config: ApiConfig,
+) -> Result<(), AfbError> {
+
+        AfbSubCall::call_async(api, config.auth_api,"state","{'action':'read'}", Box::new(AsyncAuthCtrl{widget}))?;
+        Ok(())
 }
 
 pub(crate) fn register_verbs(
@@ -532,13 +590,13 @@ pub(crate) fn register_verbs(
     };
 
 
-    let handler = AfbEvtHandler::new("Charger_manager")
+    let charger_handler = AfbEvtHandler::new("Charger_manager")
         .set_info("Charger manager")
         .set_pattern(to_static_str(format!("{}/{}",chmgr_api, "*")))
         .set_callback(Box::new(MgrEvtChmgrCtrl{ widget_charge, widget_plug_status }))
         .finalize()?;
 
-    api.add_evt_handler(handler);
+    api.add_evt_handler(charger_handler);
 
     handler_by_uid!(
         api,
