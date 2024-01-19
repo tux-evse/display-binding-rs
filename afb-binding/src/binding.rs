@@ -62,7 +62,7 @@ struct ApiUserData {
 }
 
 impl AfbApiControls for ApiUserData {
-    fn config(&mut self, api: &AfbApi, config: JsoncObj) -> Result<(), AfbError> {
+    fn config(&mut self, _api: &AfbApi, _config: JsoncObj) -> Result<(), AfbError> {
         Ok(()) // returning -1 will abort binder process
     }
 

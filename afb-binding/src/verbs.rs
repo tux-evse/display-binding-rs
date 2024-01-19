@@ -18,8 +18,6 @@ use typesv4::prelude::*;
 use std::cell::Cell;
 use std::sync::Arc;
 
-use serde::{Deserialize, Serialize};
-
 macro_rules! handler_by_uid {
     ($api: ident, $display:ident, $uid:literal, $apievt:ident, $pattern:literal, $widget:ty, $ctx_type: ident) => {
         let widget = match $display.get_by_uid($uid).downcast_ref::<$widget>() {
@@ -195,7 +193,7 @@ fn timer_callback(_timer: &AfbTimer, _decount: u32, ctx: &mut TimerCtx) -> Resul
 //------------------------------------------------------------------
 
 struct UserCtxData {
-    event: &'static AfbEvent,
+    _event: &'static AfbEvent,
     counter: Cell<u32>,
 }
 
@@ -268,7 +266,7 @@ struct PlugEvtCtrl {
 
 AfbEventRegister!(MgrEvtEngyVerb, evt_nrj_cb, MgrEvtEngyCtrl);
 fn evt_nrj_cb(
-    event: &AfbEventMsg,
+    _event: &AfbEventMsg,
     args: &AfbData,
     ctx: &mut MgrEvtEngyCtrl,
 ) -> Result<(), AfbError> {
@@ -300,9 +298,6 @@ fn evt_chmgr_cb(
                     PowerRequest::Idle => {
                         ctx.widget_charge.set_value(AssetPixmap::station_available());
                     }
-                    _ => {
-                        
-                    }
                 }
             }
             ChargingMsg::Plugged(sdata) => {
@@ -324,9 +319,6 @@ fn evt_chmgr_cb(
                     }
                     PlugState::Unknown => {
                         ctx.widget_plug_status.set_value(AssetPixmap::plug_unknow());
-                    }
-                    _ => {
-                        
                     }
                 }
             }
@@ -386,9 +378,6 @@ fn evt_plug_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut PlugEvtCtrl) -> Re
                 PlugState2del::Unknown => {
                     ctx.plug_pixmap.set_value(AssetPixmap::plug_unknow());
                 }
-                _ => {
-                    afb_log_msg!(Error, None, "-- plug invalid status");
-                }
             }
             match data.power_request {
                 PowerRequest2del::Start => {
@@ -398,9 +387,6 @@ fn evt_plug_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut PlugEvtCtrl) -> Re
                 PowerRequest2del::Stop => {
                     ctx.pixmap_start.set_value(AssetPixmap::btn_stop());
                     ctx.pixmap_start.set_disable(false);
-                }
-                _ => {
-                    afb_log_msg!(Error, None, "-- power_request invalid status");
                 }
             }
             match data.iso15118 {
@@ -581,7 +567,7 @@ pub(crate) fn register_verbs(
 */
 
 
-    let lv_Switch_iso = match display
+    let _lv_switch_iso = match display
         .get_by_uid("Switch-iso")
         .downcast_ref::<LvglSwitch>()
     {
@@ -594,7 +580,7 @@ pub(crate) fn register_verbs(
         }
     };
 
-    let lv_Switch_pnc = match display
+    let _lv_switch_pnc = match display
         .get_by_uid("Switch-pnc")
         .downcast_ref::<LvglSwitch>()
     {
@@ -607,7 +593,7 @@ pub(crate) fn register_verbs(
         }
     };
 
-    let lv_Switch_iec = match display
+    let _lv_switch_iec = match display
         .get_by_uid("Switch-iec")
         .downcast_ref::<LvglSwitch>()
     {
@@ -620,7 +606,7 @@ pub(crate) fn register_verbs(
         }
     };
 
-    let lv_pixmap_start = match display
+    let _lv_pixmap_start = match display
         .get_by_uid("Pixmap-start")
         .downcast_ref::<LvglPixButton>()
     {

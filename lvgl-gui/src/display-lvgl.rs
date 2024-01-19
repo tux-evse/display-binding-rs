@@ -18,7 +18,6 @@
 use crate::prelude::*;
 use lvgl::prelude::*;
 use std::any::Any;
-use typesv4::prelude::*;
 
 pub struct DisplayHandle {
     handle: LvglHandle,
@@ -328,7 +327,7 @@ impl DisplayHandle {
     }
 
     pub fn draw_panel_info_charging(&mut self, root: &LvglWidget) -> &mut Self {
-        let pixmap_logo_x_ofs = 5;
+        //let pixmap_logo_x_ofs = 5;
 
         let label_txt_x_ofs = 10;
         let label_val_x_ofs = label_txt_x_ofs + 90;
