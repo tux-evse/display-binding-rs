@@ -82,7 +82,9 @@ impl AfbApiControls for ApiUserData {
         AfbSubCall::call_sync(api, self.engy_api, "energy", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "current", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "power", "{'action':'subscribe'}")?;
-        AfbSubCall::call_sync(api, self.engy_api, "adsp", "{'action':'subscribe'}")?;
+        if let Err(_msg_error) = AfbSubCall::call_sync(api, self.engy_api, "adsp", "{'action':'subscribe'}") {
+            afb_log_msg!(Warning, api, "subscribing To adsp failed, linky missing");
+        }
 
         AfbSubCall::call_sync(api, self.auth_api, "subscribe", true)?;
         AfbSubCall::call_sync(api, self.chmgr_api, "subscribe", true)?;
@@ -91,7 +93,7 @@ impl AfbApiControls for ApiUserData {
 
         init_display_value(api, self.auth_widget, api_config)?;
 
-        afb_log_msg!(Notice, None, "subscribing charging_api done ");
+        afb_log_msg!(Notice, api, "subscribing charging_api done ");
 
         Ok(())
     }
@@ -211,13 +213,12 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
     };
     let api_config = ApiConfig { engy_api , chmgr_api, auth_api};
     
-
     // create backend API
     // --------------------------------------------------------
     let api = AfbApi::new(api_name)
         .set_info(info)
         .set_permission(permission);
-    
+
     register_verbs(api, &mut display, api_config)?;
 
     let auth_widget = match display.get_by_uid("Pixmap-auth-status").downcast_ref::<LvglPixmap>() {
