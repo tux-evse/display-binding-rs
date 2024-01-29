@@ -13,6 +13,7 @@
 use crate::prelude::*;
 use afbv4::prelude::*;
 use serde::{Deserialize, Serialize};
+use std::time::Duration;
 
 AfbDataConverter!(error_state, ErrorState);
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
@@ -31,20 +32,20 @@ AfbDataConverter!(power_request, PowerRequest);
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 #[serde(rename_all = "lowercase")]
 pub enum PowerRequest {
-    Start, // chrmgr station charging
-    Charging(u32),// chrmgr station charging (Value Imax on cable)
-    Stop(i32), // chrmgr station completed(Value kwh total),
-    Idle, //  chrmgr station available
+    Start,
+    Charging(u32),
+    Stop(i32),
+    Idle,
 }
 
 AfbDataConverter!(plug_state, PlugState);
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 #[serde(rename_all = "lowercase")]
 pub enum PlugState {
-    PlugIn, 
-    Lock, // chrmgr station pending autho
-    Error, // chrmgr station out of order
-    PlugOut, // chrmgr station available
+    PlugIn,
+    Lock,
+    Error,
+    PlugOut,
     Unknown,
 }
 
@@ -53,6 +54,7 @@ pub enum PlugState {
 pub enum IsoState {
     Iso20,
     Iso2,
+    Iso3,
     Iec,
     Unset,
 }
@@ -66,6 +68,16 @@ pub enum ChargingMsg {
     Iso(IsoState),
     Auth(AuthMsg),
     State(ChargingState),
+    Reservation(ReservationStatus)
+}
+
+AfbDataConverter!(reservation_state, ReservationState);
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "lowercase")]
+pub struct ReservationState {
+    pub id: i32,
+    pub start: Duration,
+    pub stop: Duration,
 }
 
 AfbDataConverter!(charging_state, ChargingState);
@@ -74,24 +86,28 @@ AfbDataConverter!(charging_state, ChargingState);
 pub struct ChargingState {
     #[serde(skip)]
     pub updated: bool,
+    #[serde(skip)]
+    pub reservation: Option<ReservationState>,
     pub imax: u32,
     pub pmax: u32,
     pub plugged: PlugState,
     pub power: PowerRequest,
     pub iso: IsoState,
     pub auth: AuthMsg,
+
 }
 
 impl ChargingState {
     pub fn default() -> Self {
         ChargingState {
             updated: false,
-            imax: 0,
-            pmax:0,
+            imax: 32, // Fulup TBD should comme from energy mgr
+            pmax: 22,
             plugged: PlugState::Unknown,
-            power: PowerRequest::Stop(0),
+            power: PowerRequest::Idle,
             iso: IsoState::Unset,
             auth: AuthMsg::Idle,
+            reservation: None,
         }
     }
 }
@@ -105,6 +121,33 @@ pub enum ChargingAction {
     SUBSCRIBE,
     UNSUBSCRIBE,
 }
+pub enum ReservationAction {
+    NOW,
+    DELAY,
+    CANCEL,
+}
+
+AfbDataConverter!(charging_msg, ReservationStatus);
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[serde(rename_all = "lowercase")]
+pub enum ReservationStatus {
+    Accepted,
+    Refused,
+    Pending,
+    Cancel,
+    Request,
+}
+
+AfbDataConverter!(reservation_session, ReservationSession);
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "lowercase")]
+pub struct ReservationSession {
+    pub id: i32,
+    pub tagid:String,
+    pub start: Duration,
+    pub stop:  Duration,
+    pub status: ReservationStatus,
+}
 
 pub fn chmgr_registers() -> Result<(), AfbError> {
     charging_actions::register()?;
@@ -113,6 +156,8 @@ pub fn chmgr_registers() -> Result<(), AfbError> {
     error_state::register()?;
     power_request::register()?;
     charging_event::register()?;
+    reservation_session::register()?;
+    reservation_state::register()?;
 
     Ok(())
 }
