@@ -664,18 +664,18 @@ pub(crate) fn register_verbs(
         }
     };
 
-    let _lv_pixmap_start = match display
-        .get_by_uid("Pixmap-start")
-        .downcast_ref::<LvglPixButton>()
-    {
-        Some(widget) => widget,
-        None => {
-            return Err(AfbError::new(
-                "Pixmap-start",
-                "no widget uid: Pixmap-start  type:LvglPixButton found in panel",
-            ))
-        }
-    };
+    // let _lv_pixmap_start = match display
+    //     .get_by_uid("Pixmap-start")
+    //     .downcast_ref::<LvglPixButton>()
+    // {
+    //     Some(widget) => widget,
+    //     None => {
+    //         return Err(AfbError::new(
+    //             "Pixmap-start",
+    //             "no widget uid: Pixmap-start  type:LvglPixButton found in panel",
+    //         ))
+    //     }
+    // };
 
     AfbTimer::new("clock-timer")
         .set_period(60000)

@@ -267,18 +267,18 @@ impl DisplayHandle {
         );
 
 
-        self.panel.push(
-            LvglPixButton::new(
-                root,
-                "Pixmap-start",
-                pix_start_x_ofs,
-                pix_connect_status_y_ofs,
-            )
-            .set_info("Pixmap lang")
-            .set_value(AssetPixmap::btn_start())
-            .set_disable(true)
-            .finalize(),
-        );
+        // self.panel.push(
+        //     LvglPixButton::new(
+        //         root,
+        //         "Pixmap-start",
+        //         pix_start_x_ofs,
+        //         pix_connect_status_y_ofs,
+        //     )
+        //     .set_info("Pixmap lang")
+        //     .set_value(AssetPixmap::btn_start())
+        //     .set_disable(true)
+        //     .finalize(),
+        // );
 
         self
     }
