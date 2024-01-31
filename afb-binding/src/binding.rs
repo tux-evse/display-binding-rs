@@ -18,9 +18,6 @@ use afbv4::prelude::*;
 use display_lvgl_gui::prelude::*;
 use serde::{Deserialize, Serialize};
 
-pub(crate) fn to_static_str(value: String) -> &'static str {
-    Box::leak(value.into_boxed_str())
-}
 
 AfbDataConverter!(api_arg_subscribe, QuerySubscribe);
 #[derive(Serialize, Deserialize, Debug, Default)]
