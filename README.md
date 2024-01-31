@@ -11,7 +11,7 @@ Binding template/demo interfacing lvgl-rclib-rs with libafb-rs micro service arc
 
 Default driver is frame-buffer, it is typically what is used for embedded devices.
 
-```
+```bash
 nm /usr/local/lib64/liblv_drivers.so | grep fbdev_init
 cargo build
 ```
