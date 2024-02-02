@@ -31,6 +31,7 @@
 #include "info_circle_fill.c"
 #include "plug_connected_unlocked.c"
 #include "logo_iot_bzh_flat.c"
+#include "logo_valeo.c"
 #include "nfc_pending.c"
 #include "station_completed.c"
 #include "station_pending_autho.c"

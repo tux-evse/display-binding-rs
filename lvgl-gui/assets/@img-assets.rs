@@ -44,4 +44,5 @@ impl AssetPixmap {
     impl_static_imgbin! (reception_on, img_reception_on);
     impl_static_imgbin! (plug_unknow, img_plug_unknow);
 //@END_IMG_imgS@
+    impl_static_imgbin! (logo_valeo, img_logo_valeo);
 }

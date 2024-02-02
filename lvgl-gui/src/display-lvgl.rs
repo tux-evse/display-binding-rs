@@ -73,10 +73,14 @@ impl DisplayHandle {
     }
 
     pub fn draw_panel_menu(&mut self, root: &LvglWidget) -> &mut Self {
-        let pixmap_logo_x_ofs = 15;
-        let pixmap_logo_y_ofs = 15;
+        let pixmap_logo_x_ofs = 110;
+        let pixmap_logo_y_ofs = 20;
+
+        let pixmap_logovaleo_x_ofs = 20;
+        let pixmap_logovaleo_y_ofs = 15;
+
         //-----------------------------------------
-        let pixmap_date_time_ico_y_ofs = 15;
+        let pixmap_date_time_ico_y_ofs = 20;
         let label_time_height = 10;
 
         let pixmap_date_x_ofs = 400;
@@ -101,6 +105,18 @@ impl DisplayHandle {
         );
 
         //-----------------------------------------
+        self.panel.push(
+            LvglPixmap::new(
+                root,
+                "Pixmap-valeo",
+                AssetPixmap::logo_valeo(),
+                pixmap_logovaleo_x_ofs,
+                pixmap_logovaleo_y_ofs,
+            )
+            .set_info("Pixmap valeo")
+            .finalize(),
+        );
+//-----------------------------------------
 
         self.panel.push(
             LvglPixmap::new(
@@ -153,7 +169,7 @@ impl DisplayHandle {
         );
         //-----------------------------------------
 
-        let pixmap_ico_y_ofs = 10;
+        let pixmap_ico_y_ofs = 15;
 
         let pixmap_nfc_x_ofs = 1024 - 5 * 40;
         let pixmap_net_x_ofs = 1024 - 4 * 40;
@@ -221,11 +237,11 @@ impl DisplayHandle {
     }
 
     pub fn draw_panel_top(&mut self, root: &LvglWidget) -> &mut Self {
-        let pix_connect_status_x_ofs = 30;
+        let pix_connect_status_x_ofs = 50;
         let pix_connect_status_y_ofs = 30;
 
-        let pix_auth_status_x_ofs = 550;
-        let pix_charge_status_x_ofs = 330;
+        let pix_auth_status_x_ofs = 750;
+        let pix_charge_status_x_ofs = 400;
 
         let pix_start_x_ofs = 800;
 
@@ -320,7 +336,7 @@ impl DisplayHandle {
             label_status_bat_y_ofs + 100,
         )
         .set_height(label_status_bat_height)
-        .set_value("kw")
+        .set_value("kW")
         .finalize();
 
         self
@@ -417,7 +433,7 @@ impl DisplayHandle {
                 label_energy_y_ofs+18-14,
             )
             .set_height(label_height)
-            .set_value("KwH")
+            .set_value("kW.h")
             .finalize(),
         );
 
@@ -456,7 +472,7 @@ impl DisplayHandle {
                 label_amps_y_ofs+18-14,
             )
             .set_height(label_height)
-            .set_value("I")
+            .set_value("A")
             .finalize(),
         );
 /* 
