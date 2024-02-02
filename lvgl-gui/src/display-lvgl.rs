@@ -336,7 +336,7 @@ impl DisplayHandle {
             label_status_bat_y_ofs + 100,
         )
         .set_height(label_status_bat_height)
-        .set_value("kW")
+        .set_value("W") // the value is in Watt
         .finalize();
 
         self
