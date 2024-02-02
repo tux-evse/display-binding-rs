@@ -282,8 +282,8 @@ fn evt_chmgr_cb(
     args: &AfbData,
     ctx: &mut MgrEvtChmgrCtrl,
 ) -> Result<(), AfbError> {
-        afb_log_msg!(Notice, event, "-- evt_chmgr_cb event.");
         let data = args.get::<&ChargingMsg>(0)?;
+        afb_log_msg!(Notice, event, "-- evt_chmgr_cb event:{:?}.",data);
         match data {
             ChargingMsg::Power(pdata) => {
                 match pdata {
