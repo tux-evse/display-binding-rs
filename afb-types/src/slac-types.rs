@@ -12,22 +12,20 @@
 use serde::{Deserialize, Serialize};
 use afbv4::prelude::*;
 
-AfbDataConverter!(slac_status, SlacStatus);
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
-#[serde(rename_all = "lowercase", untagged)]
-// Session state extracted from Switch/PySlac code
-pub enum SlacStatus {
-    MATCHED,
-    MATCHING,
-    UNMATCHED,
-    WAITING,
-    JOINING,
-    TIMEOUT,
-    IDLE,
+AfbDataConverter!(iec6185_msg, Iec6185Msg);
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "lowercase")]
+pub enum Iec6185Msg {
+    Plugged(bool),
+    PowerRqt(bool),
+    CableImax(u32),
+    RelayOn(bool),
+    Error(String),
 }
 
-pub fn slac_registers() -> Result <(), AfbError> {
+
+pub fn am62x_registers() -> Result <(), AfbError> {
     // add binding custom converter
-    slac_status::register()?;
+    iec6185_msg::register()?;
     Ok(())
 }

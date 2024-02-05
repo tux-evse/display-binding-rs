@@ -11,6 +11,7 @@
  */
 use afbv4::prelude::*;
 use serde::{Deserialize, Serialize};
+use  std::time::Duration;
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub enum MeterTagSet {
@@ -23,7 +24,14 @@ pub enum MeterTagSet {
     Unset,
 }
 
-// hole meter in 00.A value
+AfbDataConverter!(config_data_set, EngyConfSet);
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+pub struct EngyConfSet {
+    pub pmax: i32,
+    pub imax: i32,
+}
+
+// all meter in 00.A value
 AfbDataConverter!(meter_data_set, MeterDataSet);
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct MeterDataSet {
@@ -57,30 +65,30 @@ impl MeterDataSet {
     // update data_set and set updated flag when total changes.
     pub fn update(&mut self, phase: usize, meter: f64) -> Result<(), AfbError> {
         let value = (meter * 100.0).round() as i32;
+        let variation = value*self.variation/100;
         match phase {
             0 => {
-                let value= value - self.start;
-                if self.total * 100 / self.variation < value
-                    || value > self.l3 * 100 / self.variation
+                let value = value - self.start;
+                if self.total - variation < value || self.total + variation > value 
                 {
                     self.total = value;
                     self.updated = true;
                 }
             }
             1 => {
-                if self.l1 * 100 / self.variation < value || value > self.l3 * 100 / self.variation
+                if self.l1 - variation < value || self.l1 + variation > value 
                 {
                     self.l1 = value;
                 }
             }
             2 => {
-                if self.l2 * 100 / self.variation < value || value > self.l3 * 100 / self.variation
+                if self.l2 - variation < value || self.l2 + variation > value
                 {
-                    self.l3 = value;
+                    self.l2 = value;
                 }
             }
             3 => {
-                if self.l2 * 100 / self.variation < value || value > self.l3 * 100 / self.variation
+                if self.l3 - variation < value || self.l3 + variation > value
                 {
                     self.l3 = value;
                 }
@@ -102,8 +110,48 @@ pub enum EnergyAction {
     RESET,
     INFO,
 }
+
+AfbDataConverter!(energy_state, EnergyState);
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+pub struct EnergyState {
+    #[serde(skip)]
+    pub subscription_max: i32,
+    #[serde(skip)]
+    pub tension_max: i32,
+    #[serde(skip)]
+    pub imax: i32,
+    #[serde(skip)]
+    pub pmax: i32,
+    // public data
+    pub timestamp: Duration,
+    pub session: i32,
+    pub total: i32,
+    pub current: i32,
+    pub tension: i32,
+    pub power: i32,
+}
+
+impl EnergyState {
+    pub fn default() -> Self {
+        EnergyState {
+            subscription_max: 0,
+            imax: 0,
+            pmax: 0,
+            tension_max: 0,
+            session: 0,
+            total: 0,
+            current: 0,
+            tension: 0,
+            power: 0,
+            timestamp: Duration::new(0,0),
+        }
+    }
+}
+
 pub fn engy_registers() -> Result<(), AfbError> {
     meter_data_set::register()?;
+    config_data_set::register()?;
     energy_actions::register()?;
+    energy_state::register()?;
     Ok(())
 }
