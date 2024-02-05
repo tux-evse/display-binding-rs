@@ -261,7 +261,7 @@ impl DisplayHandle {
             LvglPixmap::new(
                 root,
                 "Pixmap-charge-status",
-                AssetPixmap::station_out_of_order(),
+                AssetPixmap::station_available(),
                 pix_charge_status_x_ofs,
                 pix_connect_status_y_ofs,
             )
