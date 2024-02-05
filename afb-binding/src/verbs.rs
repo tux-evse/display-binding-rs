@@ -257,13 +257,6 @@ struct MgrEvtAuthCrl {
 
 
 //------------------------------------------------------------------
-struct PlugEvtCtrl {
-    plug_pixmap: &'static LvglPixmap,
-    switch_iso: &'static LvglSwitch,
-    switch_pnc: &'static LvglSwitch,
-    switch_iec: &'static LvglSwitch,
-    pixmap_start: &'static LvglPixButton,
-}
 
 AfbEventRegister!(MgrEvtEngyVerb, evt_nrj_cb, MgrEvtEngyCtrl);
 fn evt_nrj_cb(
@@ -385,86 +378,6 @@ fn async_auth_cb(
         Ok(())
 }
 
-/*
-AfbVerbRegister!(AsyncAuthResCtrl, async_auth_res_cb);
-fn async_auth_res_cb(request: &AfbRequest, params: &mut AfbData) {
-    let jquery = match params.get::<&AuthState>(0) {
-        Ok(argument) => {afb_log_msg!(Info,request,"async_response received params={}",argument);}
-        Err(error) => {
-            afb_log_msg!(Error, request, "async_response error={}", error);
-            request.reply(afb_add_trace!(error), -1);
-            return;
-        }
-    };
-    // do something
-    request.reply("async callback done", 0);
-}
- */
-
-AfbEventRegister!(PlugEvtVerb, evt_plug_cb, PlugEvtCtrl);
-fn evt_plug_cb(event: &AfbEventMsg, args: &AfbData, ctx: &mut PlugEvtCtrl) -> Result<(), AfbError> {
-    afb_log_msg!(Notice, event, "-- evt_plug_cb event");
-    match args.get::<&VehicleState>(0) {
-        Ok(data) => {
-            match data.plugged {
-                PlugState2del::PlugIn => {
-                    ctx.plug_pixmap
-                        .set_value(AssetPixmap::plug_connected_unlocked());
-                }
-                PlugState2del::Lock => {
-                    ctx.plug_pixmap
-                        .set_value(AssetPixmap::plug_connected_locked());
-                }
-                PlugState2del::Error => {
-                    ctx.plug_pixmap.set_value(AssetPixmap::plug_error());
-                }
-                PlugState2del::PlugOut => {
-                    ctx.plug_pixmap.set_value(AssetPixmap::plug_disconnected());
-                }
-                PlugState2del::Unknown => {
-                    ctx.plug_pixmap.set_value(AssetPixmap::plug_unknow());
-                }
-            }
-            match data.power_request {
-                PowerRequest2del::Start => {
-                    ctx.pixmap_start.set_value(AssetPixmap::btn_start());
-                    ctx.pixmap_start.set_disable(true);
-                }
-                PowerRequest2del::Stop => {
-                    ctx.pixmap_start.set_value(AssetPixmap::btn_stop());
-                    ctx.pixmap_start.set_disable(false);
-                }
-            }
-            match data.iso15118 {
-                Iso15118State::Iso20 => {
-                    ctx.switch_iso.set_value(true);
-                    ctx.switch_pnc.set_value(false);
-                    ctx.switch_iec.set_value(false);
-                }
-                Iso15118State::Iso2 => {
-                    ctx.switch_iso.set_value(false);
-                    ctx.switch_pnc.set_value(true);
-                    ctx.switch_iec.set_value(false);
-                }
-                Iso15118State::Iec => {
-                    ctx.switch_iso.set_value(false);
-                    ctx.switch_pnc.set_value(false);
-                    ctx.switch_iec.set_value(true);
-                }
-                _ => {
-                    afb_log_msg!(Error, None, "-- switch invalid status");
-                }
-            }
-        }
-        Err(_) => {
-            afb_log_msg!(Error, event, "-- plug invalid format data");
-        }
-    }
-    Ok(())
-}
-
-
-
 pub fn init_display_value(
     api: & AfbApi,
     widget: &'static LvglPixmap,
@@ -553,17 +466,7 @@ pub(crate) fn register_verbs(
         LvglLabel,
         MgrEvtEngyCtrl
     );
-/*
-    handler_by_uid!(
-        api,
-        display,
-        "ChargeAdpsVal",
-        engy_api,
-        "adsp",
-        LvglLabel,
-        MgrEvtEngyCtrl
-    );
- */
+
     let widget_charge = match display.get_by_uid("Pixmap-charge-status").downcast_ref::<LvglPixmap>() {
         Some(widget) => widget,
         None => {
@@ -609,21 +512,6 @@ pub(crate) fn register_verbs(
     );
 
     //------------------------------------------------------------------
-    /*
-    let lv_charge_duration = match display
-        .get_by_uid("ChargeDuration")
-        .downcast_ref::<LvglLabel>()
-    {
-        Some(widget) => widget,
-        None => {
-            return Err(AfbError::new(
-                "conf-date-widget",
-                "no widget uid: ChargeDuration  type:LvglLabel found in panel",
-            ))
-        }
-    };
-*/
-
 
     let _lv_switch_iso = match display
         .get_by_uid("Switch-iso")
@@ -664,24 +552,10 @@ pub(crate) fn register_verbs(
         }
     };
 
-    // let _lv_pixmap_start = match display
-    //     .get_by_uid("Pixmap-start")
-    //     .downcast_ref::<LvglPixButton>()
-    // {
-    //     Some(widget) => widget,
-    //     None => {
-    //         return Err(AfbError::new(
-    //             "Pixmap-start",
-    //             "no widget uid: Pixmap-start  type:LvglPixButton found in panel",
-    //         ))
-    //     }
-    // };
-
     AfbTimer::new("clock-timer")
         .set_period(60000)
         .set_callback(Box::new(TimerCtx { time, date }))
         .start()?;
 
-    let _ = types_register();
     Ok(())
 }

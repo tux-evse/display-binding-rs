@@ -59,8 +59,6 @@ struct ApiUserData {
     auth_widget: &'static  LvglPixmap,
 }
 
-
-
 impl AfbApiControls for ApiUserData {
     fn config(&mut self, _api: &AfbApi, _config: JsoncObj) -> Result<(), AfbError> {
         Ok(()) // returning -1 will abort binder process
@@ -84,6 +82,7 @@ impl AfbApiControls for ApiUserData {
         }
 
         AfbSubCall::call_sync(api, self.auth_api, "subscribe", true)?;
+
         AfbSubCall::call_sync(api, self.chmgr_api, "subscribe", true)?;
 
         let api_config = ApiConfig{ engy_api:self.engy_api , chmgr_api:self.chmgr_api, auth_api:self.auth_api};
@@ -109,7 +108,6 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
     api_arg_switch::register()?;
 
     // add binding custom converter
-    types_register()?;
     engy_registers()?;
     auth_registers()?;
     chmgr_registers()?;
@@ -162,10 +160,6 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
             ));
         }
     };
-
-    if let Ok(value) = jconf.get::<String>("logo") {
-        LvglImage::new(display.get_root(), "tux-evse", value.as_str(), 0, 0);
-    }
 
     // check theme and provide default if needed
     if let Ok(jvalue) = jconf.get::<JsoncObj>("theme") {
@@ -231,8 +225,6 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
     };
 
     api.set_callback(Box::new(ApiUserData { engy_api, chmgr_api, auth_api, auth_widget}));
-
-
     
     api.require_api(engy_api);
     api.require_api(chmgr_api);

@@ -243,8 +243,6 @@ impl DisplayHandle {
         let pix_auth_status_x_ofs = 750;
         let pix_charge_status_x_ofs = 400;
 
-        let pix_start_x_ofs = 800;
-
         self.panel.push(
             LvglPixmap::new(
                 root,
@@ -475,87 +473,6 @@ impl DisplayHandle {
             .set_value("A")
             .finalize(),
         );
-/* 
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargePowerTxt",
-                LvglMkFont::std_18(),
-                label_txt_x_ofs,
-                label_power_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("Power")
-            .finalize(),
-        );
-
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargePowerVal",
-                LvglMkFont::std_14(),
-                label_val_x_ofs,
-                label_power_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("0.0")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargePowerUnit",
-                LvglMkFont::std_14(),
-                label_unit_x_ofs,
-                label_power_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("KW")
-            .finalize(),
-        );
-*/
-/*
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargeAdpsTxt",
-                LvglMkFont::std_18(),
-                label_txt_x_ofs,
-                label_adps_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("Adps")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargeAdpsVal",
-                LvglMkFont::std_14(),
-                label_val_x_ofs,
-                label_adps_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("0.0")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargeAdpsUnit",
-                LvglMkFont::std_14(),
-                label_unit_x_ofs,
-                label_adps_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("I")
-            .finalize(),
-        );
- */
 
         self
     }
@@ -801,8 +718,6 @@ impl DisplayHandle {
         self.draw_panel_mid(area_mid);
         self.draw_panel_bot(area_bot);
         
-
-
         self
     }
 
