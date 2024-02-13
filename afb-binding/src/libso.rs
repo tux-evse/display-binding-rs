@@ -15,9 +15,6 @@
     html_favicon_url = "https://iot.bzh/images/defaults/favicon.ico"
 )]
 
-#[path = "types.rs"]
-mod types;
-
 #[cfg(not(afbv4))]
 extern crate afbv4;
 
@@ -28,7 +25,6 @@ mod verbs;
 mod binding;
 
 pub(crate) mod prelude {
-    pub(crate) use crate::types::*;
     pub(crate) use crate::verbs::*;
     pub(crate) use crate::binding::*;
 }
