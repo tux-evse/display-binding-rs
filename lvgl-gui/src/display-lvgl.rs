@@ -344,8 +344,8 @@ impl DisplayHandle {
         //let pixmap_logo_x_ofs = 5;
 
         let label_txt_x_ofs = 10;
-        let label_val_x_ofs = label_txt_x_ofs + 90;
-        let label_unit_x_ofs = label_val_x_ofs + 50;
+        let label_val_x_ofs = label_txt_x_ofs + 40;
+        let label_unit_x_ofs = label_val_x_ofs + 80;
 
 
         let label_height = 35;
