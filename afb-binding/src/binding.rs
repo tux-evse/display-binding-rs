@@ -49,6 +49,7 @@ pub struct ApiConfig {
     pub engy_api: &'static str,
     pub chmgr_api: &'static str,
     pub auth_api: &'static str,
+    pub dbus_api: &'static str,
 }
 
 // wait until both apis (iso+slac) to be ready before trying event subscription
@@ -56,6 +57,7 @@ struct ApiUserData {
     engy_api: &'static str,
     chmgr_api: &'static str,
     auth_api: &'static str,
+    dbus_api: &'static str,
     auth_widget: &'static  LvglPixmap,
 }
 
@@ -82,10 +84,11 @@ impl AfbApiControls for ApiUserData {
         }
 
         AfbSubCall::call_sync(api, self.auth_api, "subscribe", true)?;
-
         AfbSubCall::call_sync(api, self.chmgr_api, "subscribe", true)?;
 
-        let api_config = ApiConfig{ engy_api:self.engy_api , chmgr_api:self.chmgr_api, auth_api:self.auth_api};
+        AfbSubCall::call_sync(api, self.dbus_api, "subscribe_nfc", true)?;
+
+        let api_config = ApiConfig{ engy_api:self.engy_api , chmgr_api:self.chmgr_api, auth_api:self.auth_api, dbus_api:self.dbus_api};
 
         init_display_value(api, self.auth_widget, api_config)?;
 
@@ -202,7 +205,17 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
             "auth_api micro service api SHOULD be defined",
         ));
     };
-    let api_config = ApiConfig { engy_api , chmgr_api, auth_api};
+
+    let dbus_api = if let Ok(value) = jconf.get::<String>("dbus_api") {
+        to_static_str(value)
+    } else {
+        return Err(AfbError::new(
+            "binding-dbus_api-config",
+            "dbus_api micro service api SHOULD be defined",
+        ));
+    };
+
+    let api_config = ApiConfig { engy_api , chmgr_api, auth_api, dbus_api};
     
     // create backend API
     // --------------------------------------------------------
@@ -224,11 +237,12 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
         }
     };
 
-    api.set_callback(Box::new(ApiUserData { engy_api, chmgr_api, auth_api, auth_widget}));
+    api.set_callback(Box::new(ApiUserData { engy_api, chmgr_api, auth_api, dbus_api, auth_widget}));
     
     api.require_api(engy_api);
     api.require_api(chmgr_api);
     api.require_api(auth_api);
+    api.require_api(dbus_api);
 
     Ok(api.finalize()?)
 }

@@ -251,6 +251,10 @@ struct MgrEvtChmgrCtrl {
     widget_plug_status: &'static LvglPixmap,
 }
 
+struct MgrEvtNfcCtrl {
+    widget_nfc_status: &'static LvglPixmap,
+}
+
 struct MgrEvtAuthCrl {
     widget: &'static LvglPixmap,
 }
@@ -321,6 +325,17 @@ fn evt_chmgr_cb(
         }
         Ok(())
 }
+
+AfbEventRegister!(MgrEvtNfcVerb, evt_nfc_cb, MgrEvtNfcCtrl);
+fn evt_nfc_cb(
+    _event: &AfbEventMsg,
+    _args: &AfbData,
+    ctx: &mut MgrEvtNfcCtrl,
+) -> Result<(), AfbError> {
+        ctx.widget_nfc_status.set_value(AssetPixmap::nfc_on());
+        Ok(())
+}
+
 
 AfbEventRegister!(MgrEvtAuthVerb, evt_auth_cb, MgrEvtAuthCrl);
 fn evt_auth_cb(
@@ -426,6 +441,7 @@ pub(crate) fn register_verbs(
     let engy_api = config.engy_api;
     let chmgr_api = config.chmgr_api;
     let auth_api = config.auth_api;
+    let dbus_api = config.dbus_api;
 
     handler_by_uid!(
         api,
@@ -492,6 +508,18 @@ pub(crate) fn register_verbs(
         }
     };
 
+    let widget_nfc_status = match display
+        .get_by_uid("Pixmap-nfc")
+        .downcast_ref::<LvglPixmap>()
+    {
+        Some(widget) => widget,
+        None => {
+            return Err(AfbError::new(
+                "Pixmap-nfc-status",
+                "no widget uid: Pixmap-nfc-status  type:LvglPixmap found in panel",
+            ))
+        }
+    };
 
     let charger_handler = AfbEvtHandler::new("Charger_manager")
         .set_info("Charger manager")
@@ -499,7 +527,14 @@ pub(crate) fn register_verbs(
         .set_callback(Box::new(MgrEvtChmgrCtrl{ widget_charge, widget_plug_status }))
         .finalize()?;
 
+    let nfc_handler = AfbEvtHandler::new("nfc_manager")
+        .set_info("nfc manager")
+        .set_pattern(to_static_str(format!("{}/{}",dbus_api, "*")))
+        .set_callback(Box::new(MgrEvtNfcCtrl{ widget_nfc_status }))
+        .finalize()?;
+
     api.add_evt_handler(charger_handler);
+    api.add_evt_handler(nfc_handler);
 
     handler_by_uid!(
         api,

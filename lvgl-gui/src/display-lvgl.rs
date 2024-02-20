@@ -181,7 +181,7 @@ impl DisplayHandle {
             LvglPixmap::new(
                 root,
                 "Pixmap-nfc",
-                AssetPixmap::nfc_on(),
+                AssetPixmap::nfc_off(),
                 pixmap_nfc_x_ofs,
                 pixmap_ico_y_ofs,
             )

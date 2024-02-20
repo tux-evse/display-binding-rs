@@ -14,7 +14,8 @@
         },
         "engy_api": "engy",
         "chmgr_api": "chmgr",
-        "auth_api": "auth"
+        "auth_api": "auth",
+        "dbus_api": "dbus"
     }
 ]
 }
