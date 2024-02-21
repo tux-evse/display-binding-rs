@@ -285,7 +285,7 @@ fn evt_chmgr_cb(
             ChargingMsg::Power(pdata) => {
                 match pdata {
                     PowerRequest::Start => {
-                        ctx.widget_charge.set_value(AssetPixmap::station_charging());
+                        ctx.widget_charge.set_value(AssetPixmap::station_reserved());
                     }
                     PowerRequest::Charging(_value) => {
                         ctx.widget_charge.set_value(AssetPixmap::station_charging());
