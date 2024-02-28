@@ -249,6 +249,7 @@ struct MgrEvtEngyCtrl {
 struct MgrEvtChmgrCtrl {
     widget_charge: &'static LvglPixmap,
     widget_plug_status: &'static LvglPixmap,
+    widget_iec_status: &'static LvglSwitch,
 }
 
 struct MgrEvtNfcCtrl {
@@ -317,6 +318,21 @@ fn evt_chmgr_cb(
                     }
                     PlugState::Unknown => {
                         ctx.widget_plug_status.set_value(AssetPixmap::plug_unknow());
+                    }
+                }
+            }
+            ChargingMsg::Iso(idata) => {
+                match idata {
+                    IsoState::Iso20 => {
+                    }
+                    IsoState::Iso2 => {
+                    }
+                    IsoState::Iso3 => {
+                    }
+                    IsoState::Iec => {
+                        ctx.widget_iec_status.set_value(true);
+                    }
+                    IsoState::Unset => {
                     }
                 }
             }
@@ -508,6 +524,19 @@ pub(crate) fn register_verbs(
         }
     };
 
+    let widget_iec_status = match display
+        .get_by_uid("Switch-iec")
+        .downcast_ref::<LvglSwitch>()
+    {
+        Some(widget) => widget,
+        None => {
+            return Err(AfbError::new(
+                "Switch-iec",
+                "no widget uid: Switch-iec  type:LvglSwitch found in panel",
+            ))
+        }
+    };
+
     let widget_nfc_status = match display
         .get_by_uid("Pixmap-nfc")
         .downcast_ref::<LvglPixmap>()
@@ -524,7 +553,7 @@ pub(crate) fn register_verbs(
     let charger_handler = AfbEvtHandler::new("Charger_manager")
         .set_info("Charger manager")
         .set_pattern(to_static_str(format!("{}/{}",chmgr_api, "*")))
-        .set_callback(Box::new(MgrEvtChmgrCtrl{ widget_charge, widget_plug_status }))
+        .set_callback(Box::new(MgrEvtChmgrCtrl{ widget_charge, widget_plug_status, widget_iec_status }))
         .finalize()?;
 
     let nfc_handler = AfbEvtHandler::new("nfc_manager")
