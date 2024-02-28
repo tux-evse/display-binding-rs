@@ -315,6 +315,7 @@ fn evt_chmgr_cb(
                     PlugState::PlugOut => {
                         ctx.widget_charge.set_value(AssetPixmap::station_available());
                         ctx.widget_plug_status.set_value(AssetPixmap::plug_disconnected());
+                        ctx.widget_iec_status.set_value(false);
                     }
                     PlugState::Unknown => {
                         ctx.widget_plug_status.set_value(AssetPixmap::plug_unknow());
