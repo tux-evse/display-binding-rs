@@ -79,9 +79,11 @@ impl AfbApiControls for ApiUserData {
         AfbSubCall::call_sync(api, self.engy_api, "energy", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "current", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "power", "{'action':'subscribe'}")?;
+        /*Should be remove if unused
         if let Err(_msg_error) = AfbSubCall::call_sync(api, self.engy_api, "adsp", "{'action':'subscribe'}") {
             afb_log_msg!(Warning, api, "subscribing To adsp failed, linky missing");
         }
+        */
 
         AfbSubCall::call_sync(api, self.auth_api, "subscribe", true)?;
         AfbSubCall::call_sync(api, self.chmgr_api, "subscribe", true)?;
