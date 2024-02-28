@@ -269,7 +269,7 @@ fn evt_nrj_cb(
     ctx: &mut MgrEvtEngyCtrl,
 ) -> Result<(), AfbError> {
         let data = args.get::<&MeterDataSet>(0)?;
-        ctx.widget.set_value(format!("{:.2}", (data.total as f64)/100.0).as_str());
+        ctx.widget.set_value(format!("{:.2}", (data.total as f64)/1000.0).as_str());
         Ok(())
 }
 
@@ -370,7 +370,7 @@ struct AsyncAuthData {
 AfbCallRegister!( AsyncAuthCtrl, async_auth_cb, AsyncAuthData);
 fn async_auth_cb(
     api: &AfbApi,
-    args: &AfbData, 
+    args: &AfbData,
     authdata: &mut AsyncAuthData,
 ) -> Result<(), AfbError> {
         afb_log_msg!(Notice, api, "-- async_auth_cb");
