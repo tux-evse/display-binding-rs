@@ -520,13 +520,13 @@ impl DisplayHandle {
         self.panel.push(
             LvglLabel::new(
                 root,
-                "PnG",
+                "PnC",
                 LvglMkFont::std_14(),
                 switch_label_x_ofs,
                 switch_pnc_y_ofs,
             )
             .set_height(switch_title_height)
-            .set_value("PnG")
+            .set_value("PnC")
             .finalize(),
         );
 
