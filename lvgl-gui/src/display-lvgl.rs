@@ -673,7 +673,7 @@ impl DisplayHandle {
             .set_info("Zone Message")
             .set_width(label_zone_mess_height)
             .set_disable(true)
-            .insert_text("Scan the QRcode with your smartphone")
+            .insert_text("Scan the QRcode with your smartphone test")
             .finalize(),
         );
 
