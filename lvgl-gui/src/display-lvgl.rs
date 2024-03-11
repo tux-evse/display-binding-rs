@@ -81,13 +81,13 @@ impl DisplayHandle {
 
         //-----------------------------------------
         let pixmap_date_time_ico_y_ofs = 20;
-        let label_time_height = 10;
+        let label_time_height = 20;
 
-        let pixmap_date_x_ofs = 400;
-        let label_date_x_ofs = 450;
+        let pixmap_date_x_ofs = 380;
+        let label_date_x_ofs = 415;
 
-        let pixmap_time_x_ofs = 650;
-        let label_time_x_ofs = 700;
+        let pixmap_time_x_ofs = 575;
+        let label_time_x_ofs = 600;
 
         let label_date_height = 20;
 
@@ -124,7 +124,7 @@ impl DisplayHandle {
                 "Pixmap-date",
                 AssetPixmap::calendar3(),
                 pixmap_date_x_ofs,
-                pixmap_date_time_ico_y_ofs,
+                pixmap_date_time_ico_y_ofs+2,
             )
             .set_info("Pixmap date")
             .finalize(),
@@ -134,7 +134,7 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "date",
-                LvglMkFont::std_14(),
+                LvglMkFont::std_18(),
                 label_date_x_ofs,
                 pixmap_date_time_ico_y_ofs,
             )
@@ -149,7 +149,7 @@ impl DisplayHandle {
                 "Pixmap-time",
                 AssetPixmap::clock(),
                 pixmap_time_x_ofs,
-                pixmap_date_time_ico_y_ofs,
+                pixmap_date_time_ico_y_ofs+2,
             )
             .set_info("Pixmap time")
             .finalize(),
@@ -159,7 +159,7 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "time",
-                LvglMkFont::std_14(),
+                LvglMkFont::std_18(),
                 label_time_x_ofs,
                 pixmap_date_time_ico_y_ofs,
             )
@@ -298,16 +298,16 @@ impl DisplayHandle {
     }
 
     pub fn draw_panel_status_bat(&mut self, root: &LvglWidget) -> &mut Self {
-        let label_status_bat_x_ofs = 15;
-        let label_status_bat_y_ofs = 10;
-        let label_status_bat_height = 20;
+        let label_status_bat_x_ofs = 20;
+        let label_status_bat_y_ofs = 5;
+        let label_status_bat_height = 30;
 
         self.panel.push(
             LvglPixmap::new(
                 root,
                 "Pixmap-lang",
                 AssetPixmap::battery_charge_on(),
-                label_status_bat_x_ofs + 5,
+                label_status_bat_x_ofs + 20,
                 label_status_bat_y_ofs,
             )
             .set_info("Pixmap lang")
@@ -318,9 +318,9 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "BatConso",
-                LvglMkFont::std_14(),
+                LvglMkFont::std_22(),
                 label_status_bat_x_ofs + 45,
-                label_status_bat_y_ofs + 100,
+                label_status_bat_y_ofs + 110,
             )
             .set_height(label_status_bat_height)
             .set_value("0.0")
@@ -329,9 +329,9 @@ impl DisplayHandle {
         LvglLabel::new(
             root,
             "BatConsoKw",
-            LvglMkFont::std_14(),
+            LvglMkFont::std_22(),
             label_status_bat_x_ofs + 50 + 60,
-            label_status_bat_y_ofs + 100,
+            label_status_bat_y_ofs + 110,
         )
         .set_height(label_status_bat_height)
         .set_value("W") // the value is in Watt
@@ -344,13 +344,13 @@ impl DisplayHandle {
         //let pixmap_logo_x_ofs = 5;
 
         let label_txt_x_ofs = 10;
-        let label_val_x_ofs = label_txt_x_ofs + 90;
+        let label_val_x_ofs = label_txt_x_ofs + 120;
         let label_unit_x_ofs = label_val_x_ofs + 50;
 
 
-        let label_height = 35;
+        let label_height = 48;
 
-        let label_volts_y_ofs = 10;
+        let label_volts_y_ofs = 15;
         let label_energy_y_ofs = label_volts_y_ofs + label_height;
         let label_amps_y_ofs = label_volts_y_ofs + 2 * label_height;
         //let label_power_y_ofs = label_volts_y_ofs + 3 * label_height;
@@ -360,7 +360,7 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "ChargeVoltsTxt",
-                LvglMkFont::std_18(),
+                LvglMkFont::std_22(),
                 label_txt_x_ofs,
                 label_volts_y_ofs,
             )
@@ -374,9 +374,9 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "ChargeVoltsVal",
-                LvglMkFont::std_14(),
+                LvglMkFont::std_22(),
                 label_val_x_ofs,
-                label_volts_y_ofs+18-14,
+                label_volts_y_ofs,
             )
             .set_height(label_height)
             .set_value("0.0")
@@ -387,9 +387,9 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "ChargeVoltsUnit",
-                LvglMkFont::std_14(),
+                LvglMkFont::std_22(),
                 label_unit_x_ofs,
-                label_volts_y_ofs+18-14,
+                label_volts_y_ofs,
             )
             .set_height(label_height)
             .set_value("V")
@@ -400,7 +400,7 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "ChargeEnergyTxt",
-                LvglMkFont::std_18(),
+                LvglMkFont::std_22(),
                 label_txt_x_ofs,
                 label_energy_y_ofs,
             )
@@ -413,9 +413,9 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "ChargeEnergysVal",
-                LvglMkFont::std_14(),
+                LvglMkFont::std_22(),
                 label_val_x_ofs,
-                label_energy_y_ofs+18-14,
+                label_energy_y_ofs,
             )
             .set_height(label_height)
             .set_value("0.0")
@@ -426,9 +426,9 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "ChargeEnergysUnit",
-                LvglMkFont::std_14(),
+                LvglMkFont::std_22(),
                 label_unit_x_ofs,
-                label_energy_y_ofs+18-14,
+                label_energy_y_ofs,
             )
             .set_height(label_height)
             .set_value("kW.h")
@@ -439,7 +439,7 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "ChargeImpsTxt",
-                LvglMkFont::std_18(),
+                LvglMkFont::std_22(),
                 label_txt_x_ofs,
                 label_amps_y_ofs,
             )
@@ -452,9 +452,9 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "ChargeImpsVal",
-                LvglMkFont::std_14(),
+                LvglMkFont::std_22(),
                 label_val_x_ofs,
-                label_amps_y_ofs+18-14,
+                label_amps_y_ofs,
             )
             .set_height(label_height)
             .set_value("0.0")
@@ -465,9 +465,9 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "ChargeImpsUnit",
-                LvglMkFont::std_14(),
+                LvglMkFont::std_22(),
                 label_unit_x_ofs,
-                label_amps_y_ofs+18-14,
+                label_amps_y_ofs,
             )
             .set_height(label_height)
             .set_value("A")
@@ -481,22 +481,22 @@ impl DisplayHandle {
         let switch_height = 20;
         let switch_title_height = 20;
 
-        let switch_label_x_ofs = 5;
-        let switch_x_ofs: i16 = switch_label_x_ofs + 140;
-        let switch_sep = 5;
+        let switch_label_x_ofs = 15;
+        let switch_x_ofs: i16 = switch_label_x_ofs + 160;
+        let switch_sep = 20;
 
         let switch_main_label_x_ofs = switch_x_ofs - 50;
         let switch_main_label_y_ofs = 5;
-        let switch_iso_y_ofs = switch_main_label_y_ofs + 20;
-        let switch_pnc_y_ofs = switch_iso_y_ofs + (switch_height + switch_sep) * 1;
-        let switch_iec_y_ofs = switch_iso_y_ofs + (switch_height + switch_sep) * 2;
+        let switch_iec_y_ofs = switch_main_label_y_ofs + 35;
+        let switch_pnc_y_ofs = switch_iec_y_ofs + (switch_height + switch_sep) * 1;
+        let switch_iso_y_ofs = switch_iec_y_ofs + (switch_height + switch_sep) * 2;
 
         self.panel.push(
             LvglLabel::new(
                 root,
                 "Label Switch",
                 LvglMkFont::std_18(),
-                switch_main_label_x_ofs,
+                switch_main_label_x_ofs-70,
                 switch_main_label_y_ofs,
             )
             .set_height(switch_title_height)
@@ -507,13 +507,13 @@ impl DisplayHandle {
         self.panel.push(
             LvglLabel::new(
                 root,
-                "Label Switch  iso",
-                LvglMkFont::std_14(),
+                "IEC",
+                LvglMkFont::std_22(),
                 switch_label_x_ofs,
-                switch_iso_y_ofs,
+                switch_iec_y_ofs,
             )
             .set_height(switch_title_height)
-            .set_value("ISO 15118")
+            .set_value("IEC 61851")
             .finalize(),
         );
 
@@ -521,7 +521,7 @@ impl DisplayHandle {
             LvglLabel::new(
                 root,
                 "PnC",
-                LvglMkFont::std_14(),
+                LvglMkFont::std_22(),
                 switch_label_x_ofs,
                 switch_pnc_y_ofs,
             )
@@ -533,18 +533,18 @@ impl DisplayHandle {
         self.panel.push(
             LvglLabel::new(
                 root,
-                "IEC",
-                LvglMkFont::std_14(),
+                "Label Switch  iso",
+                LvglMkFont::std_22(),
                 switch_label_x_ofs,
-                switch_iec_y_ofs,
+                switch_iso_y_ofs,
             )
             .set_height(switch_title_height)
-            .set_value("IEC")
+            .set_value("ISO 15118")
             .finalize(),
         );
 
         self.panel.push(
-            LvglSwitch::new(root, "Switch-iso", switch_x_ofs, switch_iso_y_ofs)
+            LvglSwitch::new(root, "Switch-iec", switch_x_ofs, switch_iec_y_ofs)
                 .set_disable(true)
                 .set_height(switch_height)
                 .set_value(false)
@@ -560,7 +560,7 @@ impl DisplayHandle {
         );
 
         self.panel.push(
-            LvglSwitch::new(root, "Switch-iec", switch_x_ofs, switch_iec_y_ofs)
+            LvglSwitch::new(root, "Switch-iso", switch_x_ofs, switch_iso_y_ofs)
                 .set_disable(true)
                 .set_height(switch_height)
                 .set_value(false)
@@ -572,18 +572,18 @@ impl DisplayHandle {
 
     pub fn draw_panel_mid(&mut self, root: &LvglWidget) -> &mut Self {
 
-        let area_status_bat_width = 190;
-        let area_status_bat_height = 135;
-        let area_status_bat_sizex = 20;
-        let area_status_bat_sizey = 20;
+        let area_status_bat_width = 220;
+        let area_status_bat_height = 155;
+        let area_status_bat_sizex = 30;
+        let area_status_bat_sizey = 15;
 
-        let area_smart_info_width = 220;
-        let area_smart_info_height = 135;
-        let area_smart_info_sizex = 380;
+        let area_smart_info_width = 260;
+        let area_smart_info_height = 155;
+        let area_smart_info_sizex = 370;
         let area_smart_info_sizey = area_status_bat_sizey;
 
         let area_smart_charging_width = 250;
-        let area_smart_charging_height = 135;
+        let area_smart_charging_height = 155;
         let area_smart_charging_sizex = 1024 - area_smart_charging_width - 50;
         let area_smart_charging_sizey = area_smart_info_sizey;
 
