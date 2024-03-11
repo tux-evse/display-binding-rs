@@ -330,7 +330,7 @@ impl DisplayHandle {
             root,
             "BatConsoKw",
             LvglMkFont::std_22(),
-            label_status_bat_x_ofs + 50 + 60,
+            label_status_bat_x_ofs + 50 + 100,
             label_status_bat_y_ofs + 110,
         )
         .set_height(label_status_bat_height)
@@ -345,14 +345,14 @@ impl DisplayHandle {
 
         let label_txt_x_ofs = 10;
         let label_val_x_ofs = label_txt_x_ofs + 120;
-        let label_unit_x_ofs = label_val_x_ofs + 50;
+        let label_unit_x_ofs = label_val_x_ofs + 90;
 
 
-        let label_height = 48;
+        let label_height = 45;
 
         let label_volts_y_ofs = 15;
-        let label_energy_y_ofs = label_volts_y_ofs + label_height;
-        let label_amps_y_ofs = label_volts_y_ofs + 2 * label_height;
+        let label_amps_y_ofs = label_volts_y_ofs + label_height;
+        let label_energy_y_ofs = label_volts_y_ofs + 2 * label_height;
         //let label_power_y_ofs = label_volts_y_ofs + 3 * label_height;
         //let label_adps_y_ofs = label_volts_y_ofs + 3 * label_height;
 
@@ -399,45 +399,6 @@ impl DisplayHandle {
         self.panel.push(
             LvglLabel::new(
                 root,
-                "ChargeEnergyTxt",
-                LvglMkFont::std_22(),
-                label_txt_x_ofs,
-                label_energy_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("Energy")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargeEnergysVal",
-                LvglMkFont::std_22(),
-                label_val_x_ofs,
-                label_energy_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("0.0")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargeEnergysUnit",
-                LvglMkFont::std_22(),
-                label_unit_x_ofs,
-                label_energy_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("kW.h")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
                 "ChargeImpsTxt",
                 LvglMkFont::std_22(),
                 label_txt_x_ofs,
@@ -457,7 +418,7 @@ impl DisplayHandle {
                 label_amps_y_ofs,
             )
             .set_height(label_height)
-            .set_value("0.0")
+            .set_value("1.0")
             .finalize(),
         );
 
@@ -471,6 +432,45 @@ impl DisplayHandle {
             )
             .set_height(label_height)
             .set_value("A")
+            .finalize(),
+        );
+
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "ChargeEnergyTxt",
+                LvglMkFont::std_22(),
+                label_txt_x_ofs,
+                label_energy_y_ofs,
+            )
+            .set_height(label_height)
+            .set_value("Energy")
+            .finalize(),
+        );
+
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "ChargeEnergysVal",
+                LvglMkFont::std_22(),
+                label_val_x_ofs,
+                label_energy_y_ofs,
+            )
+            .set_height(label_height)
+            .set_value("0.1")
+            .finalize(),
+        );
+
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "ChargeEnergysUnit",
+                LvglMkFont::std_22(),
+                label_unit_x_ofs,
+                label_energy_y_ofs,
+            )
+            .set_height(label_height)
+            .set_value("kW.h")
             .finalize(),
         );
 
@@ -577,9 +577,9 @@ impl DisplayHandle {
         let area_status_bat_sizex = 30;
         let area_status_bat_sizey = 15;
 
-        let area_smart_info_width = 260;
+        let area_smart_info_width = 300;
         let area_smart_info_height = 155;
-        let area_smart_info_sizex = 370;
+        let area_smart_info_sizex = 350;
         let area_smart_info_sizey = area_status_bat_sizey;
 
         let area_smart_charging_width = 250;
