@@ -520,7 +520,7 @@ impl DisplayHandle {
         self.panel.push(
             LvglLabel::new(
                 root,
-                "PlugnC",
+                "PnC",
                 LvglMkFont::std_22(),
                 switch_label_x_ofs,
                 switch_pnc_y_ofs,
