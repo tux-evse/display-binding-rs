@@ -418,7 +418,7 @@ impl DisplayHandle {
                 label_amps_y_ofs,
             )
             .set_height(label_height)
-            .set_value("1.0")
+            .set_value("0.0")
             .finalize(),
         );
 
