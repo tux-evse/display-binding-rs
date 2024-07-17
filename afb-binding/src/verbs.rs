@@ -19,7 +19,7 @@ use std::cell::Cell;
 use std::sync::Arc;
 
 macro_rules! handler_by_uid {
-    ($api: ident, $display:ident, $uid:literal, $apievt:ident, $pattern:literal, $widget:ty, $ctx_type: ident) => {
+    ($api: ident, $display:ident, $uid:literal, $apievt:ident, $pattern:literal, $widget:ty, $ctx_type: ident, $callb: ident) => {
         let widget = match $display.get_by_uid($uid).downcast_ref::<$widget>() {
             Some(widget) => widget,
             None => {
@@ -34,7 +34,8 @@ macro_rules! handler_by_uid {
         let handler = AfbEvtHandler::new(widget.get_uid())
             .set_info(widget.get_info())
             .set_pattern(to_static_str(format!("{}/{}", $apievt, $pattern)))
-            .set_callback(Box::new($ctx_type { widget }))
+            .set_callback($callb)
+            .set_context($ctx_type { widget })
             .finalize()?;
 
         $api.add_evt_handler(handler);
@@ -43,6 +44,10 @@ macro_rules! handler_by_uid {
 
 struct WidgetEvtCtx {
     event: &'static AfbEvent,
+}
+
+struct ASyncCallData {
+    my_counter: u32,
 }
 
 impl LvglHandler for WidgetEvtCtx {
@@ -65,12 +70,12 @@ struct SubscribeEvtCtx {
     event: &'static AfbEvent,
 }
 
-AfbVerbRegister!(SubscribeEvtVerb, subscribe_evt_cb, SubscribeEvtCtx);
 fn subscribe_evt_cb(
     rqt: &AfbRequest,
-    args: &AfbData,
-    ctx: &mut SubscribeEvtCtx,
+    args: &AfbRqtData,
+    ctx_data: &AfbCtxData,
 ) -> Result<(), AfbError> {
+    let ctx = ctx_data.get_ref::<SubscribeEvtCtx>()?;
     match args.get::<&QuerySubscribe>(0)? {
         QuerySubscribe::SUBSCRIBE => {
             ctx.event.subscribe(rqt)?;
@@ -86,8 +91,9 @@ fn subscribe_evt_cb(
 struct TextCtx {
     widget: &'static LvglTextArea,
 }
-AfbVerbRegister!(InfoVerb, info_verb_cb, TextCtx);
-fn info_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut TextCtx) -> Result<(), AfbError> {
+
+fn info_verb_cb(rqt: &AfbRequest, args: &AfbRqtData, ctx_data: &AfbCtxData) -> Result<(), AfbError> {
+    let ctx = ctx_data.get_ref::<TextCtx>()?;
     let text = args.get::<String>(0)?;
     ctx.widget.set_value(text.as_str());
     rqt.reply(AFB_NO_DATA, 0);
@@ -97,8 +103,8 @@ fn info_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut TextCtx) -> Result<(
 struct MeterCtx {
     widget: &'static LvglMeter,
 }
-AfbVerbRegister!(MeterVerb, meter_verb_cb, MeterCtx);
-fn meter_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut MeterCtx) -> Result<(), AfbError> {
+fn meter_verb_cb(rqt: &AfbRequest, args: &AfbRqtData, ctx_data: &AfbCtxData) -> Result<(), AfbError> {
+    let ctx = ctx_data.get_ref::<MeterCtx>()?;
     let value = args.get::<i32>(0)?;
     ctx.widget.set_value(value);
     rqt.reply(AFB_NO_DATA, 0);
@@ -108,8 +114,9 @@ fn meter_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut MeterCtx) -> Result
 struct ArcCtx {
     widget: &'static LvglArc,
 }
-AfbVerbRegister!(ArcVerb, arc_verb_cb, ArcCtx);
-fn arc_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut ArcCtx) -> Result<(), AfbError> {
+
+fn arc_verb_cb(rqt: &AfbRequest, args: &AfbRqtData, ctx_data: &AfbCtxData) -> Result<(), AfbError> {
+    let ctx = ctx_data.get_ref::<ArcCtx>()?;
     let value = args.get::<i32>(0)?;
     ctx.widget.set_value(value);
     rqt.reply(AFB_NO_DATA, 0);
@@ -119,8 +126,9 @@ fn arc_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut ArcCtx) -> Result<(),
 struct BarCtx {
     widget: &'static LvglBar,
 }
-AfbVerbRegister!(BarVerb, bar_verb_cb, BarCtx);
-fn bar_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut BarCtx) -> Result<(), AfbError> {
+
+fn bar_verb_cb(rqt: &AfbRequest, args: &AfbRqtData, ctx_data: &AfbCtxData) -> Result<(), AfbError> {
+    let ctx = ctx_data.get_ref::<BarCtx>()?;
     let value = args.get::<i32>(0)?;
     ctx.widget.set_value(value);
     rqt.reply(AFB_NO_DATA, 0);
@@ -130,8 +138,9 @@ fn bar_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut BarCtx) -> Result<(),
 struct NfcCtx {
     widget: &'static LvglPixButton,
 }
-AfbVerbRegister!(NfcVerb, ncf_verb_cb, NfcCtx);
-fn ncf_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut NfcCtx) -> Result<(), AfbError> {
+
+fn ncf_verb_cb(rqt: &AfbRequest, args: &AfbRqtData, ctx_data: &AfbCtxData) -> Result<(), AfbError> {
+    let ctx = ctx_data.get_ref::<NfcCtx>()?;
     match args.get::<&QueryOnOff>(0)? {
         QueryOnOff::ON => {
             ctx.widget.set_value(AssetPixmap::nfc_on());
@@ -147,8 +156,9 @@ fn ncf_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut NfcCtx) -> Result<(),
 struct SwitchCtx {
     widget: &'static LvglSwitch,
 }
-AfbVerbRegister!(SwitchVerb, switch_verb_cb, SwitchCtx);
-fn switch_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut SwitchCtx) -> Result<(), AfbError> {
+
+fn switch_verb_cb(rqt: &AfbRequest, args: &AfbRqtData, ctx_data: &AfbCtxData) -> Result<(), AfbError> {
+    let ctx = ctx_data.get_ref::<SwitchCtx>()?;
     match args.get::<&QueryOnOff>(0)? {
         QueryOnOff::ON => {
             ctx.widget.set_value(true);
@@ -164,8 +174,9 @@ fn switch_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut SwitchCtx) -> Resu
 struct LedCtx {
     widget: &'static LvglLed,
 }
-AfbVerbRegister!(LedVerb, led_verb_cb, LedCtx);
-fn led_verb_cb(rqt: &AfbRequest, args: &AfbData, ctx: &mut LedCtx) -> Result<(), AfbError> {
+
+fn led_verb_cb(rqt: &AfbRequest, args: &AfbRqtData, ctx_data: &AfbCtxData) -> Result<(), AfbError> {
+    let ctx = ctx_data.get_ref::<LedCtx>()?;
     match args.get::<&QueryOnOff>(0)? {
         QueryOnOff::ON => {
             ctx.widget.set_on(true);
@@ -183,8 +194,8 @@ struct TimerCtx {
     date: &'static LvglLabel,
 }
 // Callback is called for each tick until decount>0
-AfbTimerRegister!(TimerCtrl, timer_callback, TimerCtx);
-fn timer_callback(_timer: &AfbTimer, _decount: u32, ctx: &mut TimerCtx) -> Result<(), AfbError> {
+fn timer_callback(_timer: &AfbTimer, _decount: u32, ctx_data: &AfbCtxData) -> Result<(), AfbError> {
+    let ctx = ctx_data.get_ref::<TimerCtx>()?;
     ctx.time.set_value(get_time("%H:%M").unwrap().as_str());
     ctx.date.set_value(get_time("%D").unwrap().as_str());
     Ok(())
@@ -207,12 +218,13 @@ impl UserCtxData {
 struct EvtUserData {
     ctx: Arc<UserCtxData>,
 }
-AfbEventRegister!(EventGetCtrl, event_get_callback, EvtUserData);
+
 fn event_get_callback(
     event: &AfbEventMsg,
-    args: &AfbData,
-    userdata: &mut EvtUserData,
+    args: &AfbRqtData,
+    ctx_data: &AfbCtxData
 ) -> Result<(), AfbError> {
+    let userdata = ctx_data.get_ref::<EvtUserData>()?;
     // check request introspection
     let evt_uid = event.get_uid();
     let evt_name = event.get_name();
@@ -235,7 +247,7 @@ fn event_get_callback(
         }
         Err(error) => {
             afb_log_msg!(Error, event, "hoop invalid json argument {}", error);
-            JsoncObj::from("invalid json input argument")
+            JsoncObj::import("invalid json input argument").unwrap()
         }
     };
     Ok(())
@@ -263,23 +275,23 @@ struct MgrEvtAuthCrl {
 
 //------------------------------------------------------------------
 
-AfbEventRegister!(MgrEvtEngyVerb, evt_nrj_cb, MgrEvtEngyCtrl);
 fn evt_nrj_cb(
     _event: &AfbEventMsg,
-    args: &AfbData,
-    ctx: &mut MgrEvtEngyCtrl,
+    args: &AfbRqtData,
+    ctx_data: &AfbCtxData
 ) -> Result<(), AfbError> {
+        let ctx = ctx_data.get_ref::<MgrEvtEngyCtrl>()?;
         let data = args.get::<&MeterDataSet>(0)?;
         ctx.widget.set_value(format!("{:.2}", (data.total as f64)/1000.0).as_str());
         Ok(())
 }
 
-AfbEventRegister!(MgrEvtChmgrVerb, evt_chmgr_cb, MgrEvtChmgrCtrl);
 fn evt_chmgr_cb(
     event: &AfbEventMsg,
-    args: &AfbData,
-    ctx: &mut MgrEvtChmgrCtrl,
+    args: &AfbRqtData,
+    ctx_data: &AfbCtxData,
 ) -> Result<(), AfbError> {
+        let ctx = ctx_data.get_ref::<MgrEvtChmgrCtrl>()?;
         let data = args.get::<&ChargingMsg>(0)?;
         afb_log_msg!(Notice, event, "-- evt_chmgr_cb event:{:?}.",data);
         match data {
@@ -343,23 +355,23 @@ fn evt_chmgr_cb(
         Ok(())
 }
 
-AfbEventRegister!(MgrEvtNfcVerb, evt_nfc_cb, MgrEvtNfcCtrl);
 fn evt_nfc_cb(
     _event: &AfbEventMsg,
-    _args: &AfbData,
-    ctx: &mut MgrEvtNfcCtrl,
+    _args: &AfbRqtData,
+    ctx_data: &AfbCtxData,
 ) -> Result<(), AfbError> {
+        let ctx = ctx_data.get_ref::<MgrEvtNfcCtrl>()?;
         ctx.widget_nfc_status.set_value(AssetPixmap::nfc_on());
         Ok(())
 }
 
-
-AfbEventRegister!(MgrEvtAuthVerb, evt_auth_cb, MgrEvtAuthCrl);
 fn evt_auth_cb(
     event: &AfbEventMsg,
-    args: &AfbData,
+    args: &AfbRqtData,
     ctx: &mut MgrEvtAuthCrl,
+    ctx_data: &AfbCtxData
 ) -> Result<(), AfbError> {
+        let ctx = ctx_data.get_ref::<MgrEvtAuthCrl>()?;
         afb_log_msg!(Notice, event, "-- evt_auth_cb event");
         let data = args.get::<&AuthMsg>(0)?;
         match data {
@@ -384,12 +396,12 @@ struct AsyncAuthData {
     widget: &'static LvglPixmap,
 }
 
-AfbCallRegister!( AsyncAuthCtrl, async_auth_cb, AsyncAuthData);
 fn async_auth_cb(
     api: &AfbApi,
-    args: &AfbData,
-    authdata: &mut AsyncAuthData,
+    args: &AfbRqtData,
+    ctx_data: &AfbCtxData,
 ) -> Result<(), AfbError> {
+        let authdata = ctx_data.get_ref::<AsyncAuthData>()?;
         afb_log_msg!(Notice, api, "-- async_auth_cb");
         let data = args.get::<&AuthState>(0)?;
         match data.auth {
@@ -416,7 +428,7 @@ pub fn init_display_value(
     config: ApiConfig,
 ) -> Result<(), AfbError> {
 
-        AfbSubCall::call_async(api, config.auth_api,"state","{'action':'read'}", Box::new(AsyncAuthCtrl{widget}))?;
+        AfbSubCall::call_async(api, config.auth_api,"state","{'action':'read'}", async_auth_cb, ASyncCallData{my_counter:0})?;
         Ok(())
 }
 
@@ -429,8 +441,10 @@ pub(crate) fn register_verbs(
     let event = AfbEvent::new("widget");
 
     // build panel register display callback
+    let aWidgetEC= WidgetEvtCtx { event };
     display
-        .set_callback(Box::new(WidgetEvtCtx { event }))
+        .set_callback(&aWidgetEC.callback)
+        .set_context(aWidgetEC)
         .draw_panel()
         .finalize();
 
@@ -441,6 +455,7 @@ pub(crate) fn register_verbs(
         None => {
             return Err(AfbError::new(
                 "conf-time-widget",
+                0,
                 "no widget uid: time  type:LvglLabel found in panel",
             ))
         }
@@ -450,6 +465,7 @@ pub(crate) fn register_verbs(
         None => {
             return Err(AfbError::new(
                 "conf-date-widget",
+                0,
                 "no widget uid: date  type:LvglLabel found in panel",
             ))
         }
@@ -467,7 +483,8 @@ pub(crate) fn register_verbs(
         engy_api,
         "tension",
         LvglLabel,
-        MgrEvtEngyCtrl
+        MgrEvtEngyCtrl,
+        evt_nrj_cb
     );
 
     handler_by_uid!(
@@ -477,7 +494,8 @@ pub(crate) fn register_verbs(
         engy_api,
         "energy",
         LvglLabel,
-        MgrEvtEngyCtrl
+        MgrEvtEngyCtrl,
+        evt_nrj_cb
     );
 
     handler_by_uid!(
@@ -487,7 +505,8 @@ pub(crate) fn register_verbs(
         engy_api,
         "current",
         LvglLabel,
-        MgrEvtEngyCtrl
+        MgrEvtEngyCtrl,
+        evt_nrj_cb
     );
 
     handler_by_uid!(
@@ -497,7 +516,8 @@ pub(crate) fn register_verbs(
         engy_api,
         "power",
         LvglLabel,
-        MgrEvtEngyCtrl
+        MgrEvtEngyCtrl,
+        evt_nrj_cb
     );
 
     let widget_charge = match display.get_by_uid("Pixmap-charge-status").downcast_ref::<LvglPixmap>() {
@@ -520,6 +540,7 @@ pub(crate) fn register_verbs(
         None => {
             return Err(AfbError::new(
                 "Pixmap-connect-status",
+                0,
                 "no widget uid: Pixmap-connect-status  type:LvglPixmap found in panel",
             ))
         }
@@ -533,6 +554,7 @@ pub(crate) fn register_verbs(
         None => {
             return Err(AfbError::new(
                 "Switch-iec",
+                0,
                 "no widget uid: Switch-iec  type:LvglSwitch found in panel",
             ))
         }
@@ -546,6 +568,7 @@ pub(crate) fn register_verbs(
         None => {
             return Err(AfbError::new(
                 "Pixmap-nfc-status",
+                0,
                 "no widget uid: Pixmap-nfc-status  type:LvglPixmap found in panel",
             ))
         }
@@ -554,13 +577,15 @@ pub(crate) fn register_verbs(
     let charger_handler = AfbEvtHandler::new("Charger_manager")
         .set_info("Charger manager")
         .set_pattern(to_static_str(format!("{}/{}",chmgr_api, "*")))
-        .set_callback(Box::new(MgrEvtChmgrCtrl{ widget_charge, widget_plug_status, widget_iec_status }))
+        .set_callback(evt_chmgr_cb)
+        .set_context(MgrEvtChmgrCtrl{ widget_charge, widget_plug_status, widget_iec_status })
         .finalize()?;
 
     let nfc_handler = AfbEvtHandler::new("nfc_manager")
         .set_info("nfc manager")
         .set_pattern(to_static_str(format!("{}/{}",dbus_api, "*")))
-        .set_callback(Box::new(MgrEvtNfcCtrl{ widget_nfc_status }))
+        .set_callback(evt_nfc_cb)
+        .set_context(MgrEvtNfcCtrl{ widget_nfc_status })
         .finalize()?;
 
     api.add_evt_handler(charger_handler);
@@ -573,7 +598,8 @@ pub(crate) fn register_verbs(
         auth_api,
         "*",
         LvglPixmap,
-        MgrEvtAuthCrl
+        MgrEvtAuthCrl,
+        evt_auth_cb
     );
 
     //------------------------------------------------------------------
@@ -586,6 +612,7 @@ pub(crate) fn register_verbs(
         None => {
             return Err(AfbError::new(
                 "Switch-iso",
+                0,
                 "no widget uid: Switch-iso type:LvglSwitch found in panel",
             ))
         }
@@ -599,6 +626,7 @@ pub(crate) fn register_verbs(
         None => {
             return Err(AfbError::new(
                 "Switch-pnc",
+                0,
                 "no widget uid: Switch-pnc  type:LvglSwitch found in panel",
             ))
         }
@@ -612,6 +640,7 @@ pub(crate) fn register_verbs(
         None => {
             return Err(AfbError::new(
                 "Switch-iec",
+                0,
                 "no widget uid: Switch-iec  type:LvglSwitch found in panel",
             ))
         }
@@ -619,7 +648,8 @@ pub(crate) fn register_verbs(
 
     AfbTimer::new("clock-timer")
         .set_period(60000)
-        .set_callback(Box::new(TimerCtx { time, date }))
+        .set_callback(timer_callback)
+        .set_context(TimerCtx { time, date })
         .start()?;
 
     Ok(())

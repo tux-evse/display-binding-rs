@@ -161,6 +161,7 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
         Err(_error) => {
             return Err(AfbError::new(
                 "display-config-fail",
+                0,
                 "mandatory 'display' config missing",
             ));
         }
@@ -184,6 +185,7 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
     } else {
         return Err(AfbError::new(
             "binding-mgr-engy-config",
+            0,
             "engy_api micro service api SHOULD be defined",
         ));
     };
@@ -194,6 +196,7 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
     } else {
         return Err(AfbError::new(
             "binding-mgr-chmgr-config",
+            0,
             "chmgr_api micro service api SHOULD be defined",
         ));
     };
@@ -204,6 +207,7 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
     } else {
         return Err(AfbError::new(
             "binding-mgr-auth-config",
+            0,
             "auth_api micro service api SHOULD be defined",
         ));
     };
@@ -213,6 +217,7 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
     } else {
         return Err(AfbError::new(
             "binding-dbus_api-config",
+            0,
             "dbus_api micro service api SHOULD be defined",
         ));
     };
