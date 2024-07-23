@@ -159,11 +159,10 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
             DisplayHandle::create(x_res as i16, y_res as i16, ratio)
         }
         Err(_error) => {
-            return Err(AfbError::new(
+            return afb_error!(
                 "display-config-fail",
-                0,
                 "mandatory 'display' config missing",
-            ));
+            );
         }
     };
 
@@ -183,43 +182,39 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
     let engy_api = if let Ok(value) = jconf.get::<String>("engy_api") {
         to_static_str(value)
     } else {
-        return Err(AfbError::new(
+        return afb_error!(
             "binding-mgr-engy-config",
-            0,
             "engy_api micro service api SHOULD be defined",
-        ));
+        );
     };
 
 
     let chmgr_api = if let Ok(value) = jconf.get::<String>("chmgr_api") {
         to_static_str(value)
     } else {
-        return Err(AfbError::new(
+        return afb_error!(
             "binding-mgr-chmgr-config",
-            0,
             "chmgr_api micro service api SHOULD be defined",
-        ));
+        );
     };
 
 
     let auth_api = if let Ok(value) = jconf.get::<String>("auth_api") {
         to_static_str(value)
     } else {
-        return Err(AfbError::new(
+        return afb_error!(
             "binding-mgr-auth-config",
-            0,
             "auth_api micro service api SHOULD be defined",
-        ));
+        );
     };
 
     let dbus_api = if let Ok(value) = jconf.get::<String>("dbus_api") {
         to_static_str(value)
     } else {
-        return Err(AfbError::new(
+        return afb_error!(
             "binding-dbus_api-config",
-            0,
             "dbus_api micro service api SHOULD be defined",
-        ));
+        );
     };
 
     let api_config = ApiConfig { engy_api , chmgr_api, auth_api, dbus_api};

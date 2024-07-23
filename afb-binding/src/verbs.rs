@@ -450,21 +450,19 @@ pub(crate) fn register_verbs(
     let time = match display.get_by_uid("time").downcast_ref::<LvglLabel>() {
         Some(widget) => widget,
         None => {
-            return Err(AfbError::new(
+            return afb_error!(
                 "conf-time-widget",
-                0,
                 "no widget uid: time  type:LvglLabel found in panel",
-            ))
+            )
         }
     };
     let date = match display.get_by_uid("date").downcast_ref::<LvglLabel>() {
         Some(widget) => widget,
         None => {
-            return Err(AfbError::new(
+            return afb_error!(
                 "conf-date-widget",
-                0,
                 "no widget uid: date  type:LvglLabel found in panel",
-            ))
+            )
         }
     };
     //------------------------------------------------------------------
@@ -535,11 +533,10 @@ pub(crate) fn register_verbs(
     {
         Some(widget) => widget,
         None => {
-            return Err(AfbError::new(
+            return afb_error!(
                 "Pixmap-connect-status",
-                0,
                 "no widget uid: Pixmap-connect-status  type:LvglPixmap found in panel",
-            ))
+            )
         }
     };
 
@@ -549,11 +546,10 @@ pub(crate) fn register_verbs(
     {
         Some(widget) => widget,
         None => {
-            return Err(AfbError::new(
+            return afb_error!(
                 "Switch-iec",
-                0,
                 "no widget uid: Switch-iec  type:LvglSwitch found in panel",
-            ))
+            )
         }
     };
 
@@ -563,11 +559,10 @@ pub(crate) fn register_verbs(
     {
         Some(widget) => widget,
         None => {
-            return Err(AfbError::new(
+            return afb_error!(
                 "Pixmap-nfc-status",
-                0,
                 "no widget uid: Pixmap-nfc-status  type:LvglPixmap found in panel",
-            ))
+            )
         }
     };
 
@@ -607,11 +602,10 @@ pub(crate) fn register_verbs(
     {
         Some(widget) => widget,
         None => {
-            return Err(AfbError::new(
+            return afb_error!(
                 "Switch-iso",
-                0,
                 "no widget uid: Switch-iso type:LvglSwitch found in panel",
-            ))
+            )
         }
     };
 
@@ -621,11 +615,10 @@ pub(crate) fn register_verbs(
     {
         Some(widget) => widget,
         None => {
-            return Err(AfbError::new(
+            return afb_error!(
                 "Switch-pnc",
-                0,
                 "no widget uid: Switch-pnc  type:LvglSwitch found in panel",
-            ))
+            )
         }
     };
 
@@ -635,11 +628,10 @@ pub(crate) fn register_verbs(
     {
         Some(widget) => widget,
         None => {
-            return Err(AfbError::new(
+            return afb_error!(
                 "Switch-iec",
-                0,
                 "no widget uid: Switch-iec  type:LvglSwitch found in panel",
-            ))
+            )
         }
     };
 
