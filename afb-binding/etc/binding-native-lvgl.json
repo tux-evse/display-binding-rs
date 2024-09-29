@@ -21,8 +21,8 @@
             "permission": "acl:display:client",
             "test": 1,
             "display": {
-                "x_res": 1024,
-                "y_res": 600,
+                "x_res": 1920,
+                "y_res": 1080,
                 "ratio": 1
             },
             "engy_api": "engy",
