@@ -37,6 +37,11 @@ impl DisplayHandle {
         display
     }
 
+    pub fn set_rotation(&mut self, rotation: lvgl::disp::Rotation) -> &mut Self {
+        self.handle.set_rotation(rotation);
+        self
+    }
+
     pub fn set_theme(
         &mut self,
         primary: LvglColor,

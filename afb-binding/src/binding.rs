@@ -156,7 +156,10 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
             let y_res = jvalue.get::<u32>("y_res")?;
             let ratio = jvalue.get::<u32>("ratio")?;
 
-            DisplayHandle::create(x_res as i16, y_res as i16, ratio)
+            let mut display-lvgl = DisplayHandle::create(x_res as i16, y_res as i16, ratio);
+            display-lvgl.set_rotation(lvgl::disp::Rotation::Rotate180);
+            display-lvgl
+            
         }
         Err(_error) => {
             return afb_error!(
