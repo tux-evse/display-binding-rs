@@ -19,10 +19,6 @@ use crate::prelude::*;
 use lvgl::prelude::*;
 use std::any::Any;
 
-struct App {
-    zone_message: String,
-}
-
 pub struct DisplayHandle {
     handle: LvglHandle,
     panel: Vec<&'static LvglWidget>,
@@ -30,15 +26,6 @@ pub struct DisplayHandle {
 }
 
 impl DisplayHandle {
-
-    pub fn new(handle: LvglHandle) -> Self {
-        Self {
-            handle,
-            panel: Vec::new(),
-            ctrlbox: None,
-        }
-    }
-
     pub fn create(x_res: i16, y_res: i16, ratio: u32) -> Self {
         let handle = LvglHandle::new(x_res, y_res, ratio);
 
@@ -129,6 +116,7 @@ impl DisplayHandle {
             .set_info("Pixmap valeo")
             .finalize(),
         );
+
 
         self.panel.push(
             LvglPixmap::new(
@@ -636,7 +624,7 @@ impl DisplayHandle {
         self
     }
 
-    pub fn draw_panel_bot(&mut self, /*donnee:i32, */root: &LvglWidget) -> &mut Self {
+    pub fn draw_panel_bot(&mut self, root: &LvglWidget) -> &mut Self {
         let bare_code_size = 130;
 
         let label_zone_mess_x_ofs = bare_code_size + 40;
@@ -733,7 +721,7 @@ impl DisplayHandle {
         self.draw_panel_menu(area_menu);
         self.draw_panel_top(area_top);
         self.draw_panel_mid(area_mid);
-        self.draw_panel_bot(/*donnee,*/area_bot);
+        self.draw_panel_bot(area_bot);
         
         self
     }
