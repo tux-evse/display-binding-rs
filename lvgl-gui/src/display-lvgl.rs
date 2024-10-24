@@ -19,6 +19,10 @@ use crate::prelude::*;
 use lvgl::prelude::*;
 use std::any::Any;
 
+struct App {
+    zone_message: String,
+}
+
 pub struct DisplayHandle {
     handle: LvglHandle,
     panel: Vec<&'static LvglWidget>,
@@ -26,6 +30,15 @@ pub struct DisplayHandle {
 }
 
 impl DisplayHandle {
+
+    pub fn new(handle: LvglHandle) -> Self {
+        Self {
+            handle,
+            panel: Vec::new(),
+            ctrlbox: None,
+        }
+    }
+
     pub fn create(x_res: i16, y_res: i16, ratio: u32) -> Self {
         let handle = LvglHandle::new(x_res, y_res, ratio);
 
@@ -116,7 +129,6 @@ impl DisplayHandle {
             .set_info("Pixmap valeo")
             .finalize(),
         );
-//-----------------------------------------
 
         self.panel.push(
             LvglPixmap::new(
@@ -624,7 +636,7 @@ impl DisplayHandle {
         self
     }
 
-    pub fn draw_panel_bot(&mut self, root: &LvglWidget) -> &mut Self {
+    pub fn draw_panel_bot(&mut self, /*donnee:i32, */root: &LvglWidget) -> &mut Self {
         let bare_code_size = 130;
 
         let label_zone_mess_x_ofs = bare_code_size + 40;
@@ -633,9 +645,12 @@ impl DisplayHandle {
         let pixmap_logo_x_ofs = 1024 - 170;
         let pixmap_logo_y_ofs = 0;
 
-
         let label_zone_mess_height = 1024 - label_zone_mess_x_ofs - 10 - 200;
 
+        /* TMA : TEST 1 print message by variable */
+        let zone_message = " Welcome to valeo border charge!!!!";
+
+        // ------------ Affichage du QR code 
         self.panel.push(
             LvglQrcode::new(
                 root,
@@ -650,6 +665,7 @@ impl DisplayHandle {
             .finalize(),
         );
 
+        // ------------ Affichage Logo linux
         self.panel.push(
             LvglPixmap::new(
                 root,
@@ -661,8 +677,8 @@ impl DisplayHandle {
             .set_info("Pixmap nfc")
             .finalize(),
         );
-
-
+        
+        // ------------ Affichage message ttext
         self.panel.push(
             LvglTextArea::new(
                 root,
@@ -673,7 +689,7 @@ impl DisplayHandle {
             .set_info("Zone Message")
             .set_width(label_zone_mess_height)
             .set_disable(true)
-            .insert_text("A new text updated with OTA")
+            .insert_text(zone_message)
             .finalize(),
         );
 
@@ -681,6 +697,7 @@ impl DisplayHandle {
     }
 
     pub fn draw_panel(&mut self) -> &mut Self {
+
         let area_menu_posy = 0;
         let area_menu_sizey = 60;
 
@@ -716,7 +733,7 @@ impl DisplayHandle {
         self.draw_panel_menu(area_menu);
         self.draw_panel_top(area_top);
         self.draw_panel_mid(area_mid);
-        self.draw_panel_bot(area_bot);
+        self.draw_panel_bot(/*donnee,*/area_bot);
         
         self
     }
