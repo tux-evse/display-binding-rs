@@ -677,7 +677,7 @@ impl DisplayHandle {
             .set_info("Zone Message")
             .set_width(label_zone_mess_height)
             .set_disable(true)
-            .insert_text(zone_message)
+            .insert_text("Welcome to valeo border charge!!!!")
             .finalize(),
         );
 
