@@ -636,7 +636,7 @@ impl DisplayHandle {
         let label_zone_mess_height = 1024 - label_zone_mess_x_ofs - 10 - 200;
 
         /* TMA : TEST 1 print message by variable */
-        let zone_message = " Welcome to valeo border charge!!!!";
+        let zone_message = "Test1 :  Welcome to valeo border charge !!!!";
 
         // ------------ Affichage du QR code 
         self.panel.push(
@@ -677,7 +677,7 @@ impl DisplayHandle {
             .set_info("Zone Message")
             .set_width(label_zone_mess_height)
             .set_disable(true)
-            .insert_text("Welcome to valeo border charge!!!!")
+            .insert_text(zone_message)
             .finalize(),
         );
 
