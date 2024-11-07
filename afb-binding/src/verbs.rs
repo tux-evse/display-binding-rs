@@ -621,18 +621,18 @@ pub(crate) fn register_verbs(
         .set_context(MgrEvtNfcCtrl{ widget_nfc_status })
         .finalize()?;
 
-    // TMA : creation of Text handler  
-    let text_handler = AfbEvtHandler::new("Text_manager")
+        // TMA : Hander for zone message :  definition sur lequel on veut s abonner = state de authentificaiton manager
+        let text_handler = AfbEvtHandler::new("Text_manager")
         .set_info("Message manager")
-        .set_pattern(to_static_str(format!("{}/{}",auth_api, "*")))
+        .set_pattern(to_static_str(format!("{}/{}",auth_api, "state")))
         .set_callback(evt_message_cb)
-        .set_context(MgrEvtTextCtrl{ widget_message })
+        .set_context(widget_message)
         .finalize()?;
-
-
+    
+    // TMA : add api for zone message 
     api.add_evt_handler(charger_handler);
     api.add_evt_handler(nfc_handler);
-    api.add_evt_handler(text_handler); // TMA : Add evt handler for text event
+    api.add_evt_handler(text_handler);
 
     handler_by_uid!(
         api,
@@ -644,15 +644,15 @@ pub(crate) fn register_verbs(
         MgrEvtAuthCrl,
         evt_auth_cb
     );
-/* 
+/*  TMA
     handler_by_uid!(
         api,
         display,
-        "ZoneMessage",
+        "Pixmap-auth-message",
         auth_api,
-        "*",
+        "state",
         LvglTextArea,
-        MgrEvtTextCtrl,
+        MgrEvtAuthCrl,
         evt_auth_cb
     );*/
 
