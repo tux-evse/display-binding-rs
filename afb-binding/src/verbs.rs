@@ -626,7 +626,7 @@ pub(crate) fn register_verbs(
         .set_info("Message manager")
         .set_pattern(to_static_str(format!("{}/{}",auth_api, "state")))
         .set_callback(evt_message_cb)
-        .set_context(widget_message)
+        .set_context(MgrEvtTextCtrl{ widget_message })
         .finalize()?;
 
 
