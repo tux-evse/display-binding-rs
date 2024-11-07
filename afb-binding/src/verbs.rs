@@ -96,7 +96,6 @@ fn info_verb_cb(rqt: &AfbRequest, args: &AfbRqtData, ctx_data: &AfbCtxData) -> R
     let ctx = ctx_data.get_ref::<TextCtx>()?;
     let text = args.get::<String>(0)?;
     ctx.widget.set_value(text.as_str());
-    afb_log_msg!(Notice,None, "::::::::check text: {} ::::::", text);
     rqt.reply(AFB_NO_DATA, 0);
     Ok(())
 }
