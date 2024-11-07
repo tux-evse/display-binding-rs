@@ -96,6 +96,7 @@ fn info_verb_cb(rqt: &AfbRequest, args: &AfbRqtData, ctx_data: &AfbCtxData) -> R
     let ctx = ctx_data.get_ref::<TextCtx>()?;
     let text = args.get::<String>(0)?;
     ctx.widget.set_value(text.as_str());
+    afb_log_msg!(Notice,None, "::::::::check text: {} ::::::", text);
     rqt.reply(AFB_NO_DATA, 0);
     Ok(())
 }
@@ -624,7 +625,7 @@ pub(crate) fn register_verbs(
     // TMA : creation of Text handler  
     let text_handler = AfbEvtHandler::new("Text_manager")
         .set_info("Message manager")
-        .set_pattern(to_static_str(format!("{}/{}",auth_api, "state")))
+        .set_pattern(to_static_str(format!("{}/{}",auth_api, "*")))
         .set_callback(evt_message_cb)
         .set_context(MgrEvtTextCtrl{ widget_message })
         .finalize()?;
@@ -644,6 +645,17 @@ pub(crate) fn register_verbs(
         MgrEvtAuthCrl,
         evt_auth_cb
     );
+/* 
+    handler_by_uid!(
+        api,
+        display,
+        "ZoneMessage",
+        auth_api,
+        "*",
+        LvglTextArea,
+        MgrEvtTextCtrl,
+        evt_auth_cb
+    );*/
 
     //------------------------------------------------------------------
 
