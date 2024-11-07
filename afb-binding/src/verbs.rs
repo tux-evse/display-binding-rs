@@ -272,8 +272,36 @@ struct MgrEvtAuthCrl {
     widget: &'static LvglPixmap,
 }
 
+struct MgrEvtTextCtrl {
+    widget_message: &'static LvglTextArea,
+}
 
 //------------------------------------------------------------------
+fn evt_message_cb(
+    event: &AfbEventMsg,
+    args: &AfbRqtData,
+    ctx_data: &AfbCtxData,
+) -> Result<(), AfbError> {
+    let ctx = ctx_data.get_ref::<MgrEvtTextCtrl>()?;
+    let data = args.get::<&AuthMsg>(0)?;
+    match data {
+        AuthMsg::Done => {
+            ctx.widget_message.set_value("Authentification done ");
+        }
+        AuthMsg::Fail => {
+            ctx.widget_message.set_value("Authentification Fail ");
+        }
+        AuthMsg::Pending => {
+            ctx.widget_message.set_value("Authentification Pending ");
+        }
+        AuthMsg::Idle => {
+            ctx.widget_message.set_value("Authentification Idle ");
+        }
+    }
+
+    Ok(())
+}
+
 
 fn evt_nrj_cb(
     _event: &AfbEventMsg,
@@ -566,6 +594,19 @@ pub(crate) fn register_verbs(
         }
     };
 
+    // TMA : cration for Widget Message : 
+    let widget_message = match display
+        .get_by_uid("ZoneMessage")
+        .downcast_ref::<LvglTextArea>()
+    {
+    	Some(widget) => widget,
+        None => {
+            return afb_error!(
+            	"Pixmap-message",
+                "no widget uid: ZoneMessage  type:LvglTextArea found in panel",
+            )
+          }
+    };
     let charger_handler = AfbEvtHandler::new("Charger_manager")
         .set_info("Charger manager")
         .set_pattern(to_static_str(format!("{}/{}",chmgr_api, "*")))
@@ -580,8 +621,18 @@ pub(crate) fn register_verbs(
         .set_context(MgrEvtNfcCtrl{ widget_nfc_status })
         .finalize()?;
 
+    // TMA : creation of Text handler  
+    let text_handler = AfbEvtHandler::new("Text_manager")
+        .set_info("Message manager")
+        .set_pattern(to_static_str(format!("{}/{}",auth_api, "state")))
+        .set_callback(evt_message_cb)
+        .set_context(widget_message)
+        .finalize()?;
+
+
     api.add_evt_handler(charger_handler);
     api.add_evt_handler(nfc_handler);
+    api.add_evt_handler(text_handler); // TMA : Add evt handler for text event
 
     handler_by_uid!(
         api,
