@@ -69,6 +69,27 @@ pub enum IsoState {
     Unset,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[serde(rename_all = "lowercase")]
+pub enum ChargingProtocol {
+    BasicCharge,
+    SmartCharge,
+    PlugAndCharge,
+    Vehicle2Grid,
+    Grid2Vehicle,
+}
+impl ChargingProtocol {
+    pub fn as_str(&self) -> &str {
+        match self {
+            ChargingProtocol::BasicCharge => "PWM",
+            ChargingProtocol::SmartCharge => "EIM (ISO15118-2)",
+            ChargingProtocol::PlugAndCharge => "Plug&Charge",
+            ChargingProtocol::Vehicle2Grid => "V2G (ISO15118-20)",
+            ChargingProtocol::Grid2Vehicle => "V2G (ISO15118-20)",
+        }
+    }
+}
+
 AfbDataConverter!(charging_event, ChargingMsg);
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "lowercase")]
@@ -78,7 +99,8 @@ pub enum ChargingMsg {
     Iso(IsoState),
     Auth(AuthMsg),
     State(ChargingState),
-    Reservation(ReservationStatus)
+    Reservation(ReservationStatus),
+    Protocol(ChargingProtocol)
 }
 
 AfbDataConverter!(reservation_state, ReservationState);

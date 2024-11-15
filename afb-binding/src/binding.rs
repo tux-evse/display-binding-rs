@@ -18,7 +18,6 @@ use afbv4::prelude::*;
 use display_lvgl_gui::prelude::*;
 use serde::{Deserialize, Serialize};
 
-
 AfbDataConverter!(api_arg_subscribe, QuerySubscribe);
 #[derive(Serialize, Deserialize, Debug, Default)]
 #[serde(tag = "action")]
@@ -58,7 +57,7 @@ struct ApiUserData {
     chmgr_api: &'static str,
     auth_api: &'static str,
     dbus_api: &'static str,
-    auth_widget: &'static  LvglPixmap,
+    auth_widget: &'static LvglPixmap,
 }
 
 impl AfbApiControls for ApiUserData {
@@ -68,16 +67,7 @@ impl AfbApiControls for ApiUserData {
 
     // the API is created and ready. At this level user may subcall api(s) declare as dependencies
     fn start(&mut self, api: &AfbApi) -> Result<(), AfbError> {
-        afb_log_msg!(
-            Notice,
-            api,
-            "subscribing charging_api api:{}",
-            self.engy_api
-        );
-
-        AfbSubCall::call_sync(api, self.engy_api, "tension", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "energy", "{'action':'subscribe'}")?;
-        AfbSubCall::call_sync(api, self.engy_api, "current", "{'action':'subscribe'}")?;
         AfbSubCall::call_sync(api, self.engy_api, "power", "{'action':'subscribe'}")?;
         /*Should be remove if unused
         if let Err(_msg_error) = AfbSubCall::call_sync(api, self.engy_api, "adsp", "{'action':'subscribe'}") {
@@ -87,13 +77,6 @@ impl AfbApiControls for ApiUserData {
 
         AfbSubCall::call_sync(api, self.auth_api, "subscribe", true)?;
         AfbSubCall::call_sync(api, self.chmgr_api, "subscribe", true)?;
-
-        AfbSubCall::call_sync(api, self.dbus_api, "subscribe_nfc", true)?;
-
-        let api_config = ApiConfig{ engy_api:self.engy_api , chmgr_api:self.chmgr_api, auth_api:self.auth_api, dbus_api:self.dbus_api};
-
-        init_display_value(api, self.auth_widget, api_config)?;
-
         afb_log_msg!(Notice, api, "subscribing charging_api done ");
 
         Ok(())
@@ -111,7 +94,6 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
     // add binding custom converter
     api_arg_subscribe::register()?;
     api_arg_switch::register()?;
-
     // add binding custom converter
     engy_registers()?;
     auth_registers()?;
@@ -159,13 +141,9 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
             DisplayHandle::create(x_res as i16, y_res as i16, ratio)
         }
         Err(_error) => {
-            return afb_error!(
-                "display-config-fail",
-                "mandatory 'display' config missing",
-            );
+            return afb_error!("display-config-fail", "mandatory 'display' config missing",);
         }
     };
-
     // check theme and provide default if needed
     if let Ok(jvalue) = jconf.get::<JsoncObj>("theme") {
         let dark = jvalue.get::<bool>("dark")?;
@@ -188,7 +166,6 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
         );
     };
 
-
     let chmgr_api = if let Ok(value) = jconf.get::<String>("chmgr_api") {
         to_static_str(value)
     } else {
@@ -197,7 +174,6 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
             "chmgr_api micro service api SHOULD be defined",
         );
     };
-
 
     let auth_api = if let Ok(value) = jconf.get::<String>("auth_api") {
         to_static_str(value)
@@ -217,35 +193,47 @@ pub fn binding_init(rootv4: AfbApiV4, jconf: JsoncObj) -> Result<&'static AfbApi
         );
     };
 
-    let api_config = ApiConfig { engy_api , chmgr_api, auth_api, dbus_api};
-    
+    let api_config = ApiConfig {
+        engy_api,
+        chmgr_api,
+        auth_api,
+        dbus_api,
+    };
+
     // create backend API
     // --------------------------------------------------------
     let api = AfbApi::new(api_name)
         .set_info(info)
         .set_permission(permission);
-
     register_verbs(api, &mut display, api_config)?;
 
-    let auth_widget = match display.get_by_uid("Pixmap-auth-status").downcast_ref::<LvglPixmap>() {
+    let auth_widget = match display
+        .get_by_uid("evse-status")
+        .downcast_ref::<LvglPixmap>()
+    {
         Some(auth_widget) => auth_widget,
         None => {
             return afb_error!(
                 "verb-info-widget",
                 "no widget uid:{} type:{} found in panel",
-                "Pixmap-auth-status",
+                "evse-status",
                 "LvglPixmap"
             )
         }
     };
 
-    api.set_callback(Box::new(ApiUserData { engy_api, chmgr_api, auth_api, dbus_api, auth_widget}));
-    
+    api.set_callback(Box::new(ApiUserData {
+        engy_api,
+        chmgr_api,
+        auth_api,
+        dbus_api,
+        auth_widget,
+    }));
+
     api.require_api(engy_api);
     api.require_api(chmgr_api);
     api.require_api(auth_api);
     api.require_api(dbus_api);
-
     Ok(api.finalize()?)
 }
 

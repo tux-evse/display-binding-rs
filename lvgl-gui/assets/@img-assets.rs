@@ -3,6 +3,7 @@ pub struct AssetPixmap;
 #[allow(dead_code)]
 impl AssetPixmap {
 //@BEGIN_IMG_imgS@
+
     impl_static_imgbin! (ethernet_off, img_ethernet_off);
     impl_static_imgbin! (nfc_fail, img_nfc_fail);
     impl_static_imgbin! (battery_charge_on, img_battery_charge_on);
@@ -11,6 +12,88 @@ impl AssetPixmap {
     impl_static_imgbin! (station_out_of_order, img_station_out_of_order);
     impl_static_imgbin! (station_reserved, img_station_reserved);
     impl_static_imgbin! (reception_off, img_reception_off);
+
+    impl_static_imgbin!(evse_state_msg_blank, img_evse_state_msg_blank);
+    impl_static_imgbin!(charging_progress_charging_blank, img_charging_progress_charging_blank);
+
+    impl_static_imgbin!(evse_state_msg_discharge_on, img_evse_state_msg_discharge_on);
+    impl_static_imgbin!(charging_progress_charging_g2v, img_charging_progress_charging_g2v);
+    impl_static_imgbin!(charging_progress_charging_v2g, img_charging_progress_charging_v2g);
+    impl_static_imgbin!(charging_progress_charging_basiccharging, img_charging_progress_charging_basiccharging);
+    impl_static_imgbin!(charging_progress_charging_smartcharging, img_charging_progress_charging_smartcharging);
+    impl_static_imgbin!(evse_state_msg_charging_v2g, img_evse_state_msg_charging_v2g);
+    impl_static_imgbin!(charging_progress_charging_plugncharge, img_charging_progress_charging_plugncharge);
+
+    impl_static_imgbin!(evse_state_img_tesla_genuine_10, img_evse_state_img_tesla_genuine_10);
+    impl_static_imgbin!(evse_state_img_tesla_genuine_09, img_evse_state_img_tesla_genuine_09);
+    impl_static_imgbin!(evse_state_img_tesla_genuine, img_evse_state_img_tesla_genuine);
+    impl_static_imgbin!(evse_state_img_tesla_genuine_05, img_evse_state_img_tesla_genuine_05);
+    impl_static_imgbin!(evse_state_msg_charging_evse_genuine_10, img_evse_state_msg_charging_evse_genuine_10);
+    impl_static_imgbin!(evse_state_msg_charging_evse_genuine_03, img_evse_state_msg_charging_evse_genuine_03);
+    impl_static_imgbin!(evse_state_msg_charging_evse_genuine_01, img_evse_state_msg_charging_evse_genuine_01);
+    impl_static_imgbin!(evse_state_msg_charging_evse_genuine_09, img_evse_state_msg_charging_evse_genuine_09);
+    impl_static_imgbin!(evse_state_msg_charging_evse_genuine_08, img_evse_state_msg_charging_evse_genuine_08);
+    impl_static_imgbin!(evse_state_msg_charging_evse_genuine_05, img_evse_state_msg_charging_evse_genuine_05);
+    impl_static_imgbin!(evse_state_msg_charging_evse_genuine_04, img_evse_state_msg_charging_evse_genuine_04);
+    impl_static_imgbin!(evse_state_msg_charging_evse_genuine_06, img_evse_state_msg_charging_evse_genuine_06);
+    impl_static_imgbin!(evse_state_img_tesla_genuine_06, img_evse_state_img_tesla_genuine_06);
+    impl_static_imgbin!(evse_state_img_tesla_genuine_03, img_evse_state_img_tesla_genuine_03);
+    impl_static_imgbin!(evse_state_img_tesla_genuine_04, img_evse_state_img_tesla_genuine_04);
+    impl_static_imgbin!(evse_state_img_tesla_genuine_07, img_evse_state_img_tesla_genuine_07);
+    impl_static_imgbin!(evse_state_img_tesla_genuine_08, img_evse_state_img_tesla_genuine_08);
+    impl_static_imgbin!(evse_state_msg_charging_evse_genuine_07, img_evse_state_msg_charging_evse_genuine_07);
+    impl_static_imgbin!(evse_state_img_tesla_genuine_02, img_evse_state_img_tesla_genuine_02);
+    impl_static_imgbin!(evse_state_msg_charging_evse_genuine_02, img_evse_state_msg_charging_evse_genuine_02);
+    impl_static_imgbin!(evse_state_msg_charging_evse_genuine, img_evse_state_msg_charging_evse_genuine);
+    impl_static_imgbin!(evse_state_img_tesla_genuine_01, img_evse_state_img_tesla_genuine_01);
+
+    impl_static_imgbin!(evse_state_msg_charging_evse_04, img_evse_state_msg_charging_evse_04);
+    impl_static_imgbin!(evse_state_msg_charging_evse_02, img_evse_state_msg_charging_evse_02);
+    impl_static_imgbin!(evse_state_msg_charging_evse_03, img_evse_state_msg_charging_evse_03);
+    impl_static_imgbin!(evse_state_msg_charging_evse_10, img_evse_state_msg_charging_evse_10);
+    impl_static_imgbin!(evse_state_msg_charging_evse_06, img_evse_state_msg_charging_evse_06);
+    impl_static_imgbin!(evse_state_msg_charging_evse_09, img_evse_state_msg_charging_evse_09);
+    impl_static_imgbin!(evse_state_msg_charging_evse_08, img_evse_state_msg_charging_evse_08);
+    impl_static_imgbin!(evse_state_msg_charging_evse_01, img_evse_state_msg_charging_evse_01);
+    impl_static_imgbin!(evse_state_msg_charging_evse_05, img_evse_state_msg_charging_evse_05);
+    impl_static_imgbin!(evse_state_msg_charging_evse_07, img_evse_state_msg_charging_evse_07);
+
+    impl_static_imgbin!(evse_state_img_tesla_07, img_evse_state_img_tesla_07);
+    impl_static_imgbin!(evse_state_img_tesla_04, img_evse_state_img_tesla_04);
+    impl_static_imgbin!(evse_state_img_tesla_10, img_evse_state_img_tesla_10);
+    impl_static_imgbin!(evse_state_img_tesla_01, img_evse_state_img_tesla_01);
+    impl_static_imgbin!(evse_state_img_tesla_05, img_evse_state_img_tesla_05);
+    impl_static_imgbin!(evse_state_img_tesla_08, img_evse_state_img_tesla_08);
+    impl_static_imgbin!(evse_state_img_tesla_03, img_evse_state_img_tesla_03);
+    impl_static_imgbin!(evse_state_img_tesla_02, img_evse_state_img_tesla_02);
+    impl_static_imgbin!(evse_state_img_tesla_06, img_evse_state_img_tesla_06);
+    impl_static_imgbin!(evse_state_img_tesla_09, img_evse_state_img_tesla_09);
+
+    impl_static_imgbin!(evse_init, img_evse_init);
+    impl_static_imgbin!(charging_progress_init, img_charging_progress_init);
+    impl_static_imgbin!(evse_state_msg_charging_smart, img_evse_state_msg_charging_smart);
+    impl_static_imgbin!(evse_state_msg_nfc, img_evse_state_msg_nfc);
+    impl_static_imgbin!(charging_progress_auth_fail, img_charging_progress_auth_fail);
+    impl_static_imgbin!(evse_state_msg_complete_unplug, img_evse_state_msg_complete_unplug);
+    impl_static_imgbin!(evse_state_msg_charging_evse, img_evse_state_msg_charging_evse);
+    impl_static_imgbin!(evse_state_msg_ready, img_evse_state_msg_ready);
+    impl_static_imgbin!(evse_state_msg_auth_fail, img_evse_state_msg_auth_fail);
+    impl_static_imgbin!(charging_progress_pnc_auth, img_charging_progress_pnc_auth);
+    impl_static_imgbin!(evse_pnc_auth, img_evse_pnc_auth);
+    impl_static_imgbin!(evse_state_msg_charging_pnc, img_evse_state_msg_charging_pnc);
+    impl_static_imgbin!(charging_progress_charging, img_charging_progress_charging);
+    impl_static_imgbin!(evse_state_msg_init, img_evse_state_msg_init);
+    impl_static_imgbin!(charging_progress_complete, img_charging_progress_complete);
+    impl_static_imgbin!(evse_simple, img_evse_simple);
+    impl_static_imgbin!(evse_state_msg_auth_done, img_evse_state_msg_auth_done);
+    impl_static_imgbin!(charging_progress_plug_fail, img_charging_progress_plug_fail);
+    impl_static_imgbin!(evse_nfc_auth, img_evse_nfc_auth);
+    impl_static_imgbin!(evse_ready, img_evse_ready);
+    impl_static_imgbin!(evse_state_msg_charging_basic, img_evse_state_msg_charging_basic);
+    impl_static_imgbin!(evse_state_img_tesla, img_evse_state_img_tesla);
+    impl_static_imgbin!(charging_progress_auth_done, img_charging_progress_auth_done);
+    impl_static_imgbin!(charging_progress_nfc_auth, img_charging_progress_nfc_auth);
+
     impl_static_imgbin! (station_available, img_station_available);
     impl_static_imgbin! (btn_start, img_btn_start);
     impl_static_imgbin! (currency_exchange, img_currency_exchange);
