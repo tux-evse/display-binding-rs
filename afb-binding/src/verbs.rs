@@ -275,7 +275,7 @@ struct MgrEvtAuthCrl {
 }
 
 struct MgrEvtTextCtrl {
-    widget_message: &'static LvglTextArea,
+    widget: &'static LvglTextArea,
 }
 
 /* --------------------------------------------------------------------------- */
@@ -290,16 +290,16 @@ fn evt_message_cb(
     let data = args.get::<&AuthMsg>(0)?;
     match data {
         AuthMsg::Done => {
-            ctx.widget_message.set_value("Authentification done ");
+            ctx.widget.set_value("Authentification done ");
         }
         AuthMsg::Fail => {
-            ctx.widget_message.set_value("Authentification Fail ");
+            ctx.widget.set_value("Authentification Fail ");
         }
         AuthMsg::Pending => {
-            ctx.widget_message.set_value("Authentification Pending ");
+            ctx.widget.set_value("Authentification Pending ");
         }
         AuthMsg::Idle => {
-            ctx.widget_message.set_value("Authentification Idle ");
+            ctx.widget.set_value("Authentification Idle ");
         }
     }
 
@@ -425,7 +425,7 @@ fn evt_auth_cb(
 
 struct AsyncAuthData {
     widget: &'static LvglPixmap,
-    widget_txt: &'static LvglTextArea,
+   // widget_txt: &'static LvglTextArea,
 }
 
 fn async_auth_cb(
@@ -439,19 +439,19 @@ fn async_auth_cb(
         match data.auth {
             AuthMsg::Done => {
                 authdata.widget.set_value(AssetPixmap::nfc_done());
-                authdata.widget_txt.set_value("nfc done");
+                //authdata.widget_txt.set_value("nfc done");
             }
             AuthMsg::Fail => {
                 authdata.widget.set_value(AssetPixmap::nfc_fail());
-                authdata.widget_txt.set_value("nfc fail");
+                //authdata.widget_txt.set_value("nfc fail");
             }
             AuthMsg::Pending => {
                 authdata.widget.set_value(AssetPixmap::nfc_pending());
-                authdata.widget_txt.set_value("nfc pending");
+                //authdata.widget_txt.set_value("nfc pending");
             }
             AuthMsg::Idle => {
                 authdata.widget.set_value(AssetPixmap::nfc_idle());
-                authdata.widget_txt.set_value("nfc Idle");
+                //authdata.widget_txt.set_value("nfc Idle");
             }
         };
 
@@ -509,7 +509,7 @@ pub(crate) fn register_verbs(
     let dbus_api = config.dbus_api;
     
 /* --------------------------------------------------------------------------- */    
-/*  ------------------------  HANDLER BY UID DECLARATION --------------------- */
+/*  ------------------------  HANDLER BY UID ENERGY -------------------------- */
 /* --------------------------------------------------------------------------- */ 
     handler_by_uid!(
         api,
@@ -646,9 +646,9 @@ pub(crate) fn register_verbs(
         // TMA : Hander for zone message :  definition sur lequel on veut s abonner = state de authentificaiton manager
         let text_handler = AfbEvtHandler::new("Text_manager")
         .set_info("Message manager")
-        .set_pattern(to_static_str(format!("{}/{}",auth_api, "state")))
+        .set_pattern(to_static_str(format!("{}/{}",auth_api, "*")))
         .set_callback(evt_message_cb)
-        .set_context(MgrEvtTextCtrl{ widget_message })
+        .set_context(widget_message)
         .finalize()?;
     
     // TMA : add api for zone message 
@@ -667,6 +667,16 @@ pub(crate) fn register_verbs(
         evt_auth_cb
     );
 
+    handler_by_uid!(
+        api,
+        display,
+        "TextArea-auth-status",
+        auth_api,
+        "*",
+        LvglTextArea,
+        MgrEvtTextCtrl,
+        evt_message_cb
+    );
 
     //------------------------------------------------------------------
 
