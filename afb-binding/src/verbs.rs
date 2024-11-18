@@ -252,8 +252,10 @@ fn event_get_callback(
     };
     Ok(())
 }
-//------------------------------------------------------------------
 
+/* --------------------------------------------------------------------------- */
+/*  ------------------------ STRUCTURES DECLARATION -------------------------- */
+/* --------------------------------------------------------------------------- */ 
 struct MgrEvtEngyCtrl {
     widget: &'static LvglLabel,
 }
@@ -276,7 +278,9 @@ struct MgrEvtTextCtrl {
     widget_message: &'static LvglTextArea,
 }
 
-//------------------------------------------------------------------
+/* --------------------------------------------------------------------------- */
+/*  ------------------------ VERBS DECLARATION ------------------------------- */
+/* --------------------------------------------------------------------------- */ 
 fn evt_message_cb(
     event: &AfbEventMsg,
     args: &AfbRqtData,
@@ -421,6 +425,7 @@ fn evt_auth_cb(
 
 struct AsyncAuthData {
     widget: &'static LvglPixmap,
+    widget_txt: &'static LvglTextArea,
 }
 
 fn async_auth_cb(
@@ -434,15 +439,19 @@ fn async_auth_cb(
         match data.auth {
             AuthMsg::Done => {
                 authdata.widget.set_value(AssetPixmap::nfc_done());
+                authdata.widget_txt.set_value("nfc done");
             }
             AuthMsg::Fail => {
                 authdata.widget.set_value(AssetPixmap::nfc_fail());
+                authdata.widget_txt.set_value("nfc fail");
             }
             AuthMsg::Pending => {
                 authdata.widget.set_value(AssetPixmap::nfc_pending());
+                authdata.widget_txt.set_value("nfc pending");
             }
             AuthMsg::Idle => {
                 authdata.widget.set_value(AssetPixmap::nfc_idle());
+                authdata.widget_txt.set_value("nfc Idle");
             }
         };
 
@@ -498,7 +507,10 @@ pub(crate) fn register_verbs(
     let chmgr_api = config.chmgr_api;
     let auth_api = config.auth_api;
     let dbus_api = config.dbus_api;
-
+    
+/* --------------------------------------------------------------------------- */    
+/*  ------------------------  HANDLER BY UID DECLARATION --------------------- */
+/* --------------------------------------------------------------------------- */ 
     handler_by_uid!(
         api,
         display,
@@ -542,6 +554,11 @@ pub(crate) fn register_verbs(
         MgrEvtEngyCtrl,
         evt_nrj_cb
     );
+
+
+/* --------------------------------------------------------------------------- */    
+/*  ------------------------  WIDGET DECLARATION ----------------------------- */
+/* --------------------------------------------------------------------------- */ 
 
     let widget_charge = match display.get_by_uid("Pixmap-charge-status").downcast_ref::<LvglPixmap>() {
         Some(widget) => widget,
@@ -602,11 +619,16 @@ pub(crate) fn register_verbs(
     	Some(widget) => widget,
         None => {
             return afb_error!(
-            	"Pixmap-message",
+            	"TextArea-message",
                 "no widget uid: ZoneMessage  type:LvglTextArea found in panel",
             )
           }
     };
+
+
+/* --------------------------------------------------------------------------- */    
+/*  -----------------------  HANDLER CONFIGURATION --------------------------- */
+/* --------------------------------------------------------------------------- */ 
     let charger_handler = AfbEvtHandler::new("Charger_manager")
         .set_info("Charger manager")
         .set_pattern(to_static_str(format!("{}/{}",chmgr_api, "*")))
@@ -626,7 +648,7 @@ pub(crate) fn register_verbs(
         .set_info("Message manager")
         .set_pattern(to_static_str(format!("{}/{}",auth_api, "state")))
         .set_callback(evt_message_cb)
-        .set_context(widget_message)
+        .set_context(MgrEvtTextCtrl{ widget_message })
         .finalize()?;
     
     // TMA : add api for zone message 
@@ -644,17 +666,7 @@ pub(crate) fn register_verbs(
         MgrEvtAuthCrl,
         evt_auth_cb
     );
-/*  TMA
-    handler_by_uid!(
-        api,
-        display,
-        "Pixmap-auth-message",
-        auth_api,
-        "state",
-        LvglTextArea,
-        MgrEvtAuthCrl,
-        evt_auth_cb
-    );*/
+
 
     //------------------------------------------------------------------
 

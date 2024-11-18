@@ -85,6 +85,7 @@ impl AfbApiControls for ApiUserData {
         }
         */
 
+	/*  Binding subscription : to subscribe binder event  */
         AfbSubCall::call_sync(api, self.auth_api, "subscribe", true)?;
         AfbSubCall::call_sync(api, self.chmgr_api, "subscribe", true)?;
 

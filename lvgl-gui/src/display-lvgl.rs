@@ -666,7 +666,7 @@ impl DisplayHandle {
             .finalize(),
         );
         
-        // ------------ Affichage message ttext
+        // ------------ Affichage message text
         self.panel.push(
             LvglTextArea::new(
                 root,
