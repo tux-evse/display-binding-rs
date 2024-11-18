@@ -666,7 +666,7 @@ pub(crate) fn register_verbs(
         MgrEvtAuthCrl,
         evt_auth_cb
     );
-
+/* 
     handler_by_uid!(
         api,
         display,
@@ -677,7 +677,7 @@ pub(crate) fn register_verbs(
         MgrEvtTextCtrl,
         evt_message_cb
     );
-
+*/
     //------------------------------------------------------------------
 
     let _lv_switch_iso = match display
