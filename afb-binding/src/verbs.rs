@@ -18,6 +18,7 @@ use typesv4::prelude::*;
 use std::cell::Cell;
 use std::sync::Arc;
 
+
 macro_rules! handler_by_uid {
     ($api: ident, $display:ident, $uid:literal, $apievt:ident, $pattern:literal, $widget:ty, $ctx_type: ident, $callb: ident) => {
         let widget = match $display.get_by_uid($uid).downcast_ref::<$widget>() {
@@ -330,10 +331,11 @@ fn evt_chmgr_cb(
                 match pdata {
                     PowerRequest::Start => {
                         ctx.widget_charge.set_value(AssetPixmap::station_reserved());
-                        ctx.widget_info.set_value(" station is reserved ");
+                        ctx.widget_info.set_value("station is reserved");
                     }
                     PowerRequest::Charging(_value) => {
                         ctx.widget_charge.set_value(AssetPixmap::station_charging());
+                        ctx.widget_info.set_value(" Charging in progress !!!");
                     }
                     PowerRequest::Stop(_value) => {
                         ctx.widget_charge.set_value(AssetPixmap::station_completed());
@@ -341,7 +343,7 @@ fn evt_chmgr_cb(
                     }
                     PowerRequest::Idle => {
                         ctx.widget_charge.set_value(AssetPixmap::station_available());
-                        ctx.widget_info.set_value(" Charge Station is available !!!");
+                        ctx.widget_info.set_value("Charge Station is available !!!");
                     }
                 }
             }

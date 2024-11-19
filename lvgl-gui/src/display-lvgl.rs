@@ -635,9 +635,6 @@ impl DisplayHandle {
 
         let label_zone_mess_height = 1024 - label_zone_mess_x_ofs - 10 - 200;
 
-        /* TMA : TEST 1 print message by variable */
-        //let zone_message = "Test1 :  Welcome to valeo border charge !!!!";
-
         // ------------ Affichage du QR code 
         self.panel.push(
             LvglQrcode::new(
@@ -677,6 +674,7 @@ impl DisplayHandle {
             .set_info("Zone Message")
             .set_width(label_zone_mess_height)
             .set_disable(true)
+            .set_color(LvglColor::rvb(0, 0, 255))
             .insert_text(" Welcome to valeo border charge")
             .finalize(),
         );
