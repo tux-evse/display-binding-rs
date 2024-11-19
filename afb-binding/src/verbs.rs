@@ -658,18 +658,18 @@ pub(crate) fn register_verbs(
         .finalize()?;
 
         // TMA : Hander for zone message :  definition sur lequel on veut s abonner = state de authentificaiton manager
-
+    /*
         let text_handler = AfbEvtHandler::new("Text_manager")
         .set_info("Message manager")
         .set_pattern(to_static_str(format!("{}/{}",auth_api, "state")))
         .set_callback(evt_message_cb)
         .set_context(widget_info)
         .finalize()?;
-    
+     */
     // TMA : add api for zone message 
     api.add_evt_handler(charger_handler);
     api.add_evt_handler(nfc_handler);
-    api.add_evt_handler(text_handler);
+    //api.add_evt_handler(text_handler);
 
     handler_by_uid!(
         api,
@@ -681,7 +681,7 @@ pub(crate) fn register_verbs(
         MgrEvtAuthCrl,
         evt_auth_cb
     );
-
+/* 
     handler_by_uid!(
         api,
         display,
@@ -690,9 +690,10 @@ pub(crate) fn register_verbs(
         "*",
         LvglTextArea,
         MgrEvtTextCtrl,
-        evt_message_cb
-    );
+        evt_auth_cb
 
+    );
+*/
     //------------------------------------------------------------------
 
     let _lv_switch_iso = match display
