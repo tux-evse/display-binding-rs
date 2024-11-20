@@ -627,8 +627,8 @@ impl DisplayHandle {
     pub fn draw_panel_bot(&mut self, root: &LvglWidget) -> &mut Self {
         let bare_code_size = 130;
 
-        let label_zone_mess_x_ofs = bare_code_size + 20;
-        let label_zone_mess_y_ofs = label_zone_mess_x_ofs / 4;
+        let label_zone_mess_x_ofs = bare_code_size + 40;
+        let label_zone_mess_y_ofs = label_zone_mess_x_ofs / 2;
 
         let pixmap_logo_x_ofs = 1024 - 170;
         let pixmap_logo_y_ofs = 0;

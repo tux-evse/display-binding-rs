@@ -277,7 +277,7 @@ struct MgrEvtAuthCrl {
 }
 
 struct MgrEvtTextCtrl {
-    widget: &'static LvglTextArea,
+    widget_message: &'static LvglTextArea,
 }
 
 //------------------------------------------------------------------
@@ -290,16 +290,16 @@ fn evt_message_cb(
     let data = args.get::<&AuthMsg>(0)?;
     match data {
         AuthMsg::Done => {
-            ctx.widget.set_value("Authentification done ");
+            ctx.widget_message.set_value("Authentification done ");
         }
         AuthMsg::Fail => {
-            ctx.widget.set_value("Authentification Fail ");
+            ctx.widget_message.set_value("Authentification Fail ");
         }
         AuthMsg::Pending => {
-            ctx.widget.set_value("Authentification Pending ");
+            ctx.widget_message.set_value("Authentification Pending ");
         }
         AuthMsg::Idle => {
-            ctx.widget.set_value("Authentification Idle ");
+            ctx.widget_message.set_value("Authentification Idle ");
         }
         _ => { }
     }
@@ -332,19 +332,19 @@ fn evt_chmgr_cb(
                 match pdata {
                     PowerRequest::Start => {
                         ctx.widget_charge.set_value(AssetPixmap::station_reserved());
-                        ctx.widget_info.set_value("station is reserved");
+                        //ctx.widget_info.set_value("station is reserved");
                     }
                     PowerRequest::Charging(_value) => {
                         ctx.widget_charge.set_value(AssetPixmap::station_charging());
-                        ctx.widget_info.set_value(" Charging in progress !!!");
+                        //ctx.widget_info.set_value(" Charging in progress !!!");
                     }
                     PowerRequest::Stop(_value) => {
                         ctx.widget_charge.set_value(AssetPixmap::station_completed());
-                        ctx.widget_info.set_value(" charge completed");
+                        //ctx.widget_info.set_value(" charge completed");
                     }
                     PowerRequest::Idle => {
                         ctx.widget_charge.set_value(AssetPixmap::station_available());
-                        ctx.widget_info.set_value("Charge Station is available !!!");
+                        //ctx.widget_info.set_value("Charge Station is available !!!");
                     }
                 }
             }
@@ -658,14 +658,13 @@ pub(crate) fn register_verbs(
         .finalize()?;
 
         // TMA : Hander for zone message :  definition sur lequel on veut s abonner = state de authentificaiton manager
-    /*
         let text_handler = AfbEvtHandler::new("Text_manager")
         .set_info("Message manager")
         .set_pattern(to_static_str(format!("{}/{}",auth_api, "state")))
         .set_callback(evt_message_cb)
-        .set_context(widget_info)
+        .set_context(widget_message)
         .finalize()?;
-     */
+    
     // TMA : add api for zone message 
     api.add_evt_handler(charger_handler);
     api.add_evt_handler(nfc_handler);
