@@ -38,7 +38,6 @@ pub enum PowerRequest {
     Idle,
 }
 
-
 AfbDataConverter!(power_limit, PowerLimit);
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 #[serde(rename_all = "lowercase")]
@@ -90,6 +89,16 @@ impl ChargingProtocol {
     }
 }
 
+AfbDataConverter!(service_status, ServiceStatus);
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "lowercase")]
+pub enum ServiceStatus {
+    Ready,
+    Starting,
+    Stopping,
+    Error,
+}
+
 AfbDataConverter!(charging_event, ChargingMsg);
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "lowercase")]
@@ -100,7 +109,8 @@ pub enum ChargingMsg {
     Auth(AuthMsg),
     State(ChargingState),
     Reservation(ReservationStatus),
-    Protocol(ChargingProtocol)
+    Protocol(ChargingProtocol),
+    ServiceStatus { name: String, status: ServiceStatus },
 }
 
 AfbDataConverter!(reservation_state, ReservationState);
@@ -126,7 +136,6 @@ pub struct ChargingState {
     pub power: PowerRequest,
     pub iso: IsoState,
     pub auth: AuthMsg,
-
 }
 
 impl ChargingState {
@@ -175,9 +184,9 @@ AfbDataConverter!(reservation_session, ReservationSession);
 #[serde(rename_all = "lowercase")]
 pub struct ReservationSession {
     pub id: i32,
-    pub tagid:String,
+    pub tagid: String,
     pub start: Duration,
-    pub stop:  Duration,
+    pub stop: Duration,
     pub status: ReservationStatus,
 }
 

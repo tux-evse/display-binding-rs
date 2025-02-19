@@ -13,6 +13,10 @@ impl AssetPixmap {
     impl_static_imgbin! (station_reserved, img_station_reserved);
     impl_static_imgbin! (reception_off, img_reception_off);
 
+    impl_static_imgbin!(evse_state_msg_startingup, img_evse_state_msg_startingup);
+    impl_static_imgbin!(evse_startingup, img_evse_startingup);
+    impl_static_imgbin!(charging_progress_startingup, img_charging_progress_startingup);
+
     impl_static_imgbin!(evse_state_msg_blank, img_evse_state_msg_blank);
     impl_static_imgbin!(charging_progress_charging_blank, img_charging_progress_charging_blank);
 

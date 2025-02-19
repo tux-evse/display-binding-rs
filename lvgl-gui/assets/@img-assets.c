@@ -9,6 +9,10 @@
 #include "reception_off.c"
 #include "station_available.c"
 
+#include "evse_state_msg_startingup.c"
+#include "evse_startingup.c"
+#include "charging_progress_startingup.c"
+
 #include "evse_state_msg_blank.c"
 #include "charging_progress_charging_blank.c"
 

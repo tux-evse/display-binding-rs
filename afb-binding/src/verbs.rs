@@ -196,6 +196,34 @@ fn evt_chmgr_cb(
     let data = args.get::<&ChargingMsg>(0)?;
     afb_log_msg!(Notice, event, "-- evt_chmgr_cb event:{:?}.", data);
     match data {
+        ChargingMsg::ServiceStatus { name, status } => {
+            afb_log_msg!(
+                Notice,
+                None,
+                "ServiceStatus update: {} -> {:?}",
+                name,
+                status
+            );
+            match status {
+                ServiceStatus::Ready => {
+                    afb_log_msg!(Notice, None, "ServiceStatus::Ready");
+                    ctx.widget_evse.set_value(AssetPixmap::evse_ready());
+                    ctx.widget_progress
+                        .set_value(AssetPixmap::charging_progress_init());
+                    ctx.widget_state_msg
+                        .set_value(AssetPixmap::evse_state_msg_ready());
+                }
+                ServiceStatus::Starting => {
+                    afb_log_msg!(Notice, None, "ServiceStatus::Starting");
+                }
+                ServiceStatus::Stopping => {
+                    afb_log_msg!(Notice, None, "ServiceStatus::Stopping");
+                }
+                ServiceStatus::Error => {
+                    afb_log_msg!(Error, None, "ServiceStatus::Error");
+                }
+            }
+        }
         ChargingMsg::Power(pdata) => {
             match pdata {
                 PowerRequest::Start => {

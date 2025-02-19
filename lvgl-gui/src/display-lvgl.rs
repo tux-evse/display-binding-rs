@@ -116,7 +116,7 @@ impl DisplayHandle {
             .set_info("Pixmap valeo")
             .finalize(),
         );
-//-----------------------------------------
+        //-----------------------------------------
 
         self.panel.push(
             LvglPixmap::new(
@@ -124,7 +124,7 @@ impl DisplayHandle {
                 "Pixmap-date",
                 AssetPixmap::calendar3(),
                 pixmap_date_x_ofs,
-                pixmap_date_time_ico_y_ofs+2,
+                pixmap_date_time_ico_y_ofs + 2,
             )
             .set_info("Pixmap date")
             .finalize(),
@@ -149,7 +149,7 @@ impl DisplayHandle {
                 "Pixmap-time",
                 AssetPixmap::clock(),
                 pixmap_time_x_ofs,
-                pixmap_date_time_ico_y_ofs+2,
+                pixmap_date_time_ico_y_ofs + 2,
             )
             .set_info("Pixmap time")
             .finalize(),
@@ -215,10 +215,9 @@ impl DisplayHandle {
     }
 
     pub fn draw_panel_top(&mut self, root: &LvglWidget) -> &mut Self {
-
         let pix_evse_icon_x_ofs = 190;
         let pix_evse_icon_y_ofs = 24;
-        
+
         let pix_state_msg_x_ofs = 390;
         let pix_state_msg_y_ofs = 24;
 
@@ -236,7 +235,7 @@ impl DisplayHandle {
             LvglPixmap::new(
                 root,
                 "evse-status",
-                AssetPixmap::evse_ready(),
+                AssetPixmap::evse_startingup(),
                 pix_evse_icon_x_ofs,
                 pix_evse_icon_y_ofs,
             )
@@ -248,7 +247,7 @@ impl DisplayHandle {
             LvglPixmap::new(
                 root,
                 "state-msg",
-                AssetPixmap::evse_state_msg_ready(),
+                AssetPixmap::evse_state_msg_startingup(),
                 pix_state_msg_x_ofs,
                 pix_state_msg_y_ofs,
             )
@@ -267,7 +266,7 @@ impl DisplayHandle {
                 pix_summary_msg_y_ofs,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(66,133,244))
+            .set_color(LvglColor::rvb(66, 133, 244))
             .set_value("")
             .finalize(),
         );
@@ -282,7 +281,7 @@ impl DisplayHandle {
                 pix_protocol_msg_y_ofs,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_value("")
             .finalize(),
         );
@@ -296,7 +295,7 @@ impl DisplayHandle {
                 pix_protocol_msg_y_ofs,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(66,133,244))
+            .set_color(LvglColor::rvb(66, 133, 244))
             .set_value("")
             .finalize(),
         );
@@ -311,7 +310,7 @@ impl DisplayHandle {
                 pix_protocol_msg_y_ofs + 50,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_value("")
             .finalize(),
         );
@@ -324,7 +323,7 @@ impl DisplayHandle {
                 pix_protocol_msg_y_ofs + 50,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(66,133,244))
+            .set_color(LvglColor::rvb(66, 133, 244))
             .set_value("")
             .finalize(),
         );
@@ -340,7 +339,7 @@ impl DisplayHandle {
                 pix_protocol_msg_y_ofs + 100,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_value("")
             .finalize(),
         );
@@ -353,7 +352,7 @@ impl DisplayHandle {
                 pix_protocol_msg_y_ofs + 100,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(66,133,244))
+            .set_color(LvglColor::rvb(66, 133, 244))
             .set_value("")
             .finalize(),
         );
@@ -368,7 +367,7 @@ impl DisplayHandle {
                 pix_protocol_msg_y_ofs + 150,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_value("")
             .finalize(),
         );
@@ -381,7 +380,7 @@ impl DisplayHandle {
                 pix_protocol_msg_y_ofs + 150,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(66,133,244))
+            .set_color(LvglColor::rvb(66, 133, 244))
             .set_value("")
             .finalize(),
         );
@@ -391,9 +390,7 @@ impl DisplayHandle {
         self
     }
 
-
     pub fn draw_panel_progress(&mut self, root: &LvglWidget) -> &mut Self {
-
         let pix_progress_x_ofs = 31;
         let pix_progress_y_ofs = 12;
 
@@ -401,7 +398,7 @@ impl DisplayHandle {
             LvglPixmap::new(
                 root,
                 "Charge-progress",
-                AssetPixmap::charging_progress_init(),
+                AssetPixmap::charging_progress_startingup(),
                 pix_progress_x_ofs,
                 pix_progress_y_ofs,
             )
@@ -412,12 +409,10 @@ impl DisplayHandle {
         self
     }
 
-
     pub fn draw_panel_info(&mut self, root: &LvglWidget) -> &mut Self {
-        
         let time_txt_x_ofs = 60;
         let time_val_x_ofs = time_txt_x_ofs + 55;
-        
+
         let power_txt_x_ofs = time_txt_x_ofs + 330;
         let power_val_x_ofs = power_txt_x_ofs + 50;
         let power_unit_x_ofs = power_val_x_ofs + 100;
@@ -434,7 +429,6 @@ impl DisplayHandle {
         let power_txt_y_ofs = time_txt_y_ofs;
         let power_val_y_ofs = power_txt_y_ofs + 40;
 
-
         self.panel.push(
             LvglLabel::new(
                 root,
@@ -444,7 +438,7 @@ impl DisplayHandle {
                 time_txt_y_ofs,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_info("Elapsed Time")
             .set_value("Elapsed Time")
             .finalize(),
@@ -459,7 +453,7 @@ impl DisplayHandle {
                 time_val_y_ofs,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_value("00:00")
             .finalize(),
         );
@@ -473,7 +467,7 @@ impl DisplayHandle {
                 power_txt_y_ofs,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_info("Current Power")
             .set_value("Current Power")
             .finalize(),
@@ -488,7 +482,7 @@ impl DisplayHandle {
                 power_val_y_ofs,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_value("0.00")
             .finalize(),
         );
@@ -502,11 +496,11 @@ impl DisplayHandle {
                 power_val_y_ofs,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_value("kW")
             .finalize(),
         );
-        
+
         self.panel.push(
             LvglLabel::new(
                 root,
@@ -516,7 +510,7 @@ impl DisplayHandle {
                 time_txt_y_ofs,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_info("Energy Delivered")
             .set_value("Energy Delivered")
             .finalize(),
@@ -531,7 +525,7 @@ impl DisplayHandle {
                 time_val_y_ofs,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_value("0.0")
             .finalize(),
         );
@@ -545,14 +539,13 @@ impl DisplayHandle {
                 time_val_y_ofs,
             )
             .set_height(label_height)
-            .set_color(LvglColor::rvb(89,89,89))
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_value("kWh")
             .finalize(),
         );
 
         self
     }
-
 
     pub fn draw_panel_bot(&mut self, root: &LvglWidget) -> &mut Self {
         let bare_code_size = 130;
@@ -562,7 +555,6 @@ impl DisplayHandle {
 
         let pixmap_logo_x_ofs = 1024 - 170;
         let pixmap_logo_y_ofs = 0;
-
 
         let label_zone_mess_height = 1024 - label_zone_mess_x_ofs - 10 - 200;
 
@@ -592,7 +584,6 @@ impl DisplayHandle {
             .finalize(),
         );
 
-
         self.panel.push(
             LvglTextArea::new(
                 root,
@@ -611,20 +602,13 @@ impl DisplayHandle {
     }
     pub fn draw_init_panel(&mut self) -> &mut Self {
         let init_area = LvglArea::new(self.get_root(), "Area Init", 0, 0)
-        .set_size(1024, 600)
-        .set_padding(0, 0, 0, 0)
-        .set_border(0, LvglColor::rvb(0, 0xff, 0))
-        .finalize();
+            .set_size(1024, 600)
+            .set_padding(0, 0, 0, 0)
+            .set_border(0, LvglColor::rvb(0, 0xff, 0))
+            .finalize();
 
         self.panel.push(
-            LvglPixmap::new(
-                init_area,
-                "evse-init",
-                AssetPixmap::evse_init(),
-                40,
-                30,
-            )
-            .finalize(),
+            LvglPixmap::new(init_area, "evse-init", AssetPixmap::evse_init(), 40, 30).finalize(),
         );
 
         self
@@ -671,7 +655,7 @@ impl DisplayHandle {
         self.draw_panel_top(area_top);
         self.draw_panel_progress(area_mid);
         self.draw_panel_info(area_bot);
-        
+
         self
     }
 
