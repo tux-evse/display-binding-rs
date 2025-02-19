@@ -116,7 +116,7 @@ impl DisplayHandle {
             .set_info("Pixmap valeo")
             .finalize(),
         );
-//-----------------------------------------
+        //-----------------------------------------
 
         self.panel.push(
             LvglPixmap::new(
@@ -124,7 +124,7 @@ impl DisplayHandle {
                 "Pixmap-date",
                 AssetPixmap::calendar3(),
                 pixmap_date_x_ofs,
-                pixmap_date_time_ico_y_ofs+2,
+                pixmap_date_time_ico_y_ofs + 2,
             )
             .set_info("Pixmap date")
             .finalize(),
@@ -149,7 +149,7 @@ impl DisplayHandle {
                 "Pixmap-time",
                 AssetPixmap::clock(),
                 pixmap_time_x_ofs,
-                pixmap_date_time_ico_y_ofs+2,
+                pixmap_date_time_ico_y_ofs + 2,
             )
             .set_info("Pixmap time")
             .finalize(),
@@ -171,23 +171,12 @@ impl DisplayHandle {
 
         let pixmap_ico_y_ofs = 15;
 
-        let pixmap_nfc_x_ofs = 1024 - 5 * 40;
-        let pixmap_net_x_ofs = 1024 - 4 * 40;
-        let pixmap_wifi_level_x_ofs = 1024 - 3 * 40;
-        let pixmap_wifi_x_ofs = 1024 - 2 * 40;
-        let pixmap_lang_x_ofs = 1024 - 1 * 40;
+        // let pixmap_nfc_x_ofs = 1024 - 5 * 40;
+        let pixmap_net_x_ofs = 1024 - 3 * 40;
+        let pixmap_wifi_level_x_ofs = 1024 - 2 * 40;
+        let pixmap_wifi_x_ofs = 1024 - 1 * 40;
+        // let pixmap_lang_x_ofs = 1024 - 1 * 40;
 
-        self.panel.push(
-            LvglPixmap::new(
-                root,
-                "Pixmap-nfc",
-                AssetPixmap::nfc_off(),
-                pixmap_nfc_x_ofs,
-                pixmap_ico_y_ofs,
-            )
-            .set_info("Pixmap nfc")
-            .finalize(),
-        );
         self.panel.push(
             LvglPixmap::new(
                 root,
@@ -221,164 +210,322 @@ impl DisplayHandle {
             .set_info("Pixmap wifi")
             .finalize(),
         );
-        self.panel.push(
-            LvglPixmap::new(
-                root,
-                "Pixmap-lang",
-                AssetPixmap::translate(),
-                pixmap_lang_x_ofs,
-                pixmap_ico_y_ofs,
-            )
-            .set_info("Pixmap lang")
-            .finalize(),
-        );
 
         self
     }
 
     pub fn draw_panel_top(&mut self, root: &LvglWidget) -> &mut Self {
-        let pix_connect_status_x_ofs = 50;
-        let pix_connect_status_y_ofs = 30;
+        let pix_evse_icon_x_ofs = 190;
+        let pix_evse_icon_y_ofs = 24;
 
-        let pix_auth_status_x_ofs = 750;
-        let pix_charge_status_x_ofs = 400;
+        let pix_state_msg_x_ofs = 390;
+        let pix_state_msg_y_ofs = 24;
 
-        self.panel.push(
-            LvglPixmap::new(
-                root,
-                "Pixmap-connect-status",
-                AssetPixmap::plug_disconnected(),
-                pix_connect_status_x_ofs,
-                pix_connect_status_y_ofs,
-            )
-            .set_info("Pixmap lang")
-            .finalize(),
-        );
+        let pix_summary_msg_x_ofs = pix_state_msg_x_ofs + 110;
+        let pix_summary_msg_y_ofs = pix_state_msg_y_ofs + 10;
 
-        self.panel.push(
-            LvglPixmap::new(
-                root,
-                "Pixmap-charge-status",
-                AssetPixmap::station_available(),
-                pix_charge_status_x_ofs,
-                pix_connect_status_y_ofs,
-            )
-            .set_info("Pixmap lang")
-            .finalize(),
-        );
+        let pix_protocol_msg_x_ofs = pix_state_msg_x_ofs + 10;
+        let pix_protocol_msg_y_ofs = pix_state_msg_y_ofs + 80;
 
-
-        self.panel.push(
-            LvglPixmap::new(
-                root,
-                "Pixmap-auth-status",
-                AssetPixmap::nfc_idle(),
-                pix_auth_status_x_ofs,
-                pix_connect_status_y_ofs,
-            )
-            .set_info("Pixmap lang")
-            .finalize(),
-        );
-
-
-        // self.panel.push(
-        //     LvglPixButton::new(
-        //         root,
-        //         "Pixmap-start",
-        //         pix_start_x_ofs,
-        //         pix_connect_status_y_ofs,
-        //     )
-        //     .set_info("Pixmap lang")
-        //     .set_value(AssetPixmap::btn_start())
-        //     .set_disable(true)
-        //     .finalize(),
-        // );
-
-        self
-    }
-
-    pub fn draw_panel_status_bat(&mut self, root: &LvglWidget) -> &mut Self {
-        let label_status_bat_x_ofs = 20;
-        let label_status_bat_y_ofs = 5;
-        let label_status_bat_height = 30;
-
-        self.panel.push(
-            LvglPixmap::new(
-                root,
-                "Pixmap-lang",
-                AssetPixmap::battery_charge_on(),
-                label_status_bat_x_ofs + 20,
-                label_status_bat_y_ofs,
-            )
-            .set_info("Pixmap lang")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "BatConso",
-                LvglMkFont::std_22(),
-                label_status_bat_x_ofs + 45,
-                label_status_bat_y_ofs + 110,
-            )
-            .set_height(label_status_bat_height)
-            .set_value("0.0")
-            .finalize(),
-        );
-        LvglLabel::new(
-            root,
-            "BatConsoKw",
-            LvglMkFont::std_22(),
-            label_status_bat_x_ofs + 50 + 100,
-            label_status_bat_y_ofs + 110,
-        )
-        .set_height(label_status_bat_height)
-        .set_value("W") // the value is in Watt
-        .finalize();
-
-        self
-    }
-
-    pub fn draw_panel_info_charging(&mut self, root: &LvglWidget) -> &mut Self {
-        //let pixmap_logo_x_ofs = 5;
-
-        let label_txt_x_ofs = 10;
-        let label_val_x_ofs = label_txt_x_ofs + 120;
-        let label_unit_x_ofs = label_val_x_ofs + 90;
-
+        let pix_protocol_val_x_ofs = pix_state_msg_x_ofs + 320;
 
         let label_height = 45;
 
-        let label_volts_y_ofs = 15;
-        let label_amps_y_ofs = label_volts_y_ofs + label_height;
-        let label_energy_y_ofs = label_volts_y_ofs + 2 * label_height;
-        //let label_power_y_ofs = label_volts_y_ofs + 3 * label_height;
-        //let label_adps_y_ofs = label_volts_y_ofs + 3 * label_height;
+        self.panel.push(
+            LvglPixmap::new(
+                root,
+                "evse-status",
+                AssetPixmap::evse_startingup(),
+                pix_evse_icon_x_ofs,
+                pix_evse_icon_y_ofs,
+            )
+            .set_info("Pixmap lang")
+            .finalize(),
+        );
+
+        self.panel.push(
+            LvglPixmap::new(
+                root,
+                "state-msg",
+                AssetPixmap::evse_state_msg_startingup(),
+                pix_state_msg_x_ofs,
+                pix_state_msg_y_ofs,
+            )
+            .set_info("Pixmap lang")
+            .finalize(),
+        );
+
+        // Session Summary Labels
 
         self.panel.push(
             LvglLabel::new(
                 root,
-                "ChargeVoltsTxt",
-                LvglMkFont::std_22(),
-                label_txt_x_ofs,
-                label_volts_y_ofs,
+                "SummaryTxt",
+                LvglMkFont::std_40(),
+                pix_summary_msg_x_ofs,
+                pix_summary_msg_y_ofs,
             )
             .set_height(label_height)
-            .set_info("Voltage")
-            .set_value("Voltage")
+            .set_color(LvglColor::rvb(66, 133, 244))
+            .set_value("")
+            .finalize(),
+        );
+
+        // Label: Protocol used
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "ProtocolTxt",
+                LvglMkFont::std_30(),
+                pix_protocol_msg_x_ofs,
+                pix_protocol_msg_y_ofs,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(89, 89, 89))
+            .set_value("")
             .finalize(),
         );
 
         self.panel.push(
             LvglLabel::new(
                 root,
-                "ChargeVoltsVal",
-                LvglMkFont::std_22(),
-                label_val_x_ofs,
-                label_volts_y_ofs,
+                "ProtocolVal",
+                LvglMkFont::std_30(),
+                pix_protocol_val_x_ofs,
+                pix_protocol_msg_y_ofs,
             )
             .set_height(label_height)
+            .set_color(LvglColor::rvb(66, 133, 244))
+            .set_value("")
+            .finalize(),
+        );
+        //
+        // Label: Charging Time
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "ChargingTimeTxt",
+                LvglMkFont::std_30(),
+                pix_protocol_msg_x_ofs,
+                pix_protocol_msg_y_ofs + 50,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(89, 89, 89))
+            .set_value("")
+            .finalize(),
+        );
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "ChargingTimeVal",
+                LvglMkFont::std_30(),
+                pix_protocol_val_x_ofs,
+                pix_protocol_msg_y_ofs + 50,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(66, 133, 244))
+            .set_value("")
+            .finalize(),
+        );
+        //
+
+        // Label: Energy Delivered
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "SessionEnergyDeliveredTxt",
+                LvglMkFont::std_30(),
+                pix_protocol_msg_x_ofs,
+                pix_protocol_msg_y_ofs + 100,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(89, 89, 89))
+            .set_value("")
+            .finalize(),
+        );
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "SessionEnergyDeliveredVal",
+                LvglMkFont::std_30(),
+                pix_protocol_val_x_ofs,
+                pix_protocol_msg_y_ofs + 100,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(66, 133, 244))
+            .set_value("")
+            .finalize(),
+        );
+        //
+        // Label: Total Session cost
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "TotalSessionCostTxt",
+                LvglMkFont::std_30(),
+                pix_protocol_msg_x_ofs,
+                pix_protocol_msg_y_ofs + 150,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(89, 89, 89))
+            .set_value("")
+            .finalize(),
+        );
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "TotalSessionCostVal",
+                LvglMkFont::std_30(),
+                pix_protocol_val_x_ofs,
+                pix_protocol_msg_y_ofs + 150,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(66, 133, 244))
+            .set_value("")
+            .finalize(),
+        );
+        //
+        //
+
+        self
+    }
+
+    pub fn draw_panel_progress(&mut self, root: &LvglWidget) -> &mut Self {
+        let pix_progress_x_ofs = 31;
+        let pix_progress_y_ofs = 12;
+
+        self.panel.push(
+            LvglPixmap::new(
+                root,
+                "Charge-progress",
+                AssetPixmap::charging_progress_startingup(),
+                pix_progress_x_ofs,
+                pix_progress_y_ofs,
+            )
+            .set_info("Pixmap lang")
+            .finalize(),
+        );
+
+        self
+    }
+
+    pub fn draw_panel_info(&mut self, root: &LvglWidget) -> &mut Self {
+        let time_txt_x_ofs = 60;
+        let time_val_x_ofs = time_txt_x_ofs + 55;
+
+        let power_txt_x_ofs = time_txt_x_ofs + 330;
+        let power_val_x_ofs = power_txt_x_ofs + 50;
+        let power_unit_x_ofs = power_val_x_ofs + 100;
+
+        let energy_txt_x_ofs = power_txt_x_ofs + 314;
+        let energy_val_x_ofs = energy_txt_x_ofs + 60;
+        let energy_unit_x_ofs = energy_val_x_ofs + 100;
+
+        let label_height = 45;
+
+        let time_txt_y_ofs = 20;
+        let time_val_y_ofs = time_txt_y_ofs + 40;
+
+        let power_txt_y_ofs = time_txt_y_ofs;
+        let power_val_y_ofs = power_txt_y_ofs + 40;
+
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "TimeElapsedTxt",
+                LvglMkFont::std_30(),
+                time_txt_x_ofs,
+                time_txt_y_ofs,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(89, 89, 89))
+            .set_info("Elapsed Time")
+            .set_value("Elapsed Time")
+            .finalize(),
+        );
+
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "TimeElapsedVal",
+                LvglMkFont::std_30(),
+                time_val_x_ofs,
+                time_val_y_ofs,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(89, 89, 89))
+            .set_value("00:00")
+            .finalize(),
+        );
+
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "CurrentPowerTxt",
+                LvglMkFont::std_30(),
+                power_txt_x_ofs,
+                power_txt_y_ofs,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(89, 89, 89))
+            .set_info("Current Power")
+            .set_value("Current Power")
+            .finalize(),
+        );
+
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "CurrentPowerVal",
+                LvglMkFont::std_30(),
+                power_val_x_ofs,
+                power_val_y_ofs,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(89, 89, 89))
+            .set_value("0.00")
+            .finalize(),
+        );
+
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "CurrentPowerUnit",
+                LvglMkFont::std_30(),
+                power_unit_x_ofs,
+                power_val_y_ofs,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(89, 89, 89))
+            .set_value("kW")
+            .finalize(),
+        );
+
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "EnergyDeliveredTxt",
+                LvglMkFont::std_30(),
+                energy_txt_x_ofs,
+                time_txt_y_ofs,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(89, 89, 89))
+            .set_info("Energy Delivered")
+            .set_value("Energy Delivered")
+            .finalize(),
+        );
+
+        self.panel.push(
+            LvglLabel::new(
+                root,
+                "EnergyDeliveredVal",
+                LvglMkFont::std_30(),
+                energy_val_x_ofs,
+                time_val_y_ofs,
+            )
+            .set_height(label_height)
+            .set_color(LvglColor::rvb(89, 89, 89))
             .set_value("0.0")
             .finalize(),
         );
@@ -386,240 +533,16 @@ impl DisplayHandle {
         self.panel.push(
             LvglLabel::new(
                 root,
-                "ChargeVoltsUnit",
-                LvglMkFont::std_22(),
-                label_unit_x_ofs,
-                label_volts_y_ofs,
+                "EnergyDeliveredUnit",
+                LvglMkFont::std_30(),
+                energy_unit_x_ofs,
+                time_val_y_ofs,
             )
             .set_height(label_height)
-            .set_value("V")
+            .set_color(LvglColor::rvb(89, 89, 89))
+            .set_value("kWh")
             .finalize(),
         );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargeImpsTxt",
-                LvglMkFont::std_22(),
-                label_txt_x_ofs,
-                label_amps_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("Current")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargeImpsVal",
-                LvglMkFont::std_22(),
-                label_val_x_ofs,
-                label_amps_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("0.0")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargeImpsUnit",
-                LvglMkFont::std_22(),
-                label_unit_x_ofs,
-                label_amps_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("A")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargeEnergyTxt",
-                LvglMkFont::std_22(),
-                label_txt_x_ofs,
-                label_energy_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("Energy")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargeEnergysVal",
-                LvglMkFont::std_22(),
-                label_val_x_ofs,
-                label_energy_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("0.1")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "ChargeEnergysUnit",
-                LvglMkFont::std_22(),
-                label_unit_x_ofs,
-                label_energy_y_ofs,
-            )
-            .set_height(label_height)
-            .set_value("kW.h")
-            .finalize(),
-        );
-
-        self
-    }
-
-    pub fn draw_panel_smart_charging(&mut self, root: &LvglWidget) -> &mut Self {
-        let switch_height = 20;
-        let switch_title_height = 20;
-
-        let switch_label_x_ofs = 15;
-        let switch_x_ofs: i16 = switch_label_x_ofs + 160;
-        let switch_sep = 20;
-
-        let switch_main_label_x_ofs = switch_x_ofs - 50;
-        let switch_main_label_y_ofs = 5;
-        let switch_iec_y_ofs = switch_main_label_y_ofs + 35;
-        let switch_pnc_y_ofs = switch_iec_y_ofs + (switch_height + switch_sep) * 1;
-        let switch_iso_y_ofs = switch_iec_y_ofs + (switch_height + switch_sep) * 2;
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "Label Switch",
-                LvglMkFont::std_18(),
-                switch_main_label_x_ofs-70,
-                switch_main_label_y_ofs,
-            )
-            .set_height(switch_title_height)
-            .set_value("Smart Charging")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "IEC",
-                LvglMkFont::std_22(),
-                switch_label_x_ofs,
-                switch_iec_y_ofs,
-            )
-            .set_height(switch_title_height)
-            .set_value("IEC 61851")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "PnC",
-                LvglMkFont::std_22(),
-                switch_label_x_ofs,
-                switch_pnc_y_ofs,
-            )
-            .set_height(switch_title_height)
-            .set_value("PlugnC")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglLabel::new(
-                root,
-                "Label Switch  iso",
-                LvglMkFont::std_22(),
-                switch_label_x_ofs,
-                switch_iso_y_ofs,
-            )
-            .set_height(switch_title_height)
-            .set_value("ISO 15118")
-            .finalize(),
-        );
-
-        self.panel.push(
-            LvglSwitch::new(root, "Switch-iec", switch_x_ofs, switch_iec_y_ofs)
-                .set_disable(true)
-                .set_height(switch_height)
-                .set_value(false)
-                .finalize(),
-        );
-
-        self.panel.push(
-            LvglSwitch::new(root, "Switch-pnc", switch_x_ofs, switch_pnc_y_ofs)
-                .set_disable(true)
-                .set_height(switch_height)
-                .set_value(false)
-                .finalize(),
-        );
-
-        self.panel.push(
-            LvglSwitch::new(root, "Switch-iso", switch_x_ofs, switch_iso_y_ofs)
-                .set_disable(true)
-                .set_height(switch_height)
-                .set_value(false)
-                .finalize(),
-        );
-
-        self
-    }
-
-    pub fn draw_panel_mid(&mut self, root: &LvglWidget) -> &mut Self {
-
-        let area_status_bat_width = 220;
-        let area_status_bat_height = 155;
-        let area_status_bat_sizex = 30;
-        let area_status_bat_sizey = 15;
-
-        let area_smart_info_width = 300;
-        let area_smart_info_height = 155;
-        let area_smart_info_sizex = 350;
-        let area_smart_info_sizey = area_status_bat_sizey;
-
-        let area_smart_charging_width = 250;
-        let area_smart_charging_height = 155;
-        let area_smart_charging_sizex = 1024 - area_smart_charging_width - 50;
-        let area_smart_charging_sizey = area_smart_info_sizey;
-
-        let area_status_bat = LvglArea::new(
-            root,
-            "Area Status Bat",
-            area_status_bat_sizex,
-            area_status_bat_sizey,
-        )
-        .set_size(area_status_bat_width, area_smart_info_height)
-        .set_padding(0, 0, 0, 0)
-        .finalize();
-
-        let area_info_charging = LvglArea::new(
-            root,
-            "Area info charging",
-            area_smart_info_sizex,
-            area_smart_info_sizey,
-        )
-        .set_size(area_smart_info_width, area_status_bat_height)
-        .set_padding(0, 0, 0, 0)
-        .finalize();
-
-        let area_smart_charging = LvglArea::new(
-            root,
-            "Area smart charging",
-            area_smart_charging_sizex,
-            area_smart_charging_sizey,
-        )
-        .set_size(area_smart_charging_width, area_smart_charging_height)
-        .set_padding(0, 0, 0, 0)
-        .finalize();
-
-        self.draw_panel_status_bat(area_status_bat);
-        self.draw_panel_info_charging(area_info_charging);
-        self.draw_panel_smart_charging(area_smart_charging);
 
         self
     }
@@ -632,7 +555,6 @@ impl DisplayHandle {
 
         let pixmap_logo_x_ofs = 1024 - 170;
         let pixmap_logo_y_ofs = 0;
-
 
         let label_zone_mess_height = 1024 - label_zone_mess_x_ofs - 10 - 200;
 
@@ -662,7 +584,6 @@ impl DisplayHandle {
             .finalize(),
         );
 
-
         self.panel.push(
             LvglTextArea::new(
                 root,
@@ -679,16 +600,29 @@ impl DisplayHandle {
 
         self
     }
+    pub fn draw_init_panel(&mut self) -> &mut Self {
+        let init_area = LvglArea::new(self.get_root(), "Area Init", 0, 0)
+            .set_size(1024, 600)
+            .set_padding(0, 0, 0, 0)
+            .set_border(0, LvglColor::rvb(0, 0xff, 0))
+            .finalize();
+
+        self.panel.push(
+            LvglPixmap::new(init_area, "evse-init", AssetPixmap::evse_init(), 40, 30).finalize(),
+        );
+
+        self
+    }
 
     pub fn draw_panel(&mut self) -> &mut Self {
         let area_menu_posy = 0;
         let area_menu_sizey = 60;
 
         let area_top_posy = area_menu_sizey;
-        let area_top_sizey = 210;
+        let area_top_sizey = 300;
 
         let area_mid_posy = area_top_posy + area_top_sizey;
-        let area_mid_sizey = 190;
+        let area_mid_sizey = 120;
 
         let area_bot_posy = area_mid_posy + area_mid_sizey;
         let area_bot_sizey = 600 - area_mid_sizey - area_top_sizey - area_menu_sizey;
@@ -696,28 +630,32 @@ impl DisplayHandle {
         let area_menu = LvglArea::new(self.get_root(), "Area Menu", 0, area_menu_posy)
             .set_size(1024, area_menu_sizey)
             .set_padding(0, 0, 0, 0)
+            .set_border(0, LvglColor::rvb(0, 0xff, 0))
             .finalize();
 
         let area_top = LvglArea::new(self.get_root(), "Area Top", 0, area_top_posy)
             .set_size(1024, area_top_sizey)
             .set_padding(0, 0, 0, 0)
+            .set_border(0, LvglColor::rvb(0, 0xff, 0))
             .finalize();
 
         let area_mid = LvglArea::new(self.get_root(), "Area Mid", 0, area_mid_posy)
             .set_size(1024, area_mid_sizey)
             .set_padding(0, 0, 0, 0)
+            .set_border(0, LvglColor::rvb(0, 0xff, 0))
             .finalize();
 
         let area_bot = LvglArea::new(self.get_root(), "Area Bot", 0, area_bot_posy)
             .set_size(1024, area_bot_sizey)
             .set_padding(0, 0, 0, 0)
+            .set_border(0, LvglColor::rvb(0, 0xff, 0))
             .finalize();
 
         self.draw_panel_menu(area_menu);
         self.draw_panel_top(area_top);
-        self.draw_panel_mid(area_mid);
-        self.draw_panel_bot(area_bot);
-        
+        self.draw_panel_progress(area_mid);
+        self.draw_panel_info(area_bot);
+
         self
     }
 
